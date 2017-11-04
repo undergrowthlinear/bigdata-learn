@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type"
+        content="text/html; charset=ISO-8859-1" />
+  <title>Code Examples for Programming in Scala</title>
+  <link rel="stylesheet" href="style.css" type="text/css"/>
+</head>
+<body>
+
+<div id="mainTitles"><h3>Code Examples for</h3><h2>Programming in Scala</h2></div>  <p><a href="../index.html">
+    Return to chapter index
+  </a></p>
+  <h2>14 Assertions and Unit Testing</h2>
+
+    <li>14.1 <a href="#sec1">Assertions</a></li>
+    <li>14.2 <a href="#sec2">Unit testing in Scala</a></li>
+    <li>14.3 <a href="#sec3">Informative failure reports</a></li>
+    <li>14.4 <a href="#sec4">Using JUnit and TestNG</a></li>
+    <li>14.5 <a href="#sec5">Tests as specifications</a></li>
+    <li>14.6 <a href="#sec6">Property-based testing</a></li>
+    <li>14.7 <a href="#sec7">Organizing and running tests</a></li>
+    <li>14.8 <a href="#sec8">Conclusion</a></li>
+  </ul>
+
+  <h3><a name="sec1"></a>14.1 Assertions</h3>
+
+  <pre><hr>
+  def above(that: Element): Element = { 
+    val this1 = this widen that.width 
+    val that1 = that widen this.width 
+    assert(this1.width == that1.width)
+    elem(this1.contents ++ that1.contents) 
+  }
+
+<hr>
+  private def widen(w: Int): Element =
+    if (w &lt;= width) 
+      this 
+    else { 
+      val left = elem(' ', (w - width) / 2, height) 
+      var right = elem(' ', w - width - left.width, height) 
+      left beside this beside right 
+    } ensuring (w &lt;= _.width)
+
+<hr>
+  java.lang.IllegalArgumentException: assumption failed: must
+  be non-zero
+
+<hr>
+  </pre>
+  <h3><a name="sec2"></a>14.2 Unit testing in Scala</h3>
+
+  <pre><hr>
+  import org.scalatest.Suite
+  import Element.elem
+
+  class ElementSuite extends Suite {
+
+    def testUniformElement() {
+      val ele = elem('x', 2, 3)
+      assert(ele.width == 2)
+    }
+  }
+
+<hr>
+  scala&gt; (new ElementSuite).execute()
+<span class="output">  Test Starting - ElementSuite.testUniformElement</span>
+<span class="output">  Test Succeeded - ElementSuite.testUniformElement</span>
+
+<hr>
+  import org.scalatest.FunSuite
+  import Element.elem
+
+  class ElementSuite extends FunSuite {
+
+    test("elem result should have passed width") {
+      val ele = elem('x', 2, 3)
+      assert(ele.width == 2)
+    }
+  }
+
+<hr>
+  </pre>
+  <h3><a name="sec3"></a>14.3 Informative failure reports</h3>
+
+  <pre><hr>
+  assert(ele.width === 2)
+
+<hr>
+  expect(2) {
+    ele.width
+  }
+
+<hr>
+  intercept(classOf[IllegalArgumentException]) {
+   elem('x', -2, 3)
+  }
+
+<hr>
+  Expected IllegalArgumentException to be thrown,
+    but NegativeArraySizeException was thrown.
+
+<hr>
+  </pre>
+  <h3><a name="sec4"></a>14.4 Using JUnit and TestNG</h3>
+
+  <pre><hr>
+  import junit.framework.TestCase
+  import junit.framework.Assert.assertEquals
+  import junit.framework.Assert.fail
+  import Element.elem
+
+  class ElementTestCase extends TestCase {
+
+    def testUniformElement() {
+      val ele = elem('x', 2, 3)
+      assertEquals(2, ele.width)
+      assertEquals(3, ele.height)
+      try {
+        elem('x', -2, 3)
+        fail()
+      }
+      catch {
+        case e: IllegalArgumentException =&gt; // expected
+      }
+    }
+  }
+
+<hr>
+  import org.scalatest.junit.JUnit3Suite
+  import Element.elem
+
+  class ElementSuite extends JUnit3Suite {
+
+    def testUniformElement() {
+      val ele = elem('x', 2, 3)
+      assert(ele.width === 2)
+      expect(3) { ele.height }
+      intercept(classOf[IllegalArgumentException]) {
+        elem('x', -2, 3)
+      }
+    }
+  }
+
+<hr>
+  import org.testng.annotations.Test
+  import org.testng.Assert.assertEquals
+  import Element.elem
+
+  class ElementTests {
+    @Test def verifyUniformElement() {
+      val ele = elem('x', 2, 3)
+      assertEquals(ele.width, 2)
+      assertEquals(ele.height, 3)
+    }
+    @Test {
+      val expectedExceptions =
+        Array(classOf[IllegalArgumentException])
+    }
+    def elemShouldThrowIAE() { elem('x', -2, 3) }
+  }
+
+<hr>
+  import org.scalatest.testng.TestNGSuite
+  import org.testng.annotations.Test
+  import Element.elem
+
+  class ElementSuite extends TestNGSuite {
+
+    @Test def verifyUniformElement() {
+      val ele = elem('x', 2, 3)
+      assert(ele.width === 2)
+      expect(3) { ele.height }
+      intercept(classOf[IllegalArgumentException]) {
+        elem('x', -2, 3)
+      }
+    }
+  }
+
+<hr>
+  </pre>
+  <h3><a name="sec5"></a>14.5 Tests as specifications</h3>
+
+  <pre><hr>
+  import org.scalatest.Spec
+
+  class ElementSpec extends Spec {
+
+    "A UniformElement" -- {
+ 
+      "should have a width equal to the passed value" - {
+        val ele = elem('x', 2, 3)
+        assert(ele.width === 2)
+      }
+
+      "should have a height equal to the passed value" - {
+        val ele = elem('x', 2, 3)
+        assert(ele.height === 3)
+      }
+
+      "should throw an IAE if passed a negative width" - {
+        intercept(classOf[IllegalArgumentException]) {
+          elem('x', -2, 3)
+        }
+      }
+    }
+  }
+
+<hr>
+  scala&gt; (new ElementSpec).execute()
+<span class="output">  A UniformElement</span>
+<span class="output">  - should have a width equal to the passed value</span>
+<span class="output">  - should have a height equal to the passed value</span>
+<span class="output">  - should throw an IAE if passed a negative width</span>
+
+<hr>
+  import org.specs._
+
+  object ElementSpecification extends Specification {
+    "A UniformElement" should {
+      "have a width equal to the passed value" in {
+        val ele = elem('x', 2, 3)
+        ele.width must be_==(2)
+      }
+      "have a height equal to the passed value" in {
+        val ele = elem('x', 2, 3)
+        ele.height must be_==(3)
+      }
+      "throw an IAE if passed a negative width" in {
+        elem('x', -2, 3) must
+          throwA(new IllegalArgumentException)
+      }
+    }
+  }
+
+<hr>
+  </pre>
+  <h3><a name="sec6"></a>14.6 Property-based testing</h3>
+
+  <pre><hr>
+  import org.scalatest.prop.FunSuite
+  import org.scalacheck.Prop._
+  import Element.elem
+
+  class ElementSuite extends FunSuite {
+
+    test("elem result should have passed width", (w: Int) =&gt;
+      w &gt; 0 ==&gt; (elem('x', w, 3).width == w)
+    )
+
+    test("elem result should have passed height", (h: Int) =&gt;
+      h &gt; 0 ==&gt; (elem('x', 2, h).height == h)
+    )
+  }
+
+<hr>
+  w &gt; 0 ==&gt; (elem('x', w, 3).width == w)
+
+<hr>
+  import org.scalatest.junit.JUnit3Suite
+  import org.scalatest.prop.Checkers
+  import org.scalacheck.Prop._
+  import Element.elem
+
+  class ElementSuite extends JUnit3Suite with Checkers {
+
+    def testUniformElement() {
+      check((w: Int) =&gt; w &gt; 0 ==&gt; (elem('x', w, 3).width == w))
+      check((h: Int) =&gt; h &gt; 0 ==&gt; (elem('x', 2, h).height == h))
+    }
+  }
+
+<hr>
+  </pre>
+  <h3><a name="sec7"></a>14.7 Organizing and running tests</h3>
+
+  <pre><hr>
+  $ scala -cp scalatest-0.9.4.jar org.scalatest.tools.Runner
+        -p "scalatest-0.9.4-tests.jar" -s org.scalatest.SuiteSuite
+
+<hr>
+  </pre>
+  <h3><a name="sec8"></a>14.8 Conclusion</h3>
+
+
+ <table>
+ <tr valign="top">
+ <td>
+ <div id="moreinfo">
+ <p>
+ For more information about <em>Programming in Scala</em> (the "Stairway Book"), please visit:
+ </p>
+ 
+ <p>
+ <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
+ </p>
+ 
+ <p>
+ and:
+ </p>
+ 
+ <p>
+ <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
+ </p>
+ </div>
+ </td>
+ <td>
+ <div id="license">
+ <p>
+   Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
+ </p>
+
+ <p>
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ </p>
+
+ <p style="margin-left: 20px">
+   <a href="http://www.apache.org/licenses/LICENSE-2.0">
+     http://www.apache.org/licenses/LICENSE-2.0
+   </a>
+ </p>
+
+ <p>
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+   implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ </p>
+ </div>
+ </td>
+ </tr>
+ </table>
+
+</body>
+</html>

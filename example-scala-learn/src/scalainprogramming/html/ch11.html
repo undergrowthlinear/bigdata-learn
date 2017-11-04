@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type"
+        content="text/html; charset=ISO-8859-1" />
+  <title>Code Examples for Programming in Scala</title>
+  <link rel="stylesheet" href="style.css" type="text/css"/>
+</head>
+<body>
+
+<div id="mainTitles"><h3>Code Examples for</h3><h2>Programming in Scala</h2></div>  <p><a href="../index.html">
+    Return to chapter index
+  </a></p>
+  <h2>11 Scala's Hierarchy</h2>
+
+  <p><a href="../hierarchy/transcript.txt">
+    Sample run of chapter's interpreter examples
+  </a></p>
+
+  <ul>
+
+    <li>11.1 <a href="#sec1">Scala's class hierarchy</a></li>
+    <li>11.2 <a href="#sec2">How primitives are implemented</a></li>
+    <li>11.3 <a href="#sec3">Bottom types</a></li>
+    <li>11.4 <a href="#sec4">Conclusion</a></li>
+  </ul>
+
+  <h3><a name="sec1"></a>11.1 Scala's class hierarchy</h3>
+
+  <pre><hr>
+  final def ==(that: Any): Boolean
+  final def !=(that: Any): Boolean
+  def equals(that: Any): Boolean
+  def hashCode: Int
+  def toString: String
+
+<hr>
+  scala&gt; new Int
+
+<hr>
+<span class="output">  &lt;console&gt;:5: error: class Int is abstract; cannot be </span>
+<span class="output">  instantiated</span>
+<span class="output">         new Int</span>
+<span class="output">         ^</span>
+
+<hr>
+  scala&gt; 42.toString
+<span class="output">  res1: java.lang.String = 42</span>
+
+  scala&gt; 42.hashCode
+<span class="output">  res2: Int = 42</span>
+
+  scala&gt; 42 equals 42
+<span class="output">  res3: Boolean = true</span>
+
+<hr>
+  scala&gt; 42 max 43
+<span class="output">  res4: Int = 43</span>
+
+  scala&gt; 42 min 43
+<span class="output">  res5: Int = 42</span>
+
+  scala&gt; 1 until 5
+<span class="output">  res6: Range = Range(1, 2, 3, 4)</span>
+
+  scala&gt; 1 to 5
+<span class="output">  res7: Range.Inclusive = Range(1, 2, 3, 4, 5)</span>
+
+  scala&gt; 3.abs
+<span class="output">  res8: Int = 3</span>
+
+  scala&gt; (-3).abs
+<span class="output">  res9: Int = 3</span>
+
+<hr>
+  </pre>
+  <h3><a name="sec2"></a>11.2 How primitives are implemented</h3>
+
+  <pre><hr>
+// In file <a href="../hierarchy/Ex1.java">hierarchy/Ex1.java</a>
+
+  // This is Java
+  boolean isEqual(int x, int y) {
+    return x == y;
+  }
+  System.out.println(isEqual(421, 421));
+
+<hr>
+// In file <a href="../hierarchy/Ex2.java">hierarchy/Ex2.java</a>
+
+  // This is Java
+  boolean isEqual(Integer x, Integer y) {
+    return x == y;
+  }
+  System.out.println(isEqual(421, 421));
+
+<hr>
+  scala&gt; def isEqual(x: Int, y: Int) = x == y
+<span class="output">  isEqual: (Int,Int)Boolean</span>
+
+  scala&gt; isEqual(421, 421)
+<span class="output">  res10: Boolean = true</span>
+
+  scala&gt; def isEqual(x: Any, y: Any) = x == y
+<span class="output">  isEqual: (Any,Any)Boolean</span>
+
+  scala&gt; isEqual(421, 421)
+<span class="output">  res11: Boolean = true</span>
+
+<hr>
+  scala&gt; val x = "abcd".substring(2)
+<span class="output">  x: java.lang.String = cd</span>
+
+  scala&gt; val y = "abcd".substring(2)
+<span class="output">  y: java.lang.String = cd</span>
+
+  scala&gt; x == y
+<span class="output">  res12: Boolean = true</span>
+
+<hr>
+  scala&gt; val x = new String("abc")
+<span class="output">  x: java.lang.String = abc</span>
+
+  scala&gt; val y = new String("abc")
+<span class="output">  y: java.lang.String = abc</span>
+
+  scala&gt; x == y
+<span class="output">  res13: Boolean = true</span>
+
+  scala&gt; x eq y
+<span class="output">  res14: Boolean = false</span>
+
+  scala&gt; x ne y
+<span class="output">  res15: Boolean = true</span>
+
+<hr>
+  </pre>
+  <h3><a name="sec3"></a>11.3 Bottom types</h3>
+
+  <pre><hr>
+  scala&gt; val i: Int = null
+<span class="output">  &lt;console&gt;:4: error: type mismatch;</span>
+<span class="output">   found   : Null(null)</span>
+<span class="output">   required: Int</span>
+
+<hr>
+  def error(message: String): Nothing =
+    throw new RuntimeException(message)
+
+<hr>
+// In file <a href="../hierarchy/Ex3.scala">hierarchy/Ex3.scala</a>
+
+  def divide(x: Int, y: Int): Int = 
+    if (y != 0) x / y 
+    else error("can't divide by zero")
+
+<hr>
+  </pre>
+  <h3><a name="sec4"></a>11.4 Conclusion</h3>
+
+
+ <table>
+ <tr valign="top">
+ <td>
+ <div id="moreinfo">
+ <p>
+ For more information about <em>Programming in Scala</em> (the "Stairway Book"), please visit:
+ </p>
+ 
+ <p>
+ <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
+ </p>
+ 
+ <p>
+ and:
+ </p>
+ 
+ <p>
+ <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
+ </p>
+ </div>
+ </td>
+ <td>
+ <div id="license">
+ <p>
+   Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
+ </p>
+
+ <p>
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ </p>
+
+ <p style="margin-left: 20px">
+   <a href="http://www.apache.org/licenses/LICENSE-2.0">
+     http://www.apache.org/licenses/LICENSE-2.0
+   </a>
+ </p>
+
+ <p>
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+   implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ </p>
+ </div>
+ </td>
+ </tr>
+ </table>
+
+</body>
+</html>

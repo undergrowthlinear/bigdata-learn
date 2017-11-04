@@ -1,0 +1,485 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type"
+        content="text/html; charset=ISO-8859-1" />
+  <title>Code Examples for Programming in Scala</title>
+  <link rel="stylesheet" href="style.css" type="text/css"/>
+</head>
+<body>
+
+<div id="mainTitles"><h3>Code Examples for</h3><h2>Programming in Scala</h2></div>  <p><a href="../index.html">
+    Return to chapter index
+  </a></p>
+  <h2>21 Implicit Conversions and Parameters</h2>
+
+  <p><a href="../implicits/transcript.txt">
+    Sample run of chapter's interpreter examples
+  </a></p>
+
+  <ul>
+
+    <li>21.1 <a href="#sec1">Implicit conversions</a></li>
+    <li>21.2 <a href="#sec2">Rules for implicits</a></li>
+    <li>21.3 <a href="#sec3">Implicit conversion to an expected type</a></li>
+    <li>21.4 <a href="#sec4">Converting the receiver</a></li>
+    <li>21.5 <a href="#sec5">Implicit parameters</a></li>
+    <li>21.6 <a href="#sec6">View bounds</a></li>
+    <li>21.7 <a href="#sec7">Debugging implicits</a></li>
+    <li>21.8 <a href="#sec8">Conclusion</a></li>
+  </ul>
+
+  <h3><a name="sec1"></a>21.1 Implicit conversions</h3>
+
+  <pre><hr>
+// In file <a href="../implicits/String2Seq.scala">implicits/String2Seq.scala</a>
+
+  implicit def stringWrapper(s: String) = 
+    new RandomAccessSeq[Char] {
+      def length = s.length
+      def apply(i: Int) = s.charAt(i)
+    }
+
+<hr>
+  scala&gt; stringWrapper("abc123") exists (_.isDigit)
+<span class="output">  res0: Boolean = true</span>
+
+<hr>
+  scala&gt; "abc123" exists (_.isDigit)
+<span class="output">  res1: Boolean = true</span>
+
+<hr>
+// In file <a href="../implicits/String2Seq.scala">implicits/String2Seq.scala</a>
+
+  def printWithSpaces(seq: RandomAccessSeq[Char]) = 
+    seq mkString " "
+
+<hr>
+  scala&gt; printWithSpaces("xyz")
+<span class="output">  res2: String = x y z</span>
+
+<hr>
+  scala&gt; printWithSpaces(stringWrapper("xyz"))
+<span class="output">  res3: String = x y z</span>
+
+<hr>
+  </pre>
+  <h3><a name="sec2"></a>21.2 Rules for implicits</h3>
+
+  <pre><hr>
+// In file <a href="../implicits/Misc.scala">implicits/Misc.scala</a>
+
+  implicit def intToString(x: Int) = x.toString
+
+<hr>
+  object Dollar {
+    implicit def dollarToEuro(x: Dollar): Euro = ...
+  }
+  class Dollar { ... }
+
+<hr>
+  object MyConversions {
+    implicit def stringWrapper(s: String):
+        RandomAccessSeq[Char] = ...
+    implicit def intToString(x: Int): String = ...
+  }
+
+<hr>
+  import MyConversions.stringWrapper
+  ... // code making use of stringWrapper
+
+<hr>
+  </pre>
+  <h3><a name="sec3"></a>21.3 Implicit conversion to an expected type</h3>
+
+  <pre><hr>
+  scala&gt; val i: Int = 3.5
+<span class="output">  &lt;console&gt;:5: error: type mismatch;</span>
+<span class="output">   found   : Double(3.5)</span>
+<span class="output">   required: Int</span>
+<span class="output">         val i: Int = 3.5</span>
+<span class="output">                      ^</span>
+
+<hr>
+  scala&gt; implicit def doubleToInt(x: Double) = x.toInt
+<span class="output">  doubleToInt: (Double)Int</span>
+
+  scala&gt; val i: Int = 3.5
+<span class="output">  i: Int = 3</span>
+
+<hr>
+  val i: Int = doubleToInt(3.5)
+
+<hr>
+// In file <a href="../implicits/Misc.scala">implicits/Misc.scala</a>
+
+  implicit def int2double(x: Int): Double = x.toDouble
+
+<hr>
+  </pre>
+  <h3><a name="sec4"></a>21.4 Converting the receiver</h3>
+
+  <pre><hr>
+  class Rational(n: Int, d: Int) {
+    ...
+    def + (that: Rational): Rational = ...
+    def + (that: Int): Rational = ...
+  }
+
+<hr>
+  scala&gt; val oneHalf = new Rational(1, 2)
+<span class="output">  oneHalf: Rational = 1/2</span>
+
+  scala&gt; oneHalf + oneHalf
+<span class="output">  res4: Rational = 1/1</span>
+
+  scala&gt; oneHalf + 1
+<span class="output">  res5: Rational = 3/2</span>
+
+<hr>
+  scala&gt; 1 + oneHalf
+<span class="output">  &lt;console&gt;:6: error: overloaded method value + with</span>
+<span class="output">  alternatives (Double)Double &lt;and&gt; ... cannot be applied</span>
+<span class="output">  to (Rational)</span>
+<span class="output">       1 + oneHalf</span>
+<span class="output">         ^</span>
+
+<hr>
+  scala&gt; implicit def intToRational(x: Int) = 
+       |   new Rational(x, 1)
+<span class="output">  intToRational: (Int)Rational</span>
+
+<hr>
+  scala&gt; 1 + oneHalf
+<span class="output">  res6: Rational = 3/2</span>
+
+<hr>
+  intToRational(1) + oneHalf
+
+<hr>
+// In file <a href="../implicits/Misc.scala">implicits/Misc.scala</a>
+
+  Map(1 -&gt; "one", 2 -&gt; "two", 3 -&gt; "three")
+
+<hr>
+  package scala
+  object Predef {
+    class ArrowAssoc[A](x: A) {
+      def -&gt; [B](y: B): Tuple2[A, B] = Tuple2(x, y)
+    }
+    implicit def any2ArrowAssoc[A](x: A): ArrowAssoc[A] = 
+      new ArrowAssoc(x)
+    ...
+  }
+
+<hr>
+  </pre>
+  <h3><a name="sec5"></a>21.5 Implicit parameters</h3>
+
+  <pre><hr>
+  class PreferredPrompt(val preference: String)
+
+<hr>
+  object Greeter {
+    def greet(name: String)(implicit prompt: PreferredPrompt) {
+      println("Welcome, "+ name +". The system is ready.")
+      println(prompt.preference)
+    }
+  }
+
+<hr>
+  scala&gt; val bobsPrompt = new PreferredPrompt("relax&gt; ")
+<span class="output">  bobsPrompt: PreferredPrompt = PreferredPrompt@ece6e1</span>
+
+  scala&gt; Greeter.greet("Bob")(bobsPrompt)                    
+<span class="output">  Welcome, Bob. The system is ready.</span>
+<span class="output">  relax&gt; </span>
+
+<hr>
+  object JoesPrefs {
+    implicit val prompt = new PreferredPrompt("Yes, master&gt; ")
+  }
+
+<hr>
+  scala&gt; Greeter.greet("Joe")
+<span class="output">  &lt;console&gt;:7: error: no implicit argument matching parameter</span>
+<span class="output">    type PreferredPrompt was found.</span>
+<span class="output">         Greeter.greet("Joe")</span>
+<span class="output">                 ^</span>
+
+<hr>
+  scala&gt; import JoesPrefs._         
+<span class="output">  import JoesPrefs._</span>
+
+  scala&gt; Greeter.greet("Joe")
+<span class="output">  Welcome, Joe. The system is ready.</span>
+<span class="output">  Yes, master&gt; </span>
+
+<hr>
+  class PreferredPrompt(val preference: String)
+  class PreferredDrink(val preference: String)
+
+  object Greeter {
+    def greet(name: String)(implicit prompt: PreferredPrompt,
+        drink: PreferredDrink) {
+
+      println("Welcome, "+ name +". The system is ready.")
+      print("But while you work, ")
+      println("why not enjoy a cup of "+ drink.preference +"?")
+      println(prompt.preference)
+    }
+  }
+
+  object JoesPrefs {
+    implicit val prompt = new PreferredPrompt("Yes, master&gt; ")
+    implicit val drink = new PreferredDrink("tea")
+  }
+
+<hr>
+  scala&gt; Greeter.greet("Joe") 
+<span class="output">  &lt;console&gt;:8: error: no implicit argument matching parameter</span>
+<span class="output">    type PreferredPrompt was found.</span>
+<span class="output">         Greeter.greet("Joe")</span>
+<span class="output">                 ^</span>
+
+<hr>
+  scala&gt; import JoesPrefs._
+<span class="output">  import JoesPrefs._</span>
+
+<hr>
+  scala&gt; Greeter.greet("Joe")(prompt, drink)
+<span class="output">  Welcome, Joe. The system is ready.</span>
+<span class="output">  But while you work, why not enjoy a cup of tea?</span>
+<span class="output">  Yes, master&gt; </span>
+
+<hr>
+  scala&gt; Greeter.greet("Joe")
+<span class="output">  Welcome, Joe. The system is ready.</span>
+<span class="output">  But while you work, why not enjoy a cup of tea?</span>
+<span class="output">  Yes, master&gt; </span>
+
+<hr>
+// In file <a href="../implicits/Misc.scala">implicits/Misc.scala</a>
+
+  def maxListUpBound[T &lt;: Ordered[T]](elements: List[T]): T = 
+    elements match {
+      case List() =&gt;
+        throw new IllegalArgumentException("empty list!")
+      case List(x) =&gt; x
+      case x :: rest =&gt;
+        val maxRest = maxListUpBound(rest)
+        if (x &gt; maxRest) x
+        else maxRest
+    }
+
+<hr>
+// In file <a href="../implicits/MaxList1.scala">implicits/MaxList1.scala</a>
+
+  def maxListImpParm[T](elements: List[T])
+        (implicit orderer: T =&gt; Ordered[T]): T =
+
+    elements match {
+      case List() =&gt; 
+        throw new IllegalArgumentException("empty list!")
+      case List(x) =&gt; x
+      case x :: rest =&gt;
+        val maxRest = maxListImpParm(rest)(orderer)
+        if (orderer(x) &gt; maxRest) x
+        else maxRest
+    }
+
+<hr>
+  scala&gt; maxListImpParm(List(1,5,10,3))
+<span class="output">  res10: Int = 10</span>
+
+  scala&gt; maxListImpParm(List(1.5, 5.2, 10.7, 3.14159))
+<span class="output">  res11: Double = 10.7</span>
+
+  scala&gt; maxListImpParm(List("one", "two", "three"))
+<span class="output">  res12: java.lang.String = two</span>
+
+<hr>
+  def maxListPoorStyle[T](elments: List[T])
+        (implicit orderer: (T, T) =&gt; Boolean): T
+
+<hr>
+  </pre>
+  <h3><a name="sec6"></a>21.6 View bounds</h3>
+
+  <pre><hr>
+// In file <a href="../implicits/Misc.scala">implicits/Misc.scala</a>
+
+  def maxList[T](elements: List[T])
+        (implicit orderer: T =&gt; Ordered[T]): T =
+
+    elements match {
+      case List() =&gt; 
+        throw new IllegalArgumentException("empty list!")
+      case List(x) =&gt; x
+      case x :: rest =&gt;
+        val maxRest = maxList(rest)  // (orderer) is implicit
+        if (x &gt; maxRest) x           // orderer(x) is implicit
+        else maxRest
+    }
+
+<hr>
+// In file <a href="../implicits/Misc.scala">implicits/Misc.scala</a>
+
+  def maxList[T](elements: List[T])
+        (implicit converter: T =&gt; Ordered[T]): T =
+    // same body...
+
+<hr>
+// In file <a href="../implicits/Misc.scala">implicits/Misc.scala</a>
+
+  def maxList[T](elements: List[T])
+        (implicit iceCream: T =&gt; Ordered[T]): T =
+    // same body...
+
+<hr>
+// In file <a href="../implicits/MaxList2.scala">implicits/MaxList2.scala</a>
+
+  def maxList[T &lt;% Ordered[T]](elements: List[T]): T =
+    elements match {
+      case List() =&gt; 
+        throw new IllegalArgumentException("empty list!")
+      case List(x) =&gt; x
+      case x :: rest =&gt;
+        val maxRest = maxList(rest)  // (orderer) is implicit
+        if (x &gt; maxRest) x           // orderer(x) is implicit
+        else maxRest
+    }
+
+<hr>
+  implicit def identity[A](x: A): A = x
+
+<hr>
+// In file <a href="../implicits/mocha.scala">implicits/mocha.scala</a>
+
+  object Mocha extends Application {
+
+    class PreferredDrink(val preference: String)
+
+    implicit val pref = new PreferredDrink("mocha")
+
+    def enjoy(name: String)(implicit drink: PreferredDrink) {
+      print("Welcome, "+ name)
+      print(". Enjoy a ")
+      print(drink.preference)
+      println("!")
+    }
+
+    enjoy("reader")
+  }
+
+<hr>
+  $ scalac -Xprint:typer mocha.scala
+<span class="output">  [[syntax trees at end of typer]]// Scala source: mocha.scala</span>
+<span class="output">  package &lt;empty&gt; {</span>
+<span class="output">    final object Mocha extends java.lang.Object with Application</span>
+<span class="output">        with ScalaObject {</span>
+
+<span class="output">      // ...</span>
+
+<span class="output">      private[this] val pref: Mocha.PreferredDrink =</span>
+<span class="output">        new Mocha.this.PreferredDrink("mocha");</span>
+<span class="output">      implicit &lt;stable&gt; &lt;accessor&gt;</span>
+<span class="output">        def pref: Mocha.PreferredDrink = Mocha.this.pref;</span>
+<span class="output">      def enjoy(name: String)</span>
+<span class="output">          (implicit drink: Mocha.PreferredDrink): Unit = {</span>
+<span class="output">        scala.this.Predef.print("Welcome, ".+(name));</span>
+<span class="output">        scala.this.Predef.print(". Enjoy a ");</span>
+<span class="output">        scala.this.Predef.print(drink.preference);</span>
+<span class="output">        scala.this.Predef.println("!")</span>
+<span class="output">      };</span>
+<span class="output">      Mocha.this.enjoy("reader")(Mocha.this.pref)</span>
+<span class="output">    }</span>
+<span class="output">  }</span>
+
+<hr>
+  </pre>
+  <h3><a name="sec7"></a>21.7 Debugging implicits</h3>
+
+  <pre><hr>
+  scala&gt; val chars: List[Char] = "xyz"
+<span class="output">  &lt;console&gt;:12: error: type mismatch;</span>
+<span class="output">   found   : java.lang.String("xyz")</span>
+<span class="output">   required: List[Char]</span>
+<span class="output">         val chars: List[Char] = "xyz"</span>
+<span class="output">                                 ^</span>
+
+<hr>
+  scala&gt; val chars: List[Char] = stringWrapper("xyz")
+<span class="output">  &lt;console&gt;:12: error: type mismatch;</span>
+<span class="output">   found   : java.lang.Object with RandomAccessSeq[Char]</span>
+<span class="output">   required: List[Char]</span>
+<span class="output">         val chars: List[Char] = stringWrapper("xyz")</span>
+<span class="output">                                 ^</span>
+
+<hr>
+  enjoy("reader")
+
+<hr>
+<span class="output">  Mocha.this.enjoy("reader")(Mocha.this.pref)</span>
+
+<hr>
+  </pre>
+  <h3><a name="sec8"></a>21.8 Conclusion</h3>
+
+
+ <table>
+ <tr valign="top">
+ <td>
+ <div id="moreinfo">
+ <p>
+ For more information about <em>Programming in Scala</em> (the "Stairway Book"), please visit:
+ </p>
+ 
+ <p>
+ <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
+ </p>
+ 
+ <p>
+ and:
+ </p>
+ 
+ <p>
+ <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
+ </p>
+ </div>
+ </td>
+ <td>
+ <div id="license">
+ <p>
+   Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
+ </p>
+
+ <p>
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ </p>
+
+ <p style="margin-left: 20px">
+   <a href="http://www.apache.org/licenses/LICENSE-2.0">
+     http://www.apache.org/licenses/LICENSE-2.0
+   </a>
+ </p>
+
+ <p>
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+   implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ </p>
+ </div>
+ </td>
+ </tr>
+ </table>
+
+</body>
+</html>

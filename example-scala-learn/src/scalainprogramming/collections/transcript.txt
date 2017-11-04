@@ -1,0 +1,348 @@
+/*
+ * Copyright (C) 2007-2008 Artima, Inc. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Automatically generated Scala interpreter transcript from:
+ *
+ * Programming in Scala (First Edition, Version 6)
+ * by Martin Odersky, Lex Spoon, Bill Venners
+ *
+ * http://booksites.artima.com/programming_in_scala
+ */
+
+
+scala> import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.ListBuffer
+
+scala> val buf = new ListBuffer[Int]             
+buf: scala.collection.mutable.ListBuffer[Int] = ListBuffer()
+
+scala> buf += 1                                  
+
+scala> buf += 2                                  
+
+scala> buf     
+res2: scala.collection.mutable.ListBuffer[Int] = ListBuffer(1, 2)
+
+scala> 3 +: buf                                  
+res3: scala.collection.mutable.Buffer[Int] = ListBuffer(3, 1, 2)
+
+scala> buf.toList
+res4: List[Int] = List(3, 1, 2)
+
+scala> import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.ArrayBuffer
+
+scala> val buf = new ArrayBuffer[Int]()
+buf: scala.collection.mutable.ArrayBuffer[Int] = ArrayBuffer()
+
+scala> buf += 12
+
+scala> buf += 15
+
+scala> buf
+res7: scala.collection.mutable.ArrayBuffer[Int] = ArrayBuffer(12, 15)
+
+scala> buf.length
+res8: Int = 2
+
+scala> buf(0)
+res9: Int = 12
+
+scala> import scala.collection.immutable.Queue
+import scala.collection.immutable.Queue
+
+scala> val empty = new Queue[Int]             
+empty: scala.collection.immutable.Queue[Int] = Queue()
+
+scala> val has1 = empty.enqueue(1)
+has1: scala.collection.immutable.Queue[Int] = Queue(1)
+
+scala> val has123 = has1.enqueue(List(2, 3))
+has123: scala.collection.immutable.Queue[Int] = Queue(1, 2, 3)
+
+scala> val (element, has23) = has123.dequeue
+element: Int = 1
+has23: scala.collection.immutable.Queue[Int] = Queue(2, 3)
+
+scala> import scala.collection.mutable.Queue                
+import scala.collection.mutable.Queue
+
+scala> val queue = new Queue[String]
+queue: scala.collection.mutable.Queue[String] = Queue()
+
+scala> queue += "a"
+
+scala> queue ++= List("b", "c")
+
+scala> queue
+res12: scala.collection.mutable.Queue[String] = Queue(a, b, c)
+
+scala> queue.dequeue
+res13: String = a
+
+scala> queue
+res14: scala.collection.mutable.Queue[String] = Queue(b, c)
+
+scala> import scala.collection.mutable
+import scala.collection.mutable
+
+scala> val mutaSet = mutable.Set(1, 2, 3)          
+mutaSet: scala.collection.mutable.Set[Int] = Set(3, 1, 2)
+
+scala> val emptySet = mutable.Set.empty[String]
+emptySet: scala.collection.mutable.Set[String] = Set()
+
+scala> val text = "See Spot run. Run, Spot. Run!"
+text: java.lang.String = See Spot run. Run, Spot. Run!
+
+scala> val wordsArray = text.split("[ !,.]+")    
+wordsArray: Array[java.lang.String] = Array(See, Spot, run, Run, Spot, Run)
+
+scala>  val words = mutable.Set.empty[String]
+words: scala.collection.mutable.Set[String] = Set()
+
+scala> for (word <- wordsArray)
+         words += word.toLowerCase
+
+scala> words
+res16: scala.collection.mutable.Set[String] = Set(spot, run, see)
+
+scala> val map = mutable.Map.empty[String, Int]
+map: scala.collection.mutable.Map[String,Int] = Map()
+
+scala> val map = mutable.Map.empty[String, Int]
+map: scala.collection.mutable.Map[String,Int] = Map()
+
+scala> map("hello") = 1
+
+scala> map("there") = 2
+
+scala> map
+res19: scala.collection.mutable.Map[String,Int] = Map(hello -> 1, there -> 2)
+
+scala> map("hello")
+res20: Int = 1
+
+scala> def countWords(text: String) = {
+         val counts = mutable.Map.empty[String, Int]
+         for (rawWord <- text.split("[ ,!.]+")) {
+           val word = rawWord.toLowerCase
+           val oldCount = 
+             if (counts.contains(word)) counts(word)
+             else 0
+           counts += (word -> (oldCount + 1))
+         }
+         counts
+       }
+countWords: (String)scala.collection.mutable.Map[String,Int]
+
+scala> countWords("See Spot run! Run, Spot. Run!")
+res21: scala.collection.mutable.Map[String,Int] = Map(see -> 1, run -> 3, spot -> 2)
+
+scala> List(1, 2, 3)
+res22: List[Int] = List(1, 2, 3)
+
+scala> mutable.Set(1, 2, 3)
+res23: scala.collection.mutable.Set[Int] = Set(3, 1, 2)
+
+scala> mutable.Map(1->"hi", 2->"there")
+res24: scala.collection.mutable.Map[Int,java.lang.String] = Map(2 -> there, 1 -> hi)
+
+scala> Array(1, 2, 3)
+res25: Array[Int] = Array(1, 2, 3)
+
+scala> List(1, 2, 3)
+res26: List[Int] = List(1, 2, 3)
+
+scala> List.apply(1, 2, 3)
+res27: List[Int] = List(1, 2, 3)
+
+scala> import scala.collection.immutable.TreeSet
+import scala.collection.immutable.TreeSet
+
+scala> val ts = TreeSet(9, 3, 1, 8, 0, 2, 7, 4, 6, 5)
+ts: scala.collection.immutable.SortedSet[Int] = Set(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+scala> val cs = TreeSet('f', 'u', 'n')
+cs: scala.collection.immutable.SortedSet[Char] = Set(f, n, u)
+
+scala> import scala.collection.immutable.TreeMap
+import scala.collection.immutable.TreeMap
+
+scala> var tm = TreeMap(3 -> 'x', 1 -> 'x', 4 -> 'x')
+tm: scala.collection.immutable.SortedMap[Int,Char] = Map(1 -> x, 3 -> x, 4 -> x)
+
+scala> tm += (2 -> 'x')
+
+scala> tm
+res29: scala.collection.immutable.SortedMap[Int,Char] = Map(1 -> x, 2 -> x, 3 -> x, 4 -> x)
+
+scala> val original = Set(1, 2, 3)
+original: scala.collection.immutable.Set[Int] = Set(1, 2, 3)
+
+scala> val updated = original + 5
+updated: scala.collection.immutable.Set[Int] = Set(1, 2, 3, 5)
+
+scala> original
+res30: scala.collection.immutable.Set[Int] = Set(1, 2, 3)
+
+scala> val people = Set("Nancy", "Jane")
+people: scala.collection.immutable.Set[java.lang.String] = Set(Nancy, Jane)
+
+scala> people += "Bob"
+<console>:6: error: reassignment to val
+       people += "Bob"
+              ^
+
+scala> var people = Set("Nancy", "Jane")
+people: scala.collection.immutable.Set[java.lang.String] = Set(Nancy, Jane)
+
+scala> people += "Bob"
+
+scala> people
+res33: scala.collection.immutable.Set[java.lang.String] = Set(Nancy, Jane, Bob)
+
+scala> people -= "Jane"
+
+scala> people ++= List("Tom", "Harry")
+
+scala> people
+res36: scala.collection.immutable.Set[java.lang.String] = Set(Nancy, Bob, Tom, Harry)
+
+scala> var roughlyPi = 3.0
+roughlyPi: Double = 3.0
+
+scala> roughlyPi += 0.1
+
+scala> roughlyPi += 0.04
+
+scala> roughlyPi
+res39: Double = 3.14
+
+scala> List(1, 2, 3)
+res40: List[Int] = List(1, 2, 3)
+
+scala> Set('a', 'b', 'c')
+res41: scala.collection.immutable.Set[Char] = Set(a, b, c)
+
+scala> import scala.collection.mutable
+import scala.collection.mutable
+
+scala> mutable.Map("hi" -> 2, "there" -> 5)
+res42: scala.collection.mutable.Map[java.lang.String,Int] = Map(hi -> 2, there -> 5)
+
+scala> Array(1.0, 2.0, 3.0)
+res43: Array[Double] = Array(1.0, 2.0, 3.0)
+
+scala> import scala.collection.mutable
+import scala.collection.mutable
+
+scala> val stuff = mutable.Set(42)
+stuff: scala.collection.mutable.Set[Int] = Set(42)
+
+scala> stuff += "abracadabra"
+<console>:7: error: type mismatch;
+ found   : java.lang.String("abracadabra")
+ required: Int
+       stuff += "abracadabra"
+                ^
+
+scala> val stuff = mutable.Set[Any](42)
+stuff: scala.collection.mutable.Set[Any] = Set(42)
+
+scala> buf.toArray
+res45: Array[Int] = Array(12, 15)
+
+scala> buf.toList
+res46: List[Int] = List(12, 15)
+
+scala> buf.toArray
+res47: Array[Int] = Array(12, 15)
+
+scala> buf.toList
+res48: List[Int] = List(12, 15)
+
+scala> val colors = List("blue", "yellow", "red", "green")
+colors: List[java.lang.String] = List(blue, yellow, red, green)
+
+scala> import scala.collection.immutable.TreeSet
+import scala.collection.immutable.TreeSet
+
+scala> val treeSet = TreeSet(colors)                 
+<console>:6: error: no implicit argument matching parameter type (List[java.lang.String]) => Ordered[List[java.lang.String]] was found.
+       val treeSet = TreeSet(colors)                 
+                     ^
+
+scala> val treeSet = TreeSet[String]() ++ colors
+treeSet: scala.collection.immutable.SortedSet[String] = Set(blue, green, red, yellow)
+
+scala> treeSet.toList
+res49: List[String] = List(blue, green, red, yellow)
+
+scala> treeSet.toArray
+res50: Array[String] = Array(blue, green, red, yellow)
+
+scala> import scala.collection.mutable
+import scala.collection.mutable
+
+scala> treeSet
+res51: scala.collection.immutable.SortedSet[String] = Set(blue, green, red, yellow)
+
+scala> val mutaSet = mutable.Set.empty ++ treeSet
+mutaSet: scala.collection.mutable.Set[String] = Set(yellow, blue, red, green)
+
+scala> val immutaSet = Set.empty ++ mutaSet
+immutaSet: scala.collection.immutable.Set[String] = Set(yellow, blue, red, green)
+
+scala> val muta = mutable.Map("i" -> 1, "ii" -> 2)
+muta: scala.collection.mutable.Map[java.lang.String,Int] = Map(ii -> 2, i -> 1)
+
+scala> val immu = Map.empty ++ muta
+immu: scala.collection.immutable.Map[java.lang.String,Int] = Map(ii -> 2, i -> 1)
+
+scala>   def longestWord(words: Array[String]) = {
+           var word = words(0)
+           var idx = 0
+           for (i <- 1 until words.length)
+             if (words(i).length > word.length) {
+               word = words(i)
+               idx = i
+             }
+           (word, idx)
+         }
+
+longestWord: (Array[String])(String, Int)
+
+scala> val longest = 
+         longestWord("The quick brown fox".split(" "))
+longest: (String, Int) = (quick,1)
+
+scala> longest._1
+res52: String = quick
+
+scala> longest._2
+res53: Int = 1
+
+scala> val (word, idx) = longest
+word: String = quick
+idx: Int = 1
+
+scala> word
+res54: String = quick
+
+scala> val word, idx = longest
+word: (String, Int) = (quick,1)
+idx: (String, Int) = (quick,1)
+

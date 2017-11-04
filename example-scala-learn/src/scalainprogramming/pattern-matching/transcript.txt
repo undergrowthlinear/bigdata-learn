@@ -1,0 +1,320 @@
+/*
+ * Copyright (C) 2007-2008 Artima, Inc. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Automatically generated Scala interpreter transcript from:
+ *
+ * Programming in Scala (First Edition, Version 6)
+ * by Martin Odersky, Lex Spoon, Bill Venners
+ *
+ * http://booksites.artima.com/programming_in_scala
+ */
+
+
+scala>   abstract class Expr
+           case class Var(name: String) extends Expr
+         case class Number(num: Double) extends Expr
+         case class UnOp(operator: String, arg: Expr) extends Expr
+         case class BinOp(operator: String, 
+             left: Expr, right: Expr) extends Expr
+
+defined class Expr
+defined class Var
+defined class Number
+defined class UnOp
+defined class BinOp
+
+scala> val v = Var("x")
+v: Var = Var(x)
+
+scala> val op = BinOp("+", Number(1), v)
+op: BinOp = BinOp(+,Number(1.0),Var(x))
+
+scala> v.name
+res0: String = x
+
+scala> op.left
+res1: Expr = Number(1.0)
+
+scala> println(op)
+BinOp(+,Number(1.0),Var(x))
+
+scala> op.right == Var("x")
+res3: Boolean = true
+
+scala>   def simplifyTop(expr: Expr): Expr = expr match {
+           case UnOp("-", UnOp("-", e))  => e   // Double negation
+           case BinOp("+", e, Number(0)) => e   // Adding zero
+           case BinOp("*", e, Number(1)) => e   // Multiplying by one
+           case _ => expr
+         }
+
+simplifyTop: (Expr)Expr
+
+scala> simplifyTop(UnOp("-", UnOp("-", Var("x"))))
+res4: Expr = Var(x)
+
+scala>   def describe(x: Any) = x match {
+           case 5 => "five"
+           case true => "truth"
+           case "hello" => "hi!"
+           case Nil => "the empty list"
+           case _ => "something else"
+         }
+
+describe: (Any)java.lang.String
+
+scala> describe(5)
+res5: java.lang.String = five
+
+scala> describe(true)
+res6: java.lang.String = truth
+
+scala> describe("hello")
+res7: java.lang.String = hi!
+
+scala> describe(Nil)
+res8: java.lang.String = the empty list
+
+scala> describe(List(1,2,3))
+res9: java.lang.String = something else
+
+scala> import Math.{E, Pi}
+import Math.{E, Pi}
+
+scala> E match {
+         case Pi => "strange math? Pi = "+ Pi
+         case _ => "OK"
+       }
+res10: java.lang.String = OK
+
+scala> val pi = Math.Pi
+pi: Double = 3.141592653589793
+
+scala> E match {
+         case pi => "strange math? Pi = "+ pi
+       }
+res11: java.lang.String = strange math? Pi = 2.718281828459045
+
+scala> E match {
+         case pi => "strange math? Pi = "+ pi
+         case _ => "OK"  
+       }
+<console>:9: error: unreachable code
+         case _ => "OK"  
+                   ^
+
+scala> E match {
+         case `pi` => "strange math? Pi = "+ pi
+         case _ => "OK"
+       }
+res13: java.lang.String = OK
+
+scala>   def tupleDemo(expr: Any) =
+           expr match {
+             case (a, b, c)  =>  println("matched "+ a + b + c)
+             case _ =>
+           }
+
+tupleDemo: (Any)Unit
+
+scala> tupleDemo(("a ", 3, "-tuple"))
+matched a 3-tuple
+
+scala>   def generalSize(x: Any) = x match {
+           case s: String => s.length
+           case m: Map[_, _] => m.size
+           case _ => -1
+         }
+
+generalSize: (Any)Int
+
+scala> generalSize("abc")
+res15: Int = 3
+
+scala> generalSize(Map(1 -> 'a', 2 -> 'b'))
+res16: Int = 2
+
+scala> generalSize(Math.Pi)
+res17: Int = -1
+
+scala> def isIntIntMap(x: Any) = x match {
+         case m: Map[Int, Int] => true
+         case _ => false
+       }
+warning: there were unchecked warnings; re-run with -unchecked for details
+isIntIntMap: (Any)Boolean
+
+scala> isIntIntMap(Map(1 -> 1))
+res18: Boolean = true
+
+scala> isIntIntMap(Map("abc" -> "abc"))
+res19: Boolean = true
+
+scala> def isStringArray(x: Any) = x match {
+         case a: Array[String] => "yes"
+         case _ => "no"
+       }
+isStringArray: (Any)java.lang.String
+
+scala> val as = Array("abc")
+as: Array[java.lang.String] = Array(abc)
+
+scala> isStringArray(as)
+res20: java.lang.String = yes
+
+scala> val ai = Array(1, 2, 3)
+ai: Array[Int] = Array(1, 2, 3)
+
+scala> isStringArray(ai)
+res21: java.lang.String = no
+
+scala> def simplifyAdd(e: Expr) = e match {
+         case BinOp("+", x, x) => BinOp("*", x, Number(2))
+         case _ => e
+       }
+<console>:10: error: x is already defined as value x
+         case BinOp("+", x, x) => BinOp("*", x, Number(2))
+                            ^
+
+scala> def simplifyAdd(e: Expr) = e match {
+         case BinOp("+", x, y) if x == y =>
+           BinOp("*", x, Number(2))
+         case _ => e
+       }
+simplifyAdd: (Expr)Expr
+
+scala> def simplifyBad(expr: Expr): Expr = expr match {
+         case UnOp(op, e) => UnOp(op, simplifyBad(e))
+         case UnOp("-", UnOp("-", e)) => e
+       }
+<console>:17: error: unreachable code
+         case UnOp("-", UnOp("-", e)) => e
+                                         ^
+
+scala>     sealed abstract class Expr
+         case class Var(name: String) extends Expr
+         case class Number(num: Double) extends Expr
+         case class UnOp(operator: String, arg: Expr) extends Expr
+         case class BinOp(operator: String, 
+             left: Expr, right: Expr) extends Expr
+
+defined class Expr
+defined class Var
+defined class Number
+defined class UnOp
+defined class BinOp
+
+scala>   def describe(e: Expr): String = e match {
+           case Number(_) => "a number"
+           case Var(_)    => "a variable"
+         }
+
+<console>:11: warning: match is not exhaustive!
+missing combination           UnOp
+missing combination          BinOp
+
+         def describe(e: Expr): String = e match {
+                                         ^
+describe: (Expr)String
+
+scala> val capitals = 
+         Map("France" -> "Paris", "Japan" -> "Tokyo")
+capitals: scala.collection.immutable.Map[java.lang.String,java.lang.String] = Map(France -> Paris, Japan -> Tokyo)
+
+scala> capitals get "France"
+res22: Option[java.lang.String] = Some(Paris)
+
+scala> capitals get "North Pole"
+res23: Option[java.lang.String] = None
+
+scala> def show(x: Option[String]) = x match {
+         case Some(s) => s
+         case None => "?"
+       }
+show: (Option[String])String
+
+scala> show(capitals get "Japan")
+res24: String = Tokyo
+
+scala> show(capitals get "France")
+res25: String = Paris
+
+scala> show(capitals get "North Pole")
+res26: String = ?
+
+scala> val myTuple = (123, "abc")
+myTuple: (Int, java.lang.String) = (123,abc)
+
+scala> val (number, string) = myTuple
+number: Int = 123
+string: java.lang.String = abc
+
+scala> val exp = new BinOp("*", Number(5), Number(1))
+exp: BinOp = BinOp(*,Number(5.0),Number(1.0))
+
+scala> val BinOp(op, left, right) = exp
+op: String = *
+left: Expr = Number(5.0)
+right: Expr = Number(1.0)
+
+scala>   val withDefault: Option[Int] => Int = {
+           case Some(x) => x
+           case None => 0
+         }
+
+withDefault: (Option[Int]) => Int = <function>
+
+scala> withDefault(Some(10))
+res27: Int = 10
+
+scala> withDefault(None)
+res28: Int = 0
+
+scala>   val second: List[Int] => Int = {
+           case x :: y :: _ => y
+         }
+
+<console>:4: warning: match is not exhaustive!
+missing combination            Nil
+
+         val second: List[Int] => Int = {
+                                        ^
+second: (List[Int]) => Int = <function>
+
+scala>   val second: PartialFunction[List[Int],Int] = {
+           case x :: y :: _ => y
+         }
+
+second: PartialFunction[List[Int],Int] = <function>
+
+scala> second.isDefinedAt(List(5,6,7))
+res29: Boolean = true
+
+scala> second.isDefinedAt(List())
+res30: Boolean = false
+
+scala> for ((country, city) <- capitals)
+         println("The capital of "+ country +" is "+ city)
+The capital of France is Paris
+The capital of Japan is Tokyo
+
+scala> val results = List(Some("apple"), None,
+           Some("orange"))
+results: List[Option[java.lang.String]] = List(Some(apple), None, Some(orange))
+
+scala> for (Some(fruit) <- results) println(fruit)
+apple
+orange
+

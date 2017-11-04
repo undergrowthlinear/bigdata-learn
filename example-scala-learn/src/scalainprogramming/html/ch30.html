@@ -1,0 +1,808 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type"
+        content="text/html; charset=ISO-8859-1" />
+  <title>Code Examples for Programming in Scala</title>
+  <link rel="stylesheet" href="style.css" type="text/css"/>
+</head>
+<body>
+
+<div id="mainTitles"><h3>Code Examples for</h3><h2>Programming in Scala</h2></div>  <p><a href="../index.html">
+    Return to chapter index
+  </a></p>
+  <h2>30 Actors and Concurrency</h2>
+
+  <p><a href="../concurrency/transcript.txt">
+    Sample run of chapter's interpreter examples
+  </a></p>
+
+  <ul>
+
+    <li>30.1 <a href="#sec1">Trouble in paradise</a></li>
+    <li>30.2 <a href="#sec2">Actors and message passing</a></li>
+    <li>30.3 <a href="#sec3">Treating native threads as actors</a></li>
+    <li>30.4 <a href="#sec4">Better performance through thread reuse</a></li>
+    <li>30.5 <a href="#sec5">Good actors style</a></li>
+    <li>30.6 <a href="#sec6">A longer example: Parallel discrete event simulation</a></li>
+    <li>30.7 <a href="#sec7">Conclusion</a></li>
+  </ul>
+
+  <h3><a name="sec1"></a>30.1 Trouble in paradise</h3>
+
+  <h3><a name="sec2"></a>30.2 Actors and message passing</h3>
+
+  <pre><hr>
+// In file <a href="../concurrency/Actors.scala">concurrency/Actors.scala</a>
+
+  import scala.actors._
+
+  object SillyActor extends Actor {
+    def act() { 
+      for (i &lt;- 1 to 5) {
+        println("I'm acting!")
+        Thread.sleep(1000)
+      }
+    }
+  }
+
+<hr>
+  scala&gt; SillyActor.start()
+<span class="output">  I'm acting!</span>
+<span class="output">  res4: scala.actors.Actor = SillyActor$@1945696</span>
+
+<span class="output">  scala&gt; I'm acting!</span>
+<span class="output">  I'm acting!</span>
+<span class="output">  I'm acting!</span>
+<span class="output">  I'm acting!</span>
+
+<hr>
+  scala&gt; Thread.sleep(5000)
+<span class="output">  asdf</span>
+
+<hr>
+// In file <a href="../concurrency/Actors.scala">concurrency/Actors.scala</a>
+
+  import scala.actors._
+
+  object SeriousActor extends Actor {
+    def act() { 
+      for (i &lt;- 1 to 5) {
+        println("To be or not to be.")
+        Thread.sleep(1000)
+      }
+    }
+  }
+
+<hr>
+  scala&gt; SillyActor.start(); SeriousActor.start()
+<span class="output">  res3: scala.actors.Actor = seriousActor$@1689405</span>
+
+<span class="output">  scala&gt; To be or not to be.</span>
+<span class="output">  I'm acting!</span>
+<span class="output">  To be or not to be.</span>
+<span class="output">  I'm acting!</span>
+<span class="output">  To be or not to be.</span>
+<span class="output">  I'm acting!</span>
+<span class="output">  To be or not to be.</span>
+<span class="output">  I'm acting!</span>
+<span class="output">  To be or not to be.</span>
+<span class="output">  I'm acting!</span>
+
+<hr>
+  scala&gt; Thread.sleep(5000)
+<span class="output">  asdf</span>
+
+<hr>
+  scala&gt; import scala.actors.Actor._
+
+  scala&gt; val seriousActor2 = actor {
+       |    for (i &lt;- 1 to 5)
+       |      println("That is the question.")
+       |    Thread.sleep(1000)
+       | }
+
+<span class="output">  scala&gt; That is the question.</span>
+<span class="output">  That is the question.</span>
+<span class="output">  That is the question.</span>
+<span class="output">  That is the question.</span>
+<span class="output">  That is the question.</span>
+
+<hr>
+  scala&gt; SillyActor ! "hi there"
+
+<hr>
+// In file <a href="../concurrency/Actors.scala">concurrency/Actors.scala</a>
+
+  val echoActor = actor {
+    while (true) {
+      receive {
+        case msg =&gt;
+          println("received message: "+ msg)
+      }
+    }
+  }
+
+<hr>
+  scala&gt; echoActor ! "hi there"
+<span class="output">  received message: hi there</span>
+
+  scala&gt; echoActor ! 15
+
+  scala&gt; received message: 15
+
+<hr>
+  scala&gt; val intActor = actor {
+       |   receive {
+       |     case x: Int =&gt; // I only want Ints
+       |       println("Got an Int: "+ x)
+       |   }
+       | }
+<span class="output">  intActor: scala.actors.Actor = </span>
+<span class="output">    scala.actors.Actor$$anon$1@34ba6b</span>
+
+<hr>
+  scala&gt; intActor ! "hello"
+  scala&gt; intActor ! Math.Pi
+
+<hr>
+  scala&gt; intActor ! 12
+<span class="output">  Got an Int: 12</span>
+
+<hr>
+  </pre>
+  <h3><a name="sec3"></a>30.3 Treating native threads as actors</h3>
+
+  <pre><hr>
+  scala&gt; import scala.actors.Actor._
+<span class="output">  import scala.actors.Actor._</span>
+
+  scala&gt; self ! "hello"
+
+  scala&gt; self.receive { case x =&gt; x }
+<span class="output">  res6: Any = hello</span>
+
+<hr>
+  scala&gt; self.receiveWithin(1000) { case x =&gt; x } // wait a sec!
+<span class="output">  res7: Any = TIMEOUT</span>
+
+<hr>
+  </pre>
+  <h3><a name="sec4"></a>30.4 Better performance through thread reuse</h3>
+
+  <pre><hr>
+// In file <a href="../concurrency/Actors.scala">concurrency/Actors.scala</a>
+
+  object NameResolver extends Actor {
+    import java.net.{InetAddress, UnknownHostException}
+
+    def act() { 
+      react {
+        case (name: String, actor: Actor) =&gt;
+          actor ! getIp(name)
+          act()
+        case "EXIT" =&gt;
+          println("Name resolver exiting.")
+          // quit
+        case msg =&gt;
+          println("Unhandled message: "+ msg)
+          act()
+      }
+    }
+
+    def getIp(name: String): Option[InetAddress] = {
+      try {
+        Some(InetAddress.getByName(name))
+      } catch {
+        case _:UnknownHostException =&gt; None
+      }
+    }
+  }
+
+<hr>
+  scala&gt; NameResolver.start()
+<span class="output">  res0: scala.actors.Actor = NameResolver$@90d6c5</span>
+
+  scala&gt; NameResolver ! ("www.scala-lang.org", self)
+
+  scala&gt; self.receiveWithin(0) { case x =&gt; x }
+<span class="output">  res2: Any = Some(www.scala-lang.org/128.178.154.102)</span>
+
+  scala&gt; NameResolver ! ("wwwwww.scala-lang.org", self)
+
+  scala&gt; self.receiveWithin(0) { case x =&gt; x }
+<span class="output">  res4: Any = None</span>
+
+<hr>
+// In file <a href="../concurrency/Actors.scala">concurrency/Actors.scala</a>
+
+  def act() { 
+    loop {
+      react {
+        case (name: String, actor: Actor) =&gt;
+          actor ! getIp(name)
+        case msg =&gt;
+          println("Unhandled message: " + msg)
+      }
+    }
+  }
+
+<hr>
+  </pre>
+  <h3><a name="sec5"></a>30.5 Good actors style</h3>
+
+  <pre><hr>
+  actor {
+    Thread.sleep(time)
+    mainActor ! "WAKEUP"
+  } 
+
+<hr>
+// In file <a href="../concurrency/Actors.scala">concurrency/Actors.scala</a>
+
+  val sillyActor2 = actor {
+    def emoteLater() {
+      val mainActor = self
+      actor {
+        Thread.sleep(1000)
+        mainActor ! "Emote"
+      }
+    }
+ 
+    var emoted = 0
+    emoteLater()
+
+    loop {
+      react {
+        case "Emote" =&gt;
+          println("I'm acting!")
+          emoted += 1
+          if (emoted &lt; 5)
+            emoteLater()
+        case msg =&gt;
+          println("Received: "+ msg)
+      }
+    }
+  }
+
+<hr>
+  scala&gt; sillyActor2 ! "hi there"
+  scala&gt; Received: hi there
+<span class="output">  I'm acting!</span>
+<span class="output">  I'm acting!</span>
+<span class="output">  I'm acting!</span>
+
+<hr>
+ def act() { 
+   loop {
+     react {
+       case (name: String, actor: Actor) =&gt;
+         actor ! (name, getIp(name))
+     }
+   }
+ }
+
+<hr>
+  lookerUpper ! ("www.scala-lang.org", self)
+
+<hr>
+  case class LookupIP(hostname: String, requester: Actor)
+
+  lookerUpper ! LookupIP("www.scala-lang.org", self)
+
+<hr>
+// In file <a href="../concurrency/Actors.scala">concurrency/Actors.scala</a>
+
+  import scala.actors.Actor._
+  import java.net.{InetAddress, UnknownHostException}
+
+  case class LookupIP(name: String, respondTo: Actor)
+  case class LookupResult(
+    name: String, 
+    address: Option[InetAddress]
+  )
+
+  object NameResolver2 extends Actor {
+
+    def act() { 
+      loop {
+        react {
+          case LookupIP(name, actor) =&gt;
+            actor ! LookupResult(name, getIp(name))
+        }
+      }
+    }
+
+    def getIp(name: String): Option[InetAddress] = {
+      // As before (in Listing 30.3)
+    }
+  }
+
+<hr>
+  </pre>
+  <h3><a name="sec6"></a>30.6 A longer example: Parallel discrete event simulation</h3>
+
+  <pre><hr>
+  trait Simulant extends Actor
+  class Wire extends Simulant
+
+<hr>
+// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+
+  case class Ping(time: Int)
+  case class Pong(time: Int, from: Actor)
+
+<hr>
+  class Clock extends Actor {
+    private var running = false
+    private var currentTime = 0
+    private var agenda: List[WorkItem] = List()
+  }
+
+<hr>
+// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+
+  case class WorkItem(time: Int, msg: Any, target: Actor)
+
+<hr>
+// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+
+  case class AfterDelay(delay: Int, msg: Any, target: Actor)
+
+<hr>
+// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+
+  case object Start
+  case object Stop
+
+<hr>
+// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+
+  class Clock extends Actor {
+    private var running = false
+    private var currentTime = 0
+    private var agenda: List[WorkItem] = List()
+    private var allSimulants: List[Actor] = List()
+    private var busySimulants: Set[Actor] = Set.empty
+
+<hr>
+// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+
+  start()
+
+<hr>
+// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+
+  def add(sim: Simulant) {
+    allSimulants = sim :: allSimulants
+  }
+
+<hr>
+// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+
+  def act() {
+    loop {
+      if (running &amp;&amp; busySimulants.isEmpty)
+        advance()
+
+      reactToOneMessage()
+    }
+  }
+
+<hr>
+// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+
+  def advance() {
+    if (agenda.isEmpty &amp;&amp; currentTime &gt; 0) {
+      println("** Agenda empty.  Clock exiting at time "+
+              currentTime+".")
+      self ! Stop
+      return
+    }
+      
+    currentTime += 1
+    println("Advancing to time "+currentTime)
+
+    processCurrentEvents()
+    for (sim &lt;- allSimulants)
+      sim ! Ping(currentTime)
+      
+    busySimulants = Set.empty ++ allSimulants
+  }
+
+<hr>
+// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+
+  private def processCurrentEvents() {
+    val todoNow = agenda.takeWhile(_.time &lt;= currentTime)
+
+    agenda = agenda.drop(todoNow.length)
+
+    for (WorkItem(time, msg, target) &lt;- todoNow) {
+      assert(time == currentTime)
+      target ! msg
+    }
+  }
+
+<hr>
+// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+
+  def reactToOneMessage() {
+    react {
+      case AfterDelay(delay, msg, target) =&gt;
+        val item = WorkItem(currentTime + delay, msg, target)
+        agenda = insert(agenda, item)
+
+      case Pong(time, sim) =&gt;
+        assert(time == currentTime)
+        assert(busySimulants contains sim)
+        busySimulants -= sim
+          
+      case Start =&gt; running = true
+
+      case Stop =&gt;
+        for (sim &lt;- allSimulants)
+          sim ! Stop
+        exit()
+    }
+  }
+
+<hr>
+// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+
+  def act() {
+    loop {
+      react {
+        case Stop =&gt; exit()
+        case Ping(time) =&gt;
+          if (time == 1) simStarting()
+          clock ! Pong(time, self)
+        case msg =&gt; handleSimMessage(msg)
+      }
+    }
+  }
+
+<hr>
+// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+
+  trait Simulant extends Actor {
+    val clock: Clock
+    def handleSimMessage(msg: Any)
+    def simStarting() { }
+    def act() {
+      loop {
+        react {
+          case Stop =&gt; exit()
+          case Ping(time) =&gt;
+            if (time == 1) simStarting()
+            clock ! Pong(time, self)
+          case msg =&gt; handleSimMessage(msg)
+        }
+      }
+    }
+    start()
+  }
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  class Circuit {
+    val clock = new Clock
+    // simulation messages
+    // delay constants
+    // Wire and Gate classes and methods
+    // misc. utility methods
+  }
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  case class SetSignal(sig: Boolean)
+  case class SignalChanged(wire: Wire, sig: Boolean)
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  val WireDelay = 1
+  val InverterDelay = 2
+  val OrGateDelay = 3
+  val AndGateDelay = 3
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  class Wire(name: String, init: Boolean) extends Simulant {
+    def this(name: String) { this(name, false) }
+    def this() { this("unnamed") }
+
+    val clock = Circuit.this.clock
+    clock.add(this)
+
+    private var sigVal = init
+    private var observers: List[Actor] = List()
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  def handleSimMessage(msg: Any) {
+    msg match {
+      case SetSignal(s) =&gt;
+        if (s != sigVal) {
+          sigVal = s
+          signalObservers()
+        }
+    }
+  }
+    
+  def signalObservers() {
+    for (obs &lt;- observers)
+      clock ! AfterDelay(
+        WireDelay,
+        SignalChanged(this, sigVal),
+        obs)
+  }
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  override def simStarting() { signalObservers() }
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  def addObserver(obs: Actor) {
+    observers = obs :: observers
+  }
+
+  override def toString = "Wire("+ name +")"
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  private object DummyWire extends Wire("dummy")
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  abstract class Gate(in1: Wire, in2: Wire, out: Wire)
+      extends Simulant {
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  def computeOutput(s1: Boolean, s2: Boolean): Boolean
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  val delay: Int
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  val clock = Circuit.this.clock
+  clock.add(this)
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  in1.addObserver(this)
+  in2.addObserver(this)
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  var s1, s2 = false
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  def handleSimMessage(msg: Any) {
+    msg match {
+      case SignalChanged(w, sig) =&gt;
+        if (w == in1)
+          s1 = sig
+        if (w == in2)
+          s2 = sig
+        clock ! AfterDelay(delay,
+            SetSignal(computeOutput(s1, s2)),
+            out)
+    }
+  }
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  def orGate(in1: Wire, in2: Wire, output: Wire) = 
+    new Gate(in1, in2, output) {
+      val delay = OrGateDelay
+      def computeOutput(s1: Boolean, s2: Boolean) = s1 || s2 
+    }
+  
+  def andGate(in1: Wire, in2: Wire, output: Wire) = 
+    new Gate(in1, in2, output) {
+      val delay = AndGateDelay
+      def computeOutput(s1: Boolean, s2: Boolean) = s1 &amp;&amp; s2 
+    }
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  def inverter(input: Wire, output: Wire) = 
+    new Gate(input, DummyWire, output) {
+      val delay = InverterDelay
+      def computeOutput(s1: Boolean, ignored: Boolean) = !s1
+    }
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  def probe(wire: Wire) = new Simulant {
+    val clock = Circuit.this.clock
+    clock.add(this)
+    wire.addObserver(this)
+    def handleSimMessage(msg: Any) {
+      msg match {
+        case SignalChanged(w, s) =&gt;
+           println("signal "+ w +" changed to "+ s)
+      }
+    }
+  }
+
+<hr>
+// In file <a href="../concurrency/Circuit.scala">concurrency/Circuit.scala</a>
+
+  def start() { clock ! Start }
+
+<hr>
+// In file <a href="../concurrency/Adders.scala">concurrency/Adders.scala</a>
+
+  trait Adders extends Circuit {
+    def halfAdder(a: Wire, b: Wire, s: Wire, c: Wire) {
+      val d, e = new Wire
+      orGate(a, b, d)
+      andGate(a, b, c)
+      inverter(c, e)
+      andGate(d, e, s)
+    }
+
+    def fullAdder(a: Wire, b: Wire, cin: Wire,
+        sum: Wire, cout: Wire) {
+
+      val s, c1, c2 = new Wire
+      halfAdder(a, cin, s, c1)
+      halfAdder(b, s, sum, c2)
+      orGate(c1, c2, cout)
+    }
+  }
+
+<hr>
+  val circuit = new Circuit with Adders
+
+<hr>
+  val circuit =
+    new Circuit 
+      with Adders 
+      with Multiplexers
+      with FlipFlops
+      with MultiCoreProcessors
+
+<hr>
+// In file <a href="../concurrency/Demo.scala">concurrency/Demo.scala</a>
+
+  object Demo {
+    def main(args: Array[String]) {
+      val circuit = new Circuit with Adders
+      import circuit._
+
+      val ain = new Wire("ain", true)
+      val bin = new Wire("bin", false)
+      val cin = new Wire("cin", true)
+      val sout = new Wire("sout")
+      val cout = new Wire("cout")
+
+      probe(ain)
+      probe(bin)
+      probe(cin)
+      probe(sout)
+      probe(cout)
+    
+      fullAdder(ain, bin, cin, sout, cout)
+
+      circuit.start()
+    }
+  }
+
+<hr>
+<span class="output">  Advancing to time 1</span>
+<span class="output">  Advancing to time 2</span>
+<span class="output">  signal Wire(cout) changed to false</span>
+<span class="output">  signal Wire(cin) changed to true</span>
+<span class="output">  signal Wire(ain) changed to true</span>
+<span class="output">  signal Wire(sout) changed to false</span>
+<span class="output">  signal Wire(bin) changed to false</span>
+<span class="output">  Advancing to time 3</span>
+<span class="output">  Advancing to time 4</span>
+<span class="output">  Advancing to time 5</span>
+<span class="output">  Advancing to time 6</span>
+<span class="output">  Advancing to time 7</span>
+<span class="output">  Advancing to time 8</span>
+<span class="output">  Advancing to time 9</span>
+<span class="output">  Advancing to time 10</span>
+<span class="output">  signal Wire(cout) changed to true</span>
+<span class="output">  Advancing to time 11</span>
+<span class="output">  Advancing to time 12</span>
+<span class="output">  Advancing to time 13</span>
+<span class="output">  Advancing to time 14</span>
+<span class="output">  Advancing to time 15</span>
+<span class="output">  Advancing to time 16</span>
+<span class="output">  Advancing to time 17</span>
+<span class="output">  Advancing to time 18</span>
+<span class="output">  signal Wire(sout) changed to true</span>
+<span class="output">  Advancing to time 19</span>
+<span class="output">  Advancing to time 20</span>
+<span class="output">  Advancing to time 21</span>
+<span class="output">  signal Wire(sout) changed to false</span>
+<span class="output">  ** Agenda empty.  Clock exiting at time 21.</span>
+
+<hr>
+  </pre>
+  <h3><a name="sec7"></a>30.7 Conclusion</h3>
+
+
+ <table>
+ <tr valign="top">
+ <td>
+ <div id="moreinfo">
+ <p>
+ For more information about <em>Programming in Scala</em> (the "Stairway Book"), please visit:
+ </p>
+ 
+ <p>
+ <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
+ </p>
+ 
+ <p>
+ and:
+ </p>
+ 
+ <p>
+ <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
+ </p>
+ </div>
+ </td>
+ <td>
+ <div id="license">
+ <p>
+   Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
+ </p>
+
+ <p>
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ </p>
+
+ <p style="margin-left: 20px">
+   <a href="http://www.apache.org/licenses/LICENSE-2.0">
+     http://www.apache.org/licenses/LICENSE-2.0
+   </a>
+ </p>
+
+ <p>
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+   implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ </p>
+ </div>
+ </td>
+ </tr>
+ </table>
+
+</body>
+</html>

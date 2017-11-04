@@ -1,3 +1,7 @@
+# 参考
+- http://www.runoob.com/scala/scala-file-io.html
+- http://www.jianshu.com/p/e0fc0ab7a9d2
+- http://blog.csdn.net/fjse51/article/details/52152362
 # 概念
 - Scala 源代码被编译成Java字节码，所以它可以运行于JVM之上，并可以调用现有的Java类库
 ```hello world
@@ -37,6 +41,23 @@ object HelloWorld {
   - 重写一个非抽象方法必须使用override修饰符、只有主构造函数才可以往基类的构造函数里写参数
   - 在子类中重写超类的抽象方法时，你不需要使用override关键字/Scala 只允许继承一个父类
   - Scala 中，是没有 static 这个东西的，object对象不能带参数
+  - scala 中没有 static 关键字对于一个class来说，所有的方法和成员变量在实例被 new 出来之前都是无法访问的,
+    - 因此class文件中的main方法也就没什么用了，scala object 中所有成员变量和方法默认都是 static 的所以 可以直接访问main方法
+  - 在scala中，类名可以和对象名为同一个名字，该对象称为该类的伴生对象，
+    - 类和伴生对象可以相互访问他们的私有属性，但是他们必须在同一个源文件内。
 - Scala Trait(特征)----与接口不同的是，它还可以定义属性和方法的实现
   - 它使用的关键字是 trait
   - Scala的类只能够继承单一父类，但是如果是 Trait(特征) 的话就可以继承多个，从结果来看就是实现了多重继承
+  - Scala中也是一般只能继承一个父类，可以通过多个with进行多重继承
+- Scala 模式匹配----选择器 match {备选项}
+  - 一个模式匹配包含了一系列备选项，每个都开始于关键字 case。每个备选项都包含了一个模式及一到多个表达式。箭头符号 => 隔开了模式和表达式
+  - case关键字的类定义就是就是样例类(case classes)，样例类是种特殊的类，经过优化以用于模式匹配
+- Scala 正则表达式----http://www.runoob.com/scala/scala-regular-expressions.html
+- Scala 异常处理----throw new IllegalArgumentException/与java类似
+  - catch字句是按次序捕捉的。因此，在catch字句中，越具体的异常越要靠前，越普遍的异常越靠后
+- Scala 提取器(Extractor)
+  - Scala 提取器是一个带有unapply方法的对象。unapply方法算是apply方法的反向操作：
+  - unapply接受一个对象，然后从对象中提取值，提取的值通常是用来构造该对象的值
+  - 在我们实例化一个类的时，可以带上0个或者多个的参数，
+  - 编译器在实例化的时会调用 apply 方法。我们可以在类和对象中都定义 apply 方法
+- Scala 文件 I/O----Scala 进行文件写操作，直接用的都是 java中 的 I/O 类 （java.io.File)：

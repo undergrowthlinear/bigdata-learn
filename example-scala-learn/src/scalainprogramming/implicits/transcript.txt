@@ -1,0 +1,216 @@
+/*
+ * Copyright (C) 2007-2008 Artima, Inc. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Automatically generated Scala interpreter transcript from:
+ *
+ * Programming in Scala (First Edition, Version 6)
+ * by Martin Odersky, Lex Spoon, Bill Venners
+ *
+ * http://booksites.artima.com/programming_in_scala
+ */
+
+
+scala>   implicit def stringWrapper(s: String) = 
+           new RandomAccessSeq[Char] {
+             def length = s.length
+             def apply(i: Int) = s.charAt(i)
+           }
+
+stringWrapper: (String)java.lang.Object with RandomAccessSeq[Char]
+
+scala> stringWrapper("abc123") exists (_.isDigit)
+res0: Boolean = true
+
+scala> "abc123" exists (_.isDigit)
+res1: Boolean = true
+
+scala>   def printWithSpaces(seq: RandomAccessSeq[Char]) = 
+           seq mkString " "
+
+printWithSpaces: (RandomAccessSeq[Char])String
+
+scala> printWithSpaces("xyz")
+res2: String = x y z
+
+scala> printWithSpaces(stringWrapper("xyz"))
+res3: String = x y z
+
+scala> val i: Int = 3.5
+<console>:5: error: type mismatch;
+ found   : Double(3.5)
+ required: Int
+       val i: Int = 3.5
+                    ^
+
+scala> implicit def doubleToInt(x: Double) = x.toInt
+doubleToInt: (Double)Int
+
+scala> val i: Int = 3.5
+i: Int = 3
+
+scala> class Rational(n: Int, d: Int) {
+           def this(n: Int) = this(n, 1)
+           private def gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
+           private val g = gcd(n, d)
+           val numer: Int = n / g
+           val denom: Int = d / g    
+       
+           def +(that: Rational): Rational =
+             new Rational(numer * that.denom + that.numer * denom,
+                          denom * that.denom)
+           def +(that: Int): Rational = this + new Rational(that)
+       
+           override def toString() = numer+"/"+denom
+         }
+defined class Rational
+
+scala> val oneHalf = new Rational(1, 2)
+oneHalf: Rational = 1/2
+
+scala> oneHalf + oneHalf
+res4: Rational = 1/1
+
+scala> oneHalf + 1
+res5: Rational = 3/2
+
+scala> implicit def intToRational(x: Int) = 
+         new Rational(x, 1)
+intToRational: (Int)Rational
+
+scala> 1 + oneHalf
+res6: Rational = 3/2
+
+scala>   class PreferredPrompt(val preference: String)
+
+defined class PreferredPrompt
+
+scala>   object Greeter {
+           def greet(name: String)(implicit prompt: PreferredPrompt) {
+             println("Welcome, "+ name +". The system is ready.")
+             println(prompt.preference)
+           }
+         }
+
+defined module Greeter
+
+scala> val bobsPrompt = new PreferredPrompt("relax> ")
+bobsPrompt: PreferredPrompt = PreferredPrompt@61d5f7
+
+scala> Greeter.greet("Bob")(bobsPrompt)                    
+Welcome, Bob. The system is ready.
+relax> 
+
+scala>   object JoesPrefs {
+           implicit val prompt = new PreferredPrompt("Yes, master> ")
+         }
+
+defined module JoesPrefs
+
+scala> Greeter.greet("Joe")
+<console>:11: error: no implicit argument matching parameter type PreferredPrompt was found.
+       Greeter.greet("Joe")
+               ^
+
+scala> import JoesPrefs._         
+import JoesPrefs._
+
+scala> Greeter.greet("Joe")
+Welcome, Joe. The system is ready.
+Yes, master> 
+
+scala>   class PreferredPrompt(val preference: String)
+         class PreferredDrink(val preference: String)
+       
+         object Greeter {
+           def greet(name: String)(implicit prompt: PreferredPrompt,
+               drink: PreferredDrink) {
+       
+             println("Welcome, "+ name +". The system is ready.")
+             print("But while you work, ")
+             println("why not enjoy a cup of "+ drink.preference +"?")
+             println(prompt.preference)
+           }
+         }
+       
+         object JoesPrefs {
+           implicit val prompt = new PreferredPrompt("Yes, master> ")
+           implicit val drink = new PreferredDrink("tea")
+         }
+
+defined class PreferredPrompt
+defined class PreferredDrink
+defined module Greeter
+defined module JoesPrefs
+
+scala> Greeter.greet("Joe") 
+<console>:15: error: no implicit argument matching parameter type PreferredPrompt was found.
+       Greeter.greet("Joe") 
+               ^
+
+scala> import JoesPrefs._
+import JoesPrefs._
+
+scala> Greeter.greet("Joe")(prompt, drink)
+Welcome, Joe. The system is ready.
+But while you work, why not enjoy a cup of tea?
+Yes, master> 
+
+scala> Greeter.greet("Joe")
+Welcome, Joe. The system is ready.
+But while you work, why not enjoy a cup of tea?
+Yes, master> 
+
+scala>   def maxListImpParm[T](elements: List[T])
+               (implicit orderer: T => Ordered[T]): T =
+       
+           elements match {
+             case List() => 
+               throw new IllegalArgumentException("empty list!")
+             case List(x) => x
+             case x :: rest =>
+               val maxRest = maxListImpParm(rest)(orderer)
+               if (orderer(x) > maxRest) x
+               else maxRest
+           }
+
+maxListImpParm: [T](List[T])(implicit (T) => Ordered[T])T
+
+scala> implicit def predefStringWrapperRevealed(s: String): Ordered[String] =
+         Predef.stringWrapper(s)
+predefStringWrapperRevealed: (String)Ordered[String]
+
+scala> maxListImpParm(List(1,5,10,3))
+res13: Int = 10
+
+scala> maxListImpParm(List(1.5, 5.2, 10.7, 3.14159))
+res14: Double = 10.7
+
+scala> maxListImpParm(List("one", "two", "three"))
+res15: java.lang.String = two
+
+scala> val chars: List[Char] = "xyz"
+<console>:18: error: type mismatch;
+ found   : java.lang.String("xyz")
+ required: List[Char]
+       val chars: List[Char] = "xyz"
+                               ^
+
+scala> val chars: List[Char] = stringWrapper("xyz")
+<console>:18: error: type mismatch;
+ found   : java.lang.Object with RandomAccessSeq[Char]
+ required: List[Char]
+       val chars: List[Char] = stringWrapper("xyz")
+                               ^
+

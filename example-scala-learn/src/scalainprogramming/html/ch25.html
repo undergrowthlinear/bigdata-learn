@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type"
+        content="text/html; charset=ISO-8859-1" />
+  <title>Code Examples for Programming in Scala</title>
+  <link rel="stylesheet" href="style.css" type="text/css"/>
+</head>
+<body>
+
+<div id="mainTitles"><h3>Code Examples for</h3><h2>Programming in Scala</h2></div>  <p><a href="../index.html">
+    Return to chapter index
+  </a></p>
+  <h2>25 Annotations</h2>
+
+    <li>25.1 <a href="#sec1">Why have annotations?</a></li>
+    <li>25.2 <a href="#sec2">Syntax of annotations</a></li>
+    <li>25.3 <a href="#sec3">Standard annotations</a></li>
+    <li>25.4 <a href="#sec4">Conclusion</a></li>
+  </ul>
+
+  <h3><a name="sec1"></a>25.1 Why have annotations?</h3>
+
+  <h3><a name="sec2"></a>25.2 Syntax of annotations</h3>
+
+  <pre><hr>
+// In file <a href="../annotations/Misc.scala">annotations/Misc.scala</a>
+
+  @deprecated def bigMistake() = //...
+
+<hr>
+// In file <a href="../annotations/Misc.scala">annotations/Misc.scala</a>
+
+  @deprecated class QuickAndDirty {
+    //...
+  }
+
+<hr>
+// In file <a href="../annotations/Misc.scala">annotations/Misc.scala</a>
+
+  (e: @unchecked) match {
+    // non-exhaustive cases...
+  }
+
+<hr>
+  @cool val normal = "Hello"
+  @coolerThan(normal) val fonzy = "Heeyyy"
+
+<hr>
+  </pre>
+  <h3><a name="sec3"></a>25.3 Standard annotations</h3>
+
+  <pre><hr>
+  @deprecated def bigMistake() =  //...
+
+<hr>
+  </pre>
+  <h3><a name="sec4"></a>25.4 Conclusion</h3>
+
+
+ <table>
+ <tr valign="top">
+ <td>
+ <div id="moreinfo">
+ <p>
+ For more information about <em>Programming in Scala</em> (the "Stairway Book"), please visit:
+ </p>
+ 
+ <p>
+ <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
+ </p>
+ 
+ <p>
+ and:
+ </p>
+ 
+ <p>
+ <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
+ </p>
+ </div>
+ </td>
+ <td>
+ <div id="license">
+ <p>
+   Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
+ </p>
+
+ <p>
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ </p>
+
+ <p style="margin-left: 20px">
+   <a href="http://www.apache.org/licenses/LICENSE-2.0">
+     http://www.apache.org/licenses/LICENSE-2.0
+   </a>
+ </p>
+
+ <p>
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+   implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ </p>
+ </div>
+ </td>
+ </tr>
+ </table>
+
+</body>
+</html>

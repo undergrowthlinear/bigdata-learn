@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type"
+        content="text/html; charset=ISO-8859-1" />
+  <title>Code Examples for Programming in Scala</title>
+  <link rel="stylesheet" href="style.css" type="text/css"/>
+</head>
+<body>
+
+<div id="mainTitles"><h3>Code Examples for</h3><h2>Programming in Scala</h2></div>  <p><a href="../index.html">
+    Return to chapter index
+  </a></p>
+  <h2>29 Combining Scala and Java</h2>
+
+    <li>29.1 <a href="#sec1">Using Scala from Java</a></li>
+    <li>29.2 <a href="#sec2">Annotations</a></li>
+    <li>29.3 <a href="#sec3">Existential types</a></li>
+    <li>29.4 <a href="#sec4">Conclusion</a></li>
+  </ul>
+
+  <h3><a name="sec1"></a>29.1 Using Scala from Java</h3>
+
+  <pre><hr>
+// In file <a href="../java/App.scala">java/App.scala</a>
+
+  object App {
+    def main(args: Array[String]) {
+      println("Hello, world!")
+    }
+  }
+
+<hr>
+  $ javap App$
+<span class="output">  public final class App$ extends java.lang.Object</span>
+<span class="output">  implements scala.ScalaObject{</span>
+<span class="output">      public static final App$ MODULE$;</span>
+<span class="output">      public static {};</span>
+<span class="output">      public App$();</span>
+<span class="output">      public void main(java.lang.String[]);</span>
+<span class="output">      public int $tag();</span>
+<span class="output">  }</span>
+
+<hr>
+  $ javap App
+<span class="output">  Compiled from "App.scala"</span>
+<span class="output">  public final class App extends java.lang.Object{</span>
+<span class="output">      public static final int $tag();</span>
+<span class="output">      public static final void main(java.lang.String[]);</span>
+<span class="output">  }</span>
+
+<hr>
+  </pre>
+  <h3><a name="sec2"></a>29.2 Annotations</h3>
+
+  <pre><hr>
+  // Java serial version marker
+  private final static long SerialVersionUID = 1234L
+
+<hr>
+// In file <a href="../java/Reader.scala">java/Reader.scala</a>
+
+  import java.io._
+  class Reader(fname: String) {
+    private val in =
+      new BufferedReader(new FileReader(fname))
+ 
+    @throws(classOf[IOException])
+    def read() = in.read()
+  }
+
+<hr>
+  $ javap Reader
+<span class="output">  Compiled from "Reader.scala"</span>
+<span class="output">  public class Reader extends java.lang.Object implements</span>
+<span class="output">  scala.ScalaObject{</span>
+<span class="output">      public Reader(java.lang.String);</span>
+<span class="output">      public int read()       throws java.io.IOException;</span>
+<span class="output">      public int $tag();</span>
+<span class="output">  }</span>
+  $
+
+<hr>
+// In file <a href="../java/SetTest.scala">java/SetTest.scala</a>
+
+  import org.junit.Test
+  import org.junit.Assert.assertEquals
+
+  class SetTest {
+
+    @Test
+    def testMultiAdd {
+      val set = Set() + 1 + 2 + 3 + 1 + 2 + 3
+      assertEquals(3, set.size)
+    }
+  }
+
+<hr>
+  $ scala -cp junit-4.3.1.jar:. org.junit.runner.JUnitCore SetTest
+<span class="output">  JUnit version 4.3.1</span>
+<span class="output">  .</span>
+<span class="output">  Time: 0.023</span>
+<span class="output"> </span>
+<span class="output">  OK (1 test)</span>
+
+<hr>
+// In file <a href="../java/Ignore.java">java/Ignore.java</a>
+
+  import java.lang.annotation.*;
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target(ElementType.METHOD)
+  public @interface Ignore { }
+
+<hr>
+// In file <a href="../java/Tests.scala">java/Tests.scala</a>
+
+  object Tests {
+    @Ignore
+    def testData = List(0, 1, -1, 5, -5)
+
+    def test1 {
+      assert(testData == (testData.head :: testData.tail))
+    }
+
+    def test2 {
+      assert(testData.contains(testData.head))
+    }
+  }
+
+<hr>
+// In file <a href="../java/FindTests.scala">java/FindTests.scala</a>
+
+  for {
+    method &lt;- Tests.getClass.getMethods
+    if method.getName.startsWith("test")
+    if method.getAnnotation(classOf[Ignore]) == null
+  } {
+    println("found a test method: " + method)
+  }
+
+<hr>
+  $ javac Ignore.java
+  $ scalac Tests.scala
+  $ scalac FindTests.scala
+  $ scala FindTests
+<span class="output">  found a test method: public void Tests$.test2()</span>
+<span class="output">  found a test method: public void Tests$.test1()</span>
+
+<hr>
+  </pre>
+  <h3><a name="sec3"></a>29.3 Existential types</h3>
+
+  <pre><hr>
+  <em>type</em> forSome { <em>declarations</em> }
+
+<hr>
+  Iterator[T] forSome { type T }
+
+<hr>
+  Iterator[T] forSome { type T &lt;: Component }
+
+<hr>
+  Iterator[T] forSome { type T &lt;: Component }
+
+<hr>
+// In file <a href="../java/Wild.java">java/Wild.java</a>
+
+  // This is a Java class with wildcards
+  public class Wild {
+    Collection&lt;?&gt; contents() {
+      Collection&lt;String&gt; stuff = new Vector&lt;String&gt;();
+      stuff.add("a");
+      stuff.add("b");
+      stuff.add("see");
+      return stuff;
+    }
+  }
+
+<hr>
+  scala&gt; val contents = (new Wild).contents
+<span class="output">  contents: java.util.Collection[?0] forSome { type ?0 } =</span>
+<span class="output">     [a, b, see]</span>
+
+<hr>
+  scala&gt; contents.size()
+<span class="output">  res0: Int = 3</span>
+
+<hr>
+  import scala.collection.mutable.Set
+  val iter = (new Wild).contents.iterator
+  val set = Set.empty[???]     // what type goes here?
+  while (iter.hasMore)
+    set += iter.next()
+
+<hr>
+// In file <a href="../java/UseWild.scala">java/UseWild.scala</a>
+
+  import scala.collection.mutable.Set
+  import java.util.Collection
+
+  abstract class SetAndType {
+    type Elem
+    val set: Set[Elem]
+  }
+
+  def javaSet2ScalaSet[T](jset: Collection[T]): SetAndType = {
+    val sset = Set.empty[T]  // now T can be named!
+
+    val iter = jset.iterator
+    while (iter.hasNext)
+      sset += iter.next()
+
+    return new SetAndType {
+      type Elem = T
+      val set = sset
+    }
+  }
+
+<hr>
+  </pre>
+  <h3><a name="sec4"></a>29.4 Conclusion</h3>
+
+
+ <table>
+ <tr valign="top">
+ <td>
+ <div id="moreinfo">
+ <p>
+ For more information about <em>Programming in Scala</em> (the "Stairway Book"), please visit:
+ </p>
+ 
+ <p>
+ <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
+ </p>
+ 
+ <p>
+ and:
+ </p>
+ 
+ <p>
+ <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
+ </p>
+ </div>
+ </td>
+ <td>
+ <div id="license">
+ <p>
+   Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
+ </p>
+
+ <p>
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ </p>
+
+ <p style="margin-left: 20px">
+   <a href="http://www.apache.org/licenses/LICENSE-2.0">
+     http://www.apache.org/licenses/LICENSE-2.0
+   </a>
+ </p>
+
+ <p>
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+   implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ </p>
+ </div>
+ </td>
+ </tr>
+ </table>
+
+</body>
+</html>

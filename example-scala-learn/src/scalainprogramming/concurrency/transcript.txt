@@ -1,0 +1,218 @@
+/*
+ * Copyright (C) 2007-2008 Artima, Inc. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Automatically generated Scala interpreter transcript from:
+ *
+ * Programming in Scala (First Edition, Version 6)
+ * by Martin Odersky, Lex Spoon, Bill Venners
+ *
+ * http://booksites.artima.com/programming_in_scala
+ */
+
+
+scala> import scala.actors.Actor
+import scala.actors.Actor
+
+scala> import Actor._
+import Actor._
+
+scala>   import scala.actors._
+       
+         object SillyActor extends Actor {
+           def act() { 
+             for (i <- 1 to 5) {
+               println("I'm acting!")
+               Thread.sleep(1000)
+             }
+           }
+         }
+
+import scala.actors._
+defined module SillyActor
+
+scala> SillyActor.start()
+res0: scala.actors.Actor = SillyActor$@bdc543
+
+scala> Thread.sleep(5000)
+I'm acting!
+I'm acting!
+I'm acting!
+I'm acting!
+I'm acting!
+
+scala>   import scala.actors._
+       
+         object SeriousActor extends Actor {
+           def act() { 
+             for (i <- 1 to 5) {
+               println("To be or not to be.")
+               Thread.sleep(1000)
+             }
+           }
+         }
+
+import scala.actors._
+defined module SeriousActor
+
+scala> SillyActor.start(); SeriousActor.start()
+I'm acting!
+
+scala> Thread.sleep(5000)
+To be or not to be.
+I'm acting!
+To be or not to be.
+I'm acting!
+To be or not to be.
+I'm acting!
+To be or not to be.
+I'm acting!
+To be or not to be.
+
+scala> import scala.actors.Actor._
+import scala.actors.Actor._
+
+scala> val seriousActor2 = actor {
+          for (i <- 1 to 5)
+            println("That is the question.")
+          Thread.sleep(1000)
+       }
+seriousActor2: scala.actors.Actor = scala.actors.Actor$$anon$1@d6cba3
+
+That is the question.
+That is the question.
+That is the question.
+That is the question.
+That is the question.
+scala>   val echoActor = actor {
+           while (true) {
+             receive {
+               case msg =>
+                 println("received message: "+ msg)
+             }
+           }
+         }
+
+echoActor: scala.actors.Actor = scala.actors.Actor$$anon$1@542b0c
+
+scala> echoActor ! "hi there"
+
+received message: hi there
+scala> echoActor ! 15
+received message: 15
+
+scala> val intActor = actor {
+         receive {
+           case x: Int => // I only want Ints
+             println("Got an Int: "+ x)
+         }
+       }
+intActor: scala.actors.Actor = scala.actors.Actor$$anon$1@5d3a64
+
+scala> intActor ! 12
+
+Got an Int: 12
+scala> Thread.sleep(500)
+
+scala> import scala.actors.Actor._
+import scala.actors.Actor._
+
+scala> self ! "hello"
+
+scala> self.receive { case x => x }
+res8: Any = hello
+
+scala> self.receiveWithin(1000) { case x => x } // wait a sec!
+res9: Any = TIMEOUT
+
+scala>   object NameResolver extends Actor {
+           import java.net.{InetAddress, UnknownHostException}
+       
+           def act() { 
+             react {
+               case (name: String, actor: Actor) =>
+                 actor ! getIp(name)
+                 act()
+               case "EXIT" =>
+                 println("Name resolver exiting.")
+                 // quit
+               case msg =>
+                 println("Unhandled message: "+ msg)
+                 act()
+             }
+           }
+       
+           def getIp(name: String): Option[InetAddress] = {
+
+             try {
+               Some(InetAddress.getByName(name))
+             } catch {
+               case _:UnknownHostException => None
+             }
+
+           }
+         }
+
+defined module NameResolver
+
+scala> NameResolver.start()
+res10: scala.actors.Actor = NameResolver$@aa00e4
+
+scala> NameResolver ! ("www.scala-lang.org", self)
+
+scala> self.receiveWithin(0) { case x => x }
+res12: Any = TIMEOUT
+
+scala> NameResolver ! ("wwwwww.scala-lang.org", self)
+
+scala> self.receiveWithin(0) { case x => x }
+res14: Any = TIMEOUT
+
+scala>   val sillyActor2 = actor {
+           def emoteLater() {
+             val mainActor = self
+             actor {
+               Thread.sleep(1000)
+               mainActor ! "Emote"
+             }
+           }
+        
+           var emoted = 0
+           emoteLater()
+       
+           loop {
+             react {
+               case "Emote" =>
+                 println("I'm acting!")
+                 emoted += 1
+                 if (emoted < 5)
+                   emoteLater()
+               case msg =>
+                 println("Received: "+ msg)
+             }
+           }
+         }
+
+sillyActor2: scala.actors.Actor = scala.actors.Actor$$anon$1@997b8a
+
+scala> sillyActor2 ! "hi there"
+
+scala> Thread.sleep(3000)
+Received: hi there
+I'm acting!
+I'm acting!
+I'm acting!
+
+scala> NameResolver ! "EXIT"; Thread.sleep(500)
+

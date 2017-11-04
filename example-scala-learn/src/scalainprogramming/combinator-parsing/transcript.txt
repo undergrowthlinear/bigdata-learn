@@ -1,0 +1,189 @@
+/*
+ * Copyright (C) 2007-2008 Artima, Inc. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Automatically generated Scala interpreter transcript from:
+ *
+ * Programming in Scala (First Edition, Version 6)
+ * by Martin Odersky, Lex Spoon, Bill Venners
+ *
+ * http://booksites.artima.com/programming_in_scala
+ */
+
+
+scala>   import scala.util.parsing.combinator._
+       
+         class Arith extends JavaTokenParsers {   
+           def expr: Parser[Any] = term~rep("+"~term | "-"~term)
+           def term: Parser[Any] = factor~rep("*"~factor | "/"~factor)
+           def factor: Parser[Any] = floatingPointNumber | "("~expr~")"
+         }
+
+import scala.util.parsing.combinator._
+defined class Arith
+
+scala>   object ParseExpr extends Arith {
+           def main(args: Array[String]) {
+             println("input : "+ args(0))
+             println(parseAll(expr, args(0)))
+           }
+         }
+
+defined module ParseExpr
+
+scala> ParseExpr.main(Array("2 * (3 + 7)"))
+input : 2 * (3 + 7)
+[1.12] parsed: ((2~List((*~(((~((3~List())~List((+~(7~List())))))~)))))~List())
+
+scala> ParseExpr.main(Array("2 * (3 + 7))"))
+input : 2 * (3 + 7))
+[1.12] failure: string matching regex `\z' expected but `)' found
+
+2 * (3 + 7))
+           ^
+
+scala> import scala.util.parsing.combinator._
+       
+       class JSON extends JavaTokenParsers {   
+       
+         def value : Parser[Any] = obj | arr | 
+                                   stringLiteral | 
+                                   floatingPointNumber | 
+                                   "null" | "true" | "false"
+       
+         def obj   : Parser[Any] = "{"~repsep(member, ",")~"}"
+       
+         def arr   : Parser[Any] = "["~repsep(value, ",")~"]"
+       
+         def member: Parser[Any] = stringLiteral~":"~value
+       }
+
+         import java.io.FileReader
+       
+         object ParseJSON extends JSON {
+           def main(args: Array[String]) {
+             val reader = new FileReader(args(0))
+             println(parseAll(value, reader))
+           }
+         }
+
+import scala.util.parsing.combinator._
+defined class JSON
+import java.io.FileReader
+defined module ParseJSON
+
+scala> val addressbook = """
+            {
+           "address book": {
+             "name": "John Smith",
+             "address": {
+               "street": "10 Market Street",
+               "city"  : "San Francisco, CA",
+               "zip"   : 94111
+             },
+             "phone numbers": [
+               "408 338-4238",
+               "408 111-6892"
+             ]
+           }
+         }
+
+       """.trim
+addressbook: java.lang.String = 
+{
+                  "address book": {
+                    "name": "John Smith",
+                    "address": {
+                      "street": "10 Market Street",
+                      "city"  : "San Francisco, CA",
+                      "zip"   : 94111
+                    },
+                    "phone numbers": [
+                      "408 338-4238"...
+scala> object ParseJSONShell extends JSON {
+       def main(str: String) {
+         val reader = new java.io.StringReader(str)
+         println(parseAll(value, reader))
+       } }
+defined module ParseJSONShell
+
+scala> ParseJSONShell.main(addressbook)
+[14.18] parsed: (({~List((("address book"~:)~(({~List((("name"~:)~"John Smith"), (("address"~:)~(({~List((("street"~:)~"10 Market Street"), (("city"~:)~"San Francisco, CA"), (("zip"~:)~94111)))~})), (("phone numbers"~:)~(([~List("408 338-4238", "408 111-6892"))~]))))~}))))~})
+
+scala>   import scala.util.parsing.combinator._
+       
+         class JSON1 extends JavaTokenParsers {   
+       
+           def obj: Parser[Map[String, Any]] = 
+             "{"~> repsep(member, ",") <~"}" ^^ (Map() ++ _)
+       
+           def arr: Parser[List[Any]] =
+             "["~> repsep(value, ",") <~"]" 
+       
+           def member: Parser[(String, Any)] = 
+             stringLiteral~":"~value ^^ 
+               { case name~":"~value => (name, value) }
+       
+           def value: Parser[Any] = (
+             obj
+           | arr 
+           | stringLiteral
+           | floatingPointNumber ^^ (_.toDouble) 
+           | "null"  ^^ (x => null) 
+           | "true"  ^^ (x => true) 
+           | "false" ^^ (x => false)
+           )
+         }
+
+import scala.util.parsing.combinator._
+defined class JSON1
+
+scala> val addressbook = """
+            {
+           "address book": {
+             "name": "John Smith",
+             "address": {
+               "street": "10 Market Street",
+               "city"  : "San Francisco, CA",
+               "zip"   : 94111
+             },
+             "phone numbers": [
+               "408 338-4238",
+               "408 111-6892"
+             ]
+           }
+         }
+
+       """.trim
+addressbook: java.lang.String = 
+{
+                  "address book": {
+                    "name": "John Smith",
+                    "address": {
+                      "street": "10 Market Street",
+                      "city"  : "San Francisco, CA",
+                      "zip"   : 94111
+                    },
+                    "phone numbers": [
+                      "408 338-4238"...
+scala> object JSON1TestShell extends JSON1 {
+       def main(str: String) {
+         val reader = new java.io.StringReader(str)
+         println(parseAll(value, reader))
+       } }
+defined module JSON1TestShell
+
+scala> JSON1TestShell.main(addressbook)
+[14.18] parsed: Map("address book" -> Map("name" -> "John Smith", "address" -> Map("street" -> "10 Market Street", "city" -> "San Francisco, CA", "zip" -> 94111.0), "phone numbers" -> List("408 338-4238", "408 111-6892")))
+

@@ -1,0 +1,151 @@
+/*
+ * Copyright (C) 2007-2008 Artima, Inc. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Automatically generated Scala interpreter transcript from:
+ *
+ * Programming in Scala (First Edition, Version 6)
+ * by Martin Odersky, Lex Spoon, Bill Venners
+ *
+ * http://booksites.artima.com/programming_in_scala
+ */
+
+
+scala>   def containsNeg(nums: List[Int]): Boolean = {
+           var exists = false
+           for (num <- nums)
+             if (num < 0)
+               exists = true
+           exists
+         }
+
+containsNeg: (List[Int])Boolean
+
+scala> containsNeg(List(1, 2, 3, 4))
+res0: Boolean = false
+
+scala> containsNeg(List(1, 2, -3, 4))
+res1: Boolean = true
+
+scala>   def containsNeg(nums: List[Int]) = nums.exists(_ < 0)
+
+containsNeg: (List[Int])Boolean
+
+scala> containsNeg(Nil)
+res2: Boolean = false
+
+scala> containsNeg(List(0, -1, -2))
+res3: Boolean = true
+
+scala>   def containsOdd(nums: List[Int]): Boolean = {
+           var exists = false
+           for (num <- nums)
+             if (num % 2 == 1)
+               exists = true
+           exists
+         }
+
+containsOdd: (List[Int])Boolean
+
+scala>   def containsOdd(nums: List[Int]) = nums.exists(_ % 2 == 1)
+
+containsOdd: (List[Int])Boolean
+
+scala> def plainOldSum(x: Int, y: Int) = x + y
+plainOldSum: (Int,Int)Int
+
+scala> plainOldSum(1, 2)
+res4: Int = 3
+
+scala> def curriedSum(x: Int)(y: Int) = x + y
+curriedSum: (Int)(Int)Int
+
+scala> curriedSum(1)(2)
+res5: Int = 3
+
+scala> def first(x: Int) = (y: Int) => x + y
+first: (Int)(Int) => Int
+
+scala> val second = first(1)
+second: (Int) => Int = <function>
+
+scala> second(2)
+res6: Int = 3
+
+scala> val onePlus = curriedSum(1)_
+onePlus: (Int) => Int = <function>
+
+scala> onePlus(2)
+res7: Int = 3
+
+scala> val twoPlus = curriedSum(2)_
+twoPlus: (Int) => Int = <function>
+
+scala> twoPlus(2)
+res8: Int = 4
+
+scala> def twice(op: Double => Double, x: Double) = op(op(x))
+twice: ((Double) => Double,Double)Double
+
+scala> twice(_ + 1, 5)
+res9: Double = 7.0
+
+scala> println("Hello, world!")
+Hello, world!
+
+scala> println { "Hello, world!" }
+Hello, world!
+
+scala> val g = "Hello, world!"
+g: java.lang.String = Hello, world!
+
+scala> g.substring { 7, 9 }
+<console>:1: error: ';' expected but ',' found.
+       g.substring { 7, 9 }
+                      ^
+
+scala> g.substring(7, 9)
+res12: java.lang.String = wo
+
+scala>   var assertionsEnabled = true
+       
+         def myAssert(predicate: () => Boolean) =
+           if (assertionsEnabled && !predicate())
+             throw new AssertionError
+
+assertionsEnabled: Boolean = true
+myAssert: (() => Boolean)Unit
+
+scala>   def boolAssert(predicate: Boolean) =
+           if (assertionsEnabled && !predicate)
+             throw new AssertionError
+
+boolAssert: (Boolean)Unit
+
+scala> val x = 5
+x: Int = 5
+
+scala> var assertionsEnabled = false
+assertionsEnabled: Boolean = false
+
+scala> boolAssert(x / 0 == 0)
+java.lang.ArithmeticException: / by zero
+	at .<init>(<console>:8)
+	at .<clinit>(<console>)
+	at RequestResult$.<init>(<console>:3)
+	at RequestResult$.<clinit>(<console>)
+	at RequestResult$result(<console>)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAcce...

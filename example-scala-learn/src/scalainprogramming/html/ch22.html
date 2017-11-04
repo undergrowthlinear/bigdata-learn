@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type"
+        content="text/html; charset=ISO-8859-1" />
+  <title>Code Examples for Programming in Scala</title>
+  <link rel="stylesheet" href="style.css" type="text/css"/>
+</head>
+<body>
+
+<div id="mainTitles"><h3>Code Examples for</h3><h2>Programming in Scala</h2></div>  <p><a href="../index.html">
+    Return to chapter index
+  </a></p>
+  <h2>22 Implementing Lists</h2>
+
+  <p><a href="../list-impl/transcript.txt">
+    Sample run of chapter's interpreter examples
+  </a></p>
+
+  <ul>
+
+    <li>22.1 <a href="#sec1">The <span class="mono">List</span> class in principle</a></li>
+    <li>22.2 <a href="#sec2">The <span class="mono">ListBuffer</span> class</a></li>
+    <li>22.3 <a href="#sec3">The <span class="mono">List</span> class in practice</a></li>
+    <li>22.4 <a href="#sec4">Functional on the outside</a></li>
+    <li>22.5 <a href="#sec5">Conclusion</a></li>
+  </ul>
+
+  <h3><a name="sec1"></a>22.1 The <span class="mono">List</span> class in principle</h3>
+
+  <pre><hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  package scala
+  abstract class List[+T] {
+
+<hr>
+  scala&gt; val xs = List(1, 2, 3)
+<span class="output">  xs: List[Int] = List(1, 2, 3)</span>
+
+  scala&gt; var ys: List[Any] = xs
+<span class="output">  ys: List[Any] = List(1, 2, 3)</span>
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+    def isEmpty: Boolean
+    def head: T
+    def tail: List[T]
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  case object Nil extends List[Nothing] {
+    override def isEmpty = true
+    def head: Nothing =
+      throw new NoSuchElementException("head of empty list")
+    def tail: List[Nothing] =
+      throw new NoSuchElementException("tail of empty list")
+  }
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  final case class ::[T](hd: T, tl: List[T]) extends List[T] {
+    def head = hd
+    def tail = tl
+    override def isEmpty: Boolean = false
+  }
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  final case class ::[T](head: T, tail: List[T])
+      extends List[T] {
+
+    override def isEmpty: Boolean = false
+  }
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  def length: Int = 
+    if (isEmpty) 0 else 1 + tail.length
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  def drop(n: Int): List[T] = 
+    if (isEmpty) Nil
+    else if (n &lt;= 0) this
+    else tail.drop(n - 1)
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  def map[U](f: T =&gt; U): List[U] =
+    if (isEmpty) Nil
+    else f(head) :: tail.map(f)
+
+<hr>
+  abstract class Fruit 
+  class Apple extends Fruit
+  class Orange extends Fruit
+
+<hr>
+  scala&gt; val apples = new Apple :: Nil
+<span class="output">  apples: List[Apple] = List(Apple@585fa9)</span>
+
+  scala&gt; val fruits = new Orange :: apples
+<span class="output">  fruits: List[Fruit] = List(Orange@cd6798, Apple@585fa9)</span>
+
+<hr>
+  def ::[U &gt;: T](x: U): List[U] = new scala.::(x, this)
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  def ::[U &gt;: T](x: U): List[U] = new ::(x, this)
+
+<hr>
+  // A thought experiment (which wouldn't work)
+  def ::(x: T): List[T] = new scala.::(x, this)
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+    def :::[U &gt;: T](prefix: List[U]): List[U] = 
+      if (prefix.isEmpty) this
+      else prefix.head :: prefix.tail ::: this
+
+<hr>
+  prefix.head :: prefix.tail ::: this
+    <em>equals</em> <em> (because <em> ::</em> and <em> :::</em> are right-associative)</em>
+
+  prefix.head :: (prefix.tail ::: this)
+    <em>equals</em> <em> (because <em> ::</em> binds to the right)</em>
+
+  (prefix.tail ::: this).::(prefix.head)
+    <em>equals</em> <em> (because <em> :::</em> binds to the right)</em>
+
+  this.:::(prefix.tail).::(prefix.head)
+
+<hr>
+  </pre>
+  <h3><a name="sec2"></a>22.2 The <span class="mono">ListBuffer</span> class</h3>
+
+  <pre><hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  def incAll(xs: List[Int]): List[Int] = xs match {
+    case List() =&gt; List()
+    case x :: xs1 =&gt; x + 1 :: incAll(xs1)
+  }
+
+<hr>
+  for (x &lt;- xs) // ??
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  var result = List[Int]()    // a very inefficient approach
+  for (x &lt;- xs) result = result ::: List(x + 1)
+  result
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  import scala.collection.mutable.ListBuffer
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  val buf = new ListBuffer[Int]
+  for (x &lt;- xs) buf += x + 1
+  buf.toList
+
+<hr>
+  </pre>
+  <h3><a name="sec3"></a>22.3 The <span class="mono">List</span> class in practice</h3>
+
+  <pre><hr>
+  final override def map[U](f: T =&gt; U): List[U] = {
+    val b = new ListBuffer[U]
+    var these = this
+    while (!these.isEmpty) {
+      b += f(these.head)
+      these = these.tail
+    }
+    b.toList
+  }
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  final case class ::[U](hd: U, 
+      private[scala] var tl: List[U]) extends List[U] {
+
+    def head = hd
+    def tail = tl
+    override def isEmpty: Boolean = false
+  }
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  package scala.collection.immutable
+  final class ListBuffer[T] extends Buffer[T] {
+    private var start: List[T] = Nil
+    private var last0: ::[T] = _
+    private var exported: Boolean = false
+    ...
+
+<hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  override def toList: List[T] = {
+    exported = !start.isEmpty
+    start
+  }
+
+<hr>
+  override def += (x: T) {
+    if (exported) copy()
+    if (start.isEmpty) {
+      last0 = new scala.::(x, Nil)
+      start = last0
+    } else {
+      val last1 = last0
+      last0 = new scala.::(x, Nil)
+      last1.tl = last0
+    }
+  }
+
+<hr>
+  </pre>
+  <h3><a name="sec4"></a>22.4 Functional on the outside</h3>
+
+  <pre><hr>
+// In file <a href="../list-impl/Misc.scala">list-impl/Misc.scala</a>
+
+  val ys = 1 :: xs
+  val zs = 2 :: xs
+
+<hr>
+  ys.drop(2).tail = Nil  // can't do this in Scala!
+
+<hr>
+  </pre>
+  <h3><a name="sec5"></a>22.5 Conclusion</h3>
+
+
+ <table>
+ <tr valign="top">
+ <td>
+ <div id="moreinfo">
+ <p>
+ For more information about <em>Programming in Scala</em> (the "Stairway Book"), please visit:
+ </p>
+ 
+ <p>
+ <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
+ </p>
+ 
+ <p>
+ and:
+ </p>
+ 
+ <p>
+ <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
+ </p>
+ </div>
+ </td>
+ <td>
+ <div id="license">
+ <p>
+   Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
+ </p>
+
+ <p>
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ </p>
+
+ <p style="margin-left: 20px">
+   <a href="http://www.apache.org/licenses/LICENSE-2.0">
+     http://www.apache.org/licenses/LICENSE-2.0
+   </a>
+ </p>
+
+ <p>
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+   implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ </p>
+ </div>
+ </td>
+ </tr>
+ </table>
+
+</body>
+</html>
