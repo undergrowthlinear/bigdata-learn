@@ -3,6 +3,9 @@
 - http://www.jianshu.com/p/e0fc0ab7a9d2
 - http://blog.csdn.net/fjse51/article/details/52152362
 # 概念
+## 名词
+- 可扩展语言/是面向对象与函数式编程加入静态类型的混合体
+- scala像集市而非大教堂
 - Scala 源代码被编译成Java字节码，所以它可以运行于JVM之上，并可以调用现有的Java类库
 ```hello world
 object HelloWorld {
