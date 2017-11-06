@@ -33,6 +33,8 @@
 > 弹性分布式数据集
 > 计算和抽象的基础
 > 一个rdd表示一个不可变的分布式集合对象
+> 驱动器程序通过一个SparkContext 对象来访问Spark。这个对象代表对计算集群的一个连
+  接。
 - driver program
 > 包含main/SparkContext
 - SparkContext
