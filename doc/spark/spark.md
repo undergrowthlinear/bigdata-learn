@@ -38,16 +38,25 @@
 - 创建----读取外部数据集/驱动器程序集合并行化
 ## 操作----转换操作(转换操作返回的是RDD)与行动操作(行动操作返回的是其他类型)
 - trans----由一个rdd生成另一个新的rdd/
-  - map----接收函数 应用到rdd每个元素 返回新的rdd
-  - filter----接收函数返回新的rdd
-  - flatMap----压扁 一行转多行
-  - 集合运算----distinct/union/intersection/subtract
+  - map----接收函数,应用到rdd每个元素,将函数的返回结果放入rdd
+  - filter----接收函数返回新的rdd,将满足函数的元素放入rdd
+  - flatMap----压扁,一行转多行,将返回的迭代器拍扁
+  - 集合运算(rdd具有相同数据类型)----
+    - distinct(shuffle开销很大)/union(包含重复数据)/
+    - intersection(shuffle去重)/subtract(shuffle)/cartesian(笛卡尔积/所有可能组合)
 - action----对rdd计算结果----返回结果给驱动程序或者保存到外部系统----
-  - reduce----相同类型进行操作
-  - collect----
+  - reduce----接收函数,操作两个rdd元素,返回同类型新元素
+  - fold----与reduce一致,但是需要初始值
+  - aggregate(zeroValue)(seqOp, combOp)----返回不同的数据类型
+  - collect----获取整个rdd数据
   - take----返回n个结果 随机的
+  - takeOrdered----按照指定顺序返回
   - top----排序后的top
+  - takeSample----从数据集获取采样
   - foreach----计算元素 不返回本地
-  - persist----持久化
-  - count----
+  - persist/unpersist----持久化(可内存/磁盘)
+  - count----返回元素个数
+  - countByValue----各元素在rdd中出现次数
   - first----
+## scala编程
+- 传递局部可序列化变量或顶级对象中的函数始终是安全的/val query_ = this.query
