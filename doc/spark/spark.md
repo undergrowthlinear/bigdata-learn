@@ -18,54 +18,36 @@
 - Hadoop YARN
 - Apache Mesos
 # 应用处理
-- hadoop
-> 离线处理/时效性不高
-- spark
-> 时效性高/机器学习
+- hadoop----离线处理/时效性不高
+- spark----时效性高/机器学习
 # 命令
-- start-master
-> 启动master
-- start-class
-> 启动worker
-- spark-submit
-> 提交作业
+- start-master----启动master
+- start-class----启动worker
+- spark-submit----提交作业
 # RDDs
-> 弹性分布式数据集
-> 计算和抽象的基础
-> 一个rdd表示一个不可变的分布式集合对象
-> 驱动器程序通过一个SparkContext 对象来访问Spark。这个对象代表对计算集群的一个连
+- 弹性分布式数据集/不可变分布式的集合元素/计算和抽象的基础
+- 驱动器程序通过一个SparkContext 对象来访问Spark。这个对象代表对计算集群的一个连
   接。
+- rdd血统关系图----rdd之间的依赖与创建关系/延迟计算/第一次action的时候计算
 - driver program
-> 包含main/SparkContext
+  - 包含main/SparkContext
 - SparkContext
-> 代表和一个集群的连接
-- 分片/分区
-> 属于rdd的一部分
-> 是并行处理单元
-- map
-> 接收函数 应用到rdd每个元素 返回新的rdd
-- filter
-> 接收函数返回新的rdd
-> word=>
-> line=>
-- flatMap
-> 压扁 一行转多行
-- 集合运算
-> distinct/union/intersection/subtract
-- action
-> 在rdd上返回结果
-- reduce
-> 相同类型进行操作
-- collect
-- take
-> 返回n个结果 随机的
-- top
-> 排序后的top
-- foreach
-> 计算元素 不返回本地
-- rdd血统关系图
-> rdd之间的依赖与创建关系
-> 延迟计算/第一次action的时候计算
-- persist
-> 持久化
-- key/value对
+  - 代表和一个集群的连接
+- 分片/分区----运行在集群中不同的节点
+  - 属于rdd的一部分/是并行处理单元
+- 创建----读取外部数据集/驱动器程序集合并行化
+## 操作----转换操作(转换操作返回的是RDD)与行动操作(行动操作返回的是其他类型)
+- trans----由一个rdd生成另一个新的rdd/
+  - map----接收函数 应用到rdd每个元素 返回新的rdd
+  - filter----接收函数返回新的rdd
+  - flatMap----压扁 一行转多行
+  - 集合运算----distinct/union/intersection/subtract
+- action----对rdd计算结果----返回结果给驱动程序或者保存到外部系统----
+  - reduce----相同类型进行操作
+  - collect----
+  - take----返回n个结果 随机的
+  - top----排序后的top
+  - foreach----计算元素 不返回本地
+  - persist----持久化
+  - count----
+  - first----

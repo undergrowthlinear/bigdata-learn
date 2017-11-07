@@ -16,8 +16,17 @@ object ScalaInProgrammingDemo {
     println(capital("France"))
   }
 
+  def for_demo(): Unit = {
+    var str="hello world"
+    for(s <- str.split(" ")) println(s)
+    //
+    str.split(" ").foreach(println)
+    str.split(" ").foreach(s=>println(s))
+  }
+
   def main(args: Array[String]) {
     map_demo()
+    for_demo()
   }
 
 }

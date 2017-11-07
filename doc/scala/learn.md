@@ -26,19 +26,24 @@ object HelloWorld {
 - Scala 包----package com.runoob/import java.awt._
 - 默认情况下，Scala 总会引入 java.lang._ 、 scala._ 和 Predef._
 - Byte/Short Char/Int Float/Long Double/String/Boolean/Unit/Null/Nothing/Any/AnyRef
-- '<标识符>/'/"/"""/var/val  VariableName : DataType [=  Initial Value]
+- '<标识符>/'/"/"""/var/val/类型推断
+  - VariableName : DataType [=  Initial Value]----与java相反
+  - +----字符串连接
 - private，protected，public/默认情况下，Scala对象的访问级别都是 public/
   - Scala 中的 private 限定符，比 Java 更严格，在嵌套类情况下，外层类甚至不能访问被嵌套类的私有成员
   - 保护（Protected）成员,因为它只允许保护成员在定义了该成员的的类的子类中被访问
   - 写成private[x],读作"这个成员除了对[…]中的类或[…]中的包中的类及它们的伴生对像可见外，对其它所有类都是private
-- if else 与java一致/循环与java一致
+- if else 与java一致/循环与java一致/for(val 常量 <-(其中) 变量组)
 - Scala 函数----Scala 方法是类的一部分，而函数是一个对象可以赋值给一个变量。换句话来说在类中定义的函数即是方法
-  - def functionName ([参数列表]) : [return type]
+  - def functionName ([参数列表]) : [return type]----比java多了def,类型在名称之后
+  - :[return type]可省略,类型推断器会推断,{}如果是一行语句,也可省略
   - 不写等于号和方法主体，那么方法会被隐式声明为"抽象(abstract)"，包含它的类型于是也是一个抽象类型
   - functionName( 参数列表 )
+  - 函数式编程风格----函数是一等民----函数字面量(一行时,可省略)----(右箭头/=>)----函数体
 - 闭包是一个函数，返回值依赖于声明在函数外部的一个或多个变量
 -  Scala 中，字符串的类型实际上是 Java String，它本身没有 String 类。/new StringBuilder
 - var z = new Array[String](3)/var z = Array("Runoob", "Baidu", "Google")
+  - 数组以0开始,z(0)而不是java的z[0]
 - Scala Collection----可变的和不可变的集合
 - Scala 类和对象----Scala中的类不声明为public，一个Scala源文件中可以有多个类/Scala 的类定义可以有参数
   - 重写一个非抽象方法必须使用override修饰符、只有主构造函数才可以往基类的构造函数里写参数
