@@ -8,3 +8,11 @@ error msg
 debug msg
 some msg
 error msg
+some msg
+error msg
+error msg
+debug msg
+some msg
+error msg
+some msg
+error msg

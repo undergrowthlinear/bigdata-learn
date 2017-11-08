@@ -36,6 +36,13 @@
 - 分片/分区----运行在集群中不同的节点
   - 属于rdd的一部分/是并行处理单元
 - 创建----读取外部数据集/驱动器程序集合并行化
+- 键值对RDD(pair RDD)----用来进行聚合运算/元素为元组
+  - reduceByKey----通过key 进行操作----返回新的rdd
+  - groupByKey----进行分组
+  - mapValues/flatMapValues----应用值
+  - keys/values/sortByKey----返回key value sort
+  - join----对两个rdd进行内连接
+  - subtractByKey/rightOuterJoin/leftOuterJoin/cogroup
 ## 操作----转换操作(转换操作返回的是RDD)与行动操作(行动操作返回的是其他类型)
 - trans----由一个rdd生成另一个新的rdd/
   - map----接收函数,应用到rdd每个元素,将函数的返回结果放入rdd

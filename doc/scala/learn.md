@@ -40,6 +40,8 @@ object HelloWorld {
   - 不写等于号和方法主体，那么方法会被隐式声明为"抽象(abstract)"，包含它的类型于是也是一个抽象类型
   - functionName( 参数列表 )
   - 函数式编程风格----函数是一等民----函数字面量(一行时,可省略)----(右箭头/=>)----函数体
+  - 指令式编程风格----
+    - 指令转函数----尽量不使用var编程/尽量函数完全无副作用(除了返回值,对主调函数无任何影响)
 - 闭包是一个函数，返回值依赖于声明在函数外部的一个或多个变量
 -  Scala 中，字符串的类型实际上是 Java String，它本身没有 String 类。/new StringBuilder
 - var z = new Array[String](3)/var z = Array("Runoob", "Baidu", "Google")
@@ -47,6 +49,10 @@ object HelloWorld {
   - Array[String]----属于类型参数，3----值参数
   - 任何对于对象的值参数应用将都被转换为对apply方法的调用/对带有括号并包含参数赋值时,转换为对对象的update方法调用
 - Scala Collection----可变的和不可变的集合
+  - List(Nil)/同类型/不可变----::(方法被右操作数调用)/:::/foreach/length/mkString/isEmpty
+  - Tuple/不同类型/不可变----元祖实例化对象放入()/以.与_与数字为1开始的索引访问/par._1
+  - map/set----默认为不可变/也有可编辑支持,引入不同包即可
+- 任何对象都能调用的->机制被称为隐式转化
 - Scala 类和对象----Scala中的类不声明为public，一个Scala源文件中可以有多个类/Scala 的类定义可以有参数
   - 重写一个非抽象方法必须使用override修饰符、只有主构造函数才可以往基类的构造函数里写参数
   - 在子类中重写超类的抽象方法时，你不需要使用override关键字/Scala 只允许继承一个父类
