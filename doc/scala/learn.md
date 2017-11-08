@@ -44,6 +44,8 @@ object HelloWorld {
 -  Scala 中，字符串的类型实际上是 Java String，它本身没有 String 类。/new StringBuilder
 - var z = new Array[String](3)/var z = Array("Runoob", "Baidu", "Google")
   - 数组以0开始,z(0)而不是java的z[0]
+  - Array[String]----属于类型参数，3----值参数
+  - 任何对于对象的值参数应用将都被转换为对apply方法的调用/对带有括号并包含参数赋值时,转换为对对象的update方法调用
 - Scala Collection----可变的和不可变的集合
 - Scala 类和对象----Scala中的类不声明为public，一个Scala源文件中可以有多个类/Scala 的类定义可以有参数
   - 重写一个非抽象方法必须使用override修饰符、只有主构造函数才可以往基类的构造函数里写参数
