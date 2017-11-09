@@ -51,6 +51,7 @@
   - 集合运算(rdd具有相同数据类型)----
     - distinct(shuffle开销很大)/union(包含重复数据)/
     - intersection(shuffle去重)/subtract(shuffle)/cartesian(笛卡尔积/所有可能组合)
+  - countByKey/lookup/collectAsMap
 - action----对rdd计算结果----返回结果给驱动程序或者保存到外部系统----
   - reduce----接收函数,操作两个rdd元素,返回同类型新元素
   - fold----与reduce一致,但是需要初始值
