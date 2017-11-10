@@ -70,6 +70,9 @@
 - 传递局部可序列化变量或顶级对象中的函数始终是安全的/val query_ = this.query
 ## 存储方式
 - 文件格式与文件系统
-    - 文本文件
-- SQL 的结构化数据源
+    - 文本文件/JSON/CSV/SequenceFile/对象文件/Hadoop输入输出格式/protocol buffer
+    - 本地文件系统/amazon s3/hdfs
+- SPARK SQL 的结构化数据源
+    - hive
 - 数据库与键值存储
+    - jdbc/cassandra/hbase/elasticsearch
