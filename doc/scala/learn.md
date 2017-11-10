@@ -25,7 +25,7 @@ object HelloWorld {
 - Scala 类似 Java 支持单行和多行注释----// /* */
 - Scala 包----package com.runoob/import java.awt._
 - 默认情况下，Scala 总会引入 java.lang._ 、 scala._ 和 Predef._
-- Byte/Short Char/Int Float/Long Double/String/Boolean/Unit/Null/Nothing/Any/AnyRef
+- Boolean/Byte Char/Short Int/Float/ Long/Double/ String/Unit/Null/Nothing/Any/AnyRef
 - '<标识符>/'/"/"""/var/val/类型推断
   - VariableName : DataType [=  Initial Value]----与java相反
   - +----字符串连接
@@ -52,7 +52,10 @@ object HelloWorld {
   - List(Nil)/同类型/不可变----::(方法被右操作数调用)/:::/foreach/length/mkString/isEmpty
   - Tuple/不同类型/不可变----元祖实例化对象放入()/以.与_与数字为1开始的索引访问/par._1
   - map/set----默认为不可变/也有可编辑支持,引入不同包即可
-- 任何对象都能调用的->机制被称为隐式转化
+- 任何对象都能调用的->机制被称为隐式转化(implicit conversion)
+    - Boolean/Byte Char/Short Int/Float/ Long/Double/ String/Unit/Null/Nothing/Any/AnyRef
+    - 前缀操作符(+/-/!/~)/中缀操作符/后缀操作符
+    - scala操作符就是方法调用,scala基本类型的富变体的隐式转换可以增加更多有用的方法
 - Scala 类和对象()----Scala中的类不声明即为public，一个Scala源文件中可以有多个类/Scala 的类定义可以有参数
   - class/new/var/val(方法参数为val)/def(带花括号没有等号相当于Unit结果类型的方法)/private(只能在类内部)
   - singleton object----与java静态类类似/虚构类的名称是对象名加上一个美元符号
