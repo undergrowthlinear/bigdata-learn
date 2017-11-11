@@ -61,6 +61,7 @@ object HelloWorld {
   - singleton object----与java静态类类似/虚构类的名称是对象名加上一个美元符号
   - companion object----类和伴生对象可相互访问其私有成员
   - standalone object----
+  - 函数式对象----任何不具有可改变状态的对象的类
   - 重写一个非抽象方法必须使用override修饰符、只有主构造函数才可以往基类的构造函数里写参数
   - 在子类中重写超类的抽象方法时，你不需要使用override关键字/Scala 只允许继承一个父类
   - Scala 中，是没有 static 这个东西的，object对象不能带参数

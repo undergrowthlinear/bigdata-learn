@@ -1,3 +1,4 @@
+/*
 package spark.elasticsearch
 
 import org.apache.spark.{SparkConf, SparkContext}
@@ -70,3 +71,4 @@ object ElasticsearchSparkDemo {
 }
 
 case class Trip(departure: String, arrival: String)
+*/
