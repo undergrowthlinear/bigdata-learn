@@ -68,6 +68,10 @@
   - first----
 ## scala编程
 - 传递局部可序列化变量或顶级对象中的函数始终是安全的/val query_ = this.query
+- 共享变量
+  - 累加器----对信息进行聚合
+    - val blankLines = sc.accumulator(0)/转化操作中，累加器通常只用于调试目的
+  - 广播变量----高效分发较大对象
 ## 存储方式
 - 文件格式与文件系统
     - 文本文件/JSON/CSV/SequenceFile/对象文件/Hadoop输入输出格式/protocol buffer
