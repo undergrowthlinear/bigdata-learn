@@ -7,6 +7,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>../example-spark-learn</module>
+        <module>../example-hdfs-learn</module>
     </modules>
     <packaging>pom</packaging>
 
