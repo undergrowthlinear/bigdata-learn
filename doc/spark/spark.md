@@ -14,16 +14,28 @@
 ### 中间层----spark core
 - 弹性分布式数据/rdd(RDD 表示分布在多个计算节点上可以并行操作的元素集合)
 ### 底层----集群管理器
+- local
 - 独立调度器----Spark自带/默认
 - Hadoop YARN
 - Apache Mesos
 # 应用处理
 - hadoop----离线处理/时效性不高
 - spark----时效性高/机器学习
+## spark 集群运行
+- spark驱动器节点----执行main方法的进程/创建SparkContext、创建RDD、转换RDD、行动操作RDD/驱动器节点进行任务的调度、数据的跟踪
+  - 把用户程序转为任务----stage----task
+  - 为执行器节点调度任务
+- 集群管理器----启动执行器节点,有时启动驱动器节点()----主节点/工作节点
+  - 独立调度器----Spark自带/默认
+  - Hadoop YARN
+  - Apache Mesos
+- spark执行器节点
+  - 运行驱动器任务,返回结果给驱动器
+  - 提供RDD的内存式存储
 # 命令
 - start-master----启动master
 - start-class----启动worker
-- spark-submit----提交作业
+- spark-submit----提交作业/部署应用
 # RDDs
 - 弹性分布式数据集/不可变分布式的集合元素/计算和抽象的基础
 - 驱动器程序通过一个SparkContext 对象来访问Spark。这个对象代表对计算集群的一个连
