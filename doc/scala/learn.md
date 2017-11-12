@@ -33,7 +33,10 @@ object HelloWorld {
   - Scala 中的 private 限定符，比 Java 更严格，在嵌套类情况下，外层类甚至不能访问被嵌套类的私有成员
   - 保护（Protected）成员,因为它只允许保护成员在定义了该成员的的类的子类中被访问
   - 写成private[x],读作"这个成员除了对[…]中的类或[…]中的包中的类及它们的伴生对像可见外，对其它所有类都是private
-- if else 与java一致/循环与java一致/for(val 常量 <-(其中) 变量组)
+- if else 与java一致/while 循环与java一致/for(val 常量 <-(其中) 变量组)----发生器(to/until)----yield产生新的集合
+  - if/while/for/try/match/函数调用----能够产生某个值
+  - try/catch/finally----catch/case
+  - match/case---- _表示默认情况----更简洁的使用
 - Scala 函数----Scala 方法是类的一部分，而函数是一个对象可以赋值给一个变量。换句话来说在类中定义的函数即是方法
   - def functionName ([参数列表]) : [return type]----比java多了def,类型在名称之后
   - :[return type]可省略,类型推断器会推断,{}如果是一行语句,也可省略
