@@ -25,6 +25,6 @@
 </configuration>
 ```
 - hdfs namenode -format
-- bin/start-dfs.sh----NameNode - http://localhost:50070/
+- sbin/start-dfs.sh----NameNode - http://localhost:50070/
 - 操作
 - stop-dfs.sh

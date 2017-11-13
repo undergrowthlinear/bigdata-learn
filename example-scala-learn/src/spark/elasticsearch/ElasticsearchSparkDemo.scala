@@ -1,10 +1,7 @@
-/*
+
 package spark.elasticsearch
 
 import org.apache.spark.{SparkConf, SparkContext}
-import org.elasticsearch.spark._
-import org.elasticsearch.spark.rdd.EsSpark
-import org.elasticsearch.spark.rdd.Metadata._
 
 
 /**
@@ -34,13 +31,14 @@ object ElasticsearchSparkDemo {
     val rddDirect = sc.makeRDD(Seq(upcomingTrip, lastWeekTrip))
     EsSpark.saveToEs(rddDirect, "test/sparkclass2")
     // json 写入
-    val json1 = """{"id" : 1, "blog" : "www.iteblog.com", "weixin" : "iteblog_hadoop"}"""
+    val json1 =
+      """{"id" : 1, "blog" : "www.iteblog.com", "weixin" : "iteblog_hadoop"}"""
     val json2 = """{"id" : 2, "blog" : "books.iteblog.com", "weixin" : "iteblog_hadoop"}"""
     sc.makeRDD(Seq(json1, json2)).saveJsonToEs("test/sparkjson")
     // type是通过{media_type}通配符设置的
-    val game = Map("media_type"->"game","title" -> "FF VI","year" -> "1994")
-    val book = Map("media_type" -> "book","title" -> "Harry Potter","year" -> "2010")
-    val cd = Map("media_type" -> "music","title" -> "Surfing With The Alien")
+    val game = Map("media_type" -> "game", "title" -> "FF VI", "year" -> "1994")
+    val book = Map("media_type" -> "book", "title" -> "Harry Potter", "year" -> "2010")
+    val cd = Map("media_type" -> "music", "title" -> "Surfing With The Alien")
     sc.makeRDD(Seq(game, book, cd)).saveToEs("test/spark_{media_type}")
     // Seq((1, otp), (2, muc), (3, sfo))语句指定为各个对象指定了id值，分别为1、2、3
     val otp = Map("iata" -> "OTP", "name" -> "Otopeni")
@@ -49,7 +47,8 @@ object ElasticsearchSparkDemo {
     val airportsRDD = sc.makeRDD(Seq((1, otp), (2, muc), (3, sfo)))
     airportsRDD.saveToEsWithMeta("test/spark2015")
     // 显示指定映射信息
-    val json1 = """{"id" : 1, "blog" : "www.iteblog.com", "weixin" : "iteblog_hadoop"}"""
+    val json1 =
+      """{"id" : 1, "blog" : "www.iteblog.com", "weixin" : "iteblog_hadoop"}"""
     val json2 = """{"id" : 2, "blog" : "books.iteblog.com", "weixin" : "iteblog_hadoop"}"""
     val rddMapping = sc.makeRDD(Seq(json1, json2))
     EsSpark.saveToEs(rddMapping, "test/sparkmapping", Map("es.mapping.id" -> "id"))
@@ -65,10 +64,9 @@ object ElasticsearchSparkDemo {
     // 读取数据
     // by default, as a Tuple2 containing as the first element the document id and the second element the actual document represented through Scala collections
     val RDD = sc.esRDD("test/spark")
-    val RDD2=sc.esRDD("test/spark", "?q=me*")
+    val RDD2 = sc.esRDD("test/spark", "?q=me*")
   }
 
 }
 
 case class Trip(departure: String, arrival: String)
-*/
