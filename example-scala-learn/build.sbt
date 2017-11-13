@@ -8,3 +8,5 @@ scalaVersion := "2.11.7"
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % "2.2.0" % "provided"
 )
+
+libraryDependencies += "org.elasticsearch" % "elasticsearch-hadoop" % "5.2.0"

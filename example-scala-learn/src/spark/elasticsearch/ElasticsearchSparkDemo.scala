@@ -23,7 +23,7 @@ object ElasticsearchSparkDemo {
     val airports = Map("OTP" -> "Otopeni", "SFO" -> "San Fran")
     sc.makeRDD(Seq(numbers, airports)).saveToEs("test/spark")
     //
-    val upcomingTrip = Trip("OTP", "SFO")
+    /*val upcomingTrip = Trip("OTP", "SFO")
     val lastWeekTrip = Trip("MUC", "OTP")
     val rdd = sc.makeRDD(Seq(upcomingTrip, lastWeekTrip))
     rdd.saveToEs("test/sparkclass")
@@ -64,7 +64,7 @@ object ElasticsearchSparkDemo {
     // 读取数据
     // by default, as a Tuple2 containing as the first element the document id and the second element the actual document represented through Scala collections
     val RDD = sc.esRDD("test/spark")
-    val RDD2 = sc.esRDD("test/spark", "?q=me*")
+    val RDD2 = sc.esRDD("test/spark", "?q=me*")*/
   }
 
 }
