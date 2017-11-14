@@ -7,7 +7,15 @@
 - 2009年伯克利分校----基于mapreduce----使用scala编写
 # 组件
 ### 上层组件----spark sql/spark streaming/mlib/graphx
-- spark sql----Spark 用来操作结构化数据的程序包
+- spark sql----Spark 用来操作结构化/半结构化数据的程序包
+  - 从各种数据源读取数据/支持各种方式的sql查询
+    - hive查询
+    - 支持udf(用户自定义函数)
+  - SchemaRDD(DataFrame)----存放Row 对象的RDD，每个Row 对象代表一行记录
+ ```
+ SELECT SUM(user.favouritesCount), SUM(retweetCount), user.id FROM tweets
+ GROUP BY user.id
+ ```
 - spark streaming----Spark 提供的对实时数据进行流式计算的组件
 - mlib----提供常见的机器学习（ML）功能的程序库
 - graphx----用来操作图（比如社交网络的朋友关系图）的程序库
