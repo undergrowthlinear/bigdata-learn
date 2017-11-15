@@ -16,7 +16,13 @@
  SELECT SUM(user.favouritesCount), SUM(retweetCount), user.id FROM tweets
  GROUP BY user.id
  ```
-- spark streaming----Spark 提供的对实时数据进行流式计算的组件
+- spark streaming----Spark 提供的对实时数据进行流式计算的组件/微批次架构
+  - Spark Streaming 使用离散化流（discretized stream）作为抽象表示，叫作DStream
+  - DStream 是随时间推移而收到的数据的序列
+    - 一种是转化操作（transformation），会生成一个新的DStream
+      - 无状态（stateless）----每个批次的处理不依赖于之前批次的数据
+      - 有状态（stateful)----需要使用之前批次的数据或者是中间结果来计算当前批次的数据
+    - 另一种是输出操作（output operation），可以把数据写入外部系统
 - mlib----提供常见的机器学习（ML）功能的程序库
 - graphx----用来操作图（比如社交网络的朋友关系图）的程序库
 ### 中间层----spark core
