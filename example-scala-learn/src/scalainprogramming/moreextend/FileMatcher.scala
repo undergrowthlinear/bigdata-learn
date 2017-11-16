@@ -74,6 +74,8 @@ object FileMatcher {
     withPrintWriter2(new File("load1.txt")) {
       writer => writer.println(new Date)
     }
+    //
+    val a: Any = 12
   }
 
 }

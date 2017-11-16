@@ -26,6 +26,11 @@ object HelloWorld {
 - Scala 包----package com.runoob/import java.awt._
 - 默认情况下，Scala 总会引入 java.lang._ 、 scala._ 和 Predef._
 - Boolean/Byte Char/Short Int/Float/ Long/Double/ String/Unit/Null/Nothing/Any/AnyRef
+  - scala类层次----21种
+  - Any
+    - AnyVal----Boolean/Byte Char/Short Int/Float/ Long/Double/ Unit(java void)--------9
+      - 值类以方法的名称支持运算符
+    - AnyRef(java.lang.Object)----ScalaObject/Iterable/Seq/List java对象/scala对象 String Null/Nothing--------9
 - '<标识符>/'/"/"""/var/val/类型推断
   - VariableName : DataType [=  Initial Value]----与java相反
   - +----字符串连接
