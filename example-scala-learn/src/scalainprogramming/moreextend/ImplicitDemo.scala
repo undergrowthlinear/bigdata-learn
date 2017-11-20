@@ -28,13 +28,31 @@ object ImplicitDemo {
 
   /*implicit def stringWrapper(s: String) =
     new RandomAccessSeq[Char] {
-      def length = s.length
+      def length = s.lengthe
       def apply(i: Int) = s.charAt(i)
     }*/
+
 
   def main(args: Array[String]) {
     val i: Int = 10.5d
     println("1" + new Rational(1, 1))
+    // 隐式参数 类似于扩展柯里化函数
+    // 隐式参数的类型名称至少要用一个角色去确定
+    implicit val p: ProPre = new ProPre("what")
+    implicit val p1: ProDrink = new ProDrink("hello world")
+    Greeter.greet("what")
+  }
+}
+
+class ProPre(val propre: String)
+
+class ProDrink(val propre: String)
+
+object Greeter {
+  def greet(name: String)(implicit prompt: ProPre, drink: ProDrink): Unit = {
+    println(name)
+    println(prompt.propre)
+    println(drink.propre)
   }
 }
 
