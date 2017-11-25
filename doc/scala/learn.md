@@ -95,7 +95,8 @@ object HelloWorld {
   - assert/ensuring
   - 需要进一步尝试
 - Scala 模式匹配----选择器 match {备选项}
-  - 一个模式匹配包含了一系列备选项，每个都开始于关键字 case。每个备选项都包含了一个模式及一到多个表达式。箭头符号 => 隔开了模式和表达式
+  - 一个模式匹配包含了一系列备选项，每个都开始于关键字 case。每个备选项都包含了
+  一个模式及一到多个表达式。箭头符号 => 隔开了模式和表达式
   - case关键字的类定义就是就是样例类(case classes)，样例类是种特殊的类，经过优化以用于模式匹配
 - Scala 正则表达式----http://www.runoob.com/scala/scala-regular-expressions.html
 - Scala 异常处理----throw new IllegalArgumentException/与java类似
