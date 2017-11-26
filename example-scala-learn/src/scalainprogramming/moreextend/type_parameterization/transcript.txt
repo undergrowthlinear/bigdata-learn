@@ -1,0 +1,78 @@
+/*
+ * Copyright (C) 2007-2008 Artima, Inc. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Automatically generated Scala interpreter transcript from:
+ *
+ * Programming in Scala (First Edition, Version 6)
+ * by Martin Odersky, Lex Spoon, Bill Venners
+ *
+ * http://booksites.artima.com/programming_in_scala
+ */
+
+
+scala> class Queue[T](elems: List[T]) {
+         def head = elems.head
+         def tail = elems.tail
+         def append(x: T) = new Queue(elems ::: List(x))
+         override def toString() = elems.mkString("Queue(", ", ", ")")
+       }
+defined class Queue
+
+scala> def Queue[T](elems: T*) = new Queue(elems.toList)
+Queue: [T](T*)Queue[T]
+
+scala> val q = Queue(1, 2, 3)
+q: Queue[Int] = Queue(1, 2, 3)
+
+scala> val q1 = q append 4
+q1: Queue[Int] = Queue(1, 2, 3, 4)
+
+scala> q
+res0: Queue[Int] = Queue(1, 2, 3)
+
+scala>   class Queue[T] private (
+           private val leading: List[T],
+           private val trailing: List[T]
+         ) 
+
+defined class Queue
+
+scala> new Queue(List(1, 2), List(3))
+<console>:6: error: constructor Queue cannot be accessed in object $iw
+       new Queue(List(1, 2), List(3))
+       ^
+
+scala> def doesNotCompile(q: Queue) {}
+<console>:5: error: class Queue takes type parameters
+       def doesNotCompile(q: Queue) {}
+                             ^
+
+scala> def doesCompile(q: Queue[AnyRef]) {}
+doesCompile: (Queue[AnyRef])Unit
+
+scala> val a1 = Array("abc")
+a1: Array[java.lang.String] = Array(abc)
+
+scala> val a2: Array[Any] = a1
+<console>:5: error: type mismatch;
+ found   : Array[java.lang.String]
+ required: Array[Any]
+       val a2: Array[Any] = a1
+                            ^
+
+scala> val a2: Array[Object] =
+         a1.asInstanceOf[Array[Object]]
+a2: Array[java.lang.Object] = Array(abc)
+
