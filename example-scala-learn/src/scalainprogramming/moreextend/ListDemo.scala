@@ -31,6 +31,7 @@ object ListDemo {
   // list的所有元素都具有相同类型
   // list是协变的 List[Nothing] 是List[T] 所有类型的子类
   // Nil(空列表)与::(前缀连接符) 构造列表
+  // ListBuffer(+=/toList)----缓存的list
   def main(args: Array[String]) {
     val l = List(1, 2)
     // 右结合规则
@@ -41,6 +42,6 @@ object ListDemo {
     display(l ::: li)
     // 利用分而治之
     display(append(l, li))
-    display(List.range(1,10,2))
+    display(List.range(1, 10, 2))
   }
 }
