@@ -104,6 +104,6 @@ object HelloWorld {
 - Scala 提取器(Extractor)
   - Scala 提取器是一个带有unapply方法的对象。unapply方法算是apply方法的反向操作：
   - unapply接受一个对象，然后从对象中提取值，提取的值通常是用来构造该对象的值
-  - 在我们实例化一个类的时，可以带上0个或者多个的参数，
+  - 在我们实例化一个类的时，可以带上0个或者多个的参数，使用unapplySeq
   - 编译器在实例化的时会调用 apply 方法。我们可以在类和对象中都定义 apply 方法
 - Scala 文件 I/O----Scala 进行文件写操作，直接用的都是 java中 的 I/O 类 （java.io.File)：
