@@ -21,12 +21,10 @@
  * http://booksites.artima.com/programming_in_scala
  */
 
-import ChecksumAccumulator.calculate
-
 object Summer {
   def main(args: Array[String]) {
     for (arg <- args)
-      println(arg +": "+ calculate(arg))
+      println(arg + ": " + calculate(arg))
   }
 }
 

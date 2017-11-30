@@ -46,12 +46,12 @@ class Rational(n: Int, d: Int) {
   var num = n / g
   var denom = d / g
 
+  // 隐式转换 需要定义在作用范围内才起作用
+  implicit def intToRational(x: Int) = new Rational(x)
+
   // 只有主类构造器能够调用超类构造器
   // 辅助构造器 都是以this开头
   def this(n: Int) = this(n, 1)
-
-  // 隐式转换 需要定义在作用范围内才起作用
-  implicit def intToRational(x: Int) = new Rational(x)
 
   // 定义操作符方法
   def +(that: Rational): Rational = {
@@ -89,13 +89,13 @@ class Rational(n: Int, d: Int) {
     new Rational(num, denom * i)
   }
 
+  def max(that: Rational): Rational = {
+    if (this.lessThat(that)) that else this
+  }
+
   // this 自指向
   def lessThat(that: Rational): Boolean = {
     this.num * that.denom < that.num * this.denom
-  }
-
-  def max(that: Rational): Rational = {
-    if (this.lessThat(that)) that else this
   }
 
   // 重载 toString

@@ -1,4 +1,20 @@
 
+// 空类结构体可省略花括号{}
+// sealed 封闭的样式
+sealed abstract class Expr
+
+// case 加上 class 表示样例类
+// 为样例类添加类名一致的工厂方法
+// 样本类的所有参数列表都是val变量
+// 样本类使用重写的equals做比较
+case class Var(name: String) extends Expr
+
+case class Number(num: Double) extends Expr
+
+case class Unop(operator: String, args: Expr) extends Expr
+
+case class BiOp(operator: String, left: Expr, right: Expr) extends Expr
+
 /**
   * @description
   * @author zhangwu
@@ -6,6 +22,17 @@
   * @version 1.0.0
   */
 object CaseAndPatternDemo {
+
+  def main(args: Array[String]) {
+    simpleOpe(Unop("-", Unop("-", Var("x"))))
+    val m = Map("x" -> "y")
+    // Optional----包含Some(y)/None
+    println(m.get("x").get)
+    println(m.get("x"))
+    println(m.get("z"))
+    // 类型匹配
+    println(matchAng("qwertyuiopq"))
+  }
 
   // match是scala表达式 以结果结尾
   // scala备选项不会掉到下一个case
@@ -33,32 +60,4 @@ object CaseAndPatternDemo {
     // case _ => _
   }
 
-
-  def main(args: Array[String]) {
-    simpleOpe(Unop("-", Unop("-", Var("x"))))
-    val m = Map("x" -> "y")
-    // Optional----包含Some(y)/None
-    println(m.get("x").get)
-    println(m.get("x"))
-    println(m.get("z"))
-    // 类型匹配
-    println(matchAng("qwertyuiopq"))
-  }
-
 }
-
-// 空类结构体可省略花括号{}
-// sealed 封闭的样式
-sealed abstract class Expr
-
-// case 加上 class 表示样例类
-// 为样例类添加类名一致的工厂方法
-// 样本类的所有参数列表都是val变量
-// 样本类使用重写的equals做比较
-case class Var(name: String) extends Expr
-
-case class Number(num: Double) extends Expr
-
-case class Unop(operator: String, args: Expr) extends Expr
-
-case class BiOp(operator: String, left: Expr, right: Expr) extends Expr

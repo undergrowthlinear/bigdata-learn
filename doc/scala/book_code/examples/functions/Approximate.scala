@@ -22,17 +22,13 @@
  */
 
 object Approximate {
-  def isGoodEnough(guess: Double): Boolean = {
-      println("guess [" + guess + "]")
-      Math.abs(guess*guess - 2.0)  <  1.0E-6
-  }
-
-  def improve(guess: Double): Double =
-      (guess + 2.0/guess)/2.0
-      
-  def approximate(guess: Double): Double = 
+  def approximate(guess: Double): Double =
     if (isGoodEnough(guess)) guess
     else approximate(improve(guess))
+
+  def main(args: Array[String]) {
+    approximateLoop(3.3)
+  }
 
   def approximateLoop(initialGuess: Double): Double = {
     var guess = initialGuess
@@ -41,7 +37,11 @@ object Approximate {
     guess
   }
 
-  def main(args: Array[String]) {
-    approximateLoop(3.3)
+  def isGoodEnough(guess: Double): Boolean = {
+    println("guess [" + guess + "]")
+    Math.abs(guess * guess - 2.0) < 1.0E-6
   }
+
+  def improve(guess: Double): Double =
+    (guess + 2.0 / guess) / 2.0
 }

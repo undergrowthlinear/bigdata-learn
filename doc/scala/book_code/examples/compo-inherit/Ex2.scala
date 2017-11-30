@@ -22,16 +22,6 @@
  */
 
 object Ex2 {
-  abstract class Element {
-    def contents: Array[String]
-    val height = contents.length
-    val width = 
-      if (height == 0) 0 else contents(0).length
-  }
-
-  class ArrayElement(conts: Array[String]) extends Element {
-    def contents: Array[String] = conts
-  }
 
   def main(args: Array[String]) {
     val arrayElem = new ArrayElement(Array("foo"))
@@ -42,13 +32,25 @@ object Ex2 {
     val abcLen =
       "abc".length
     val helloLen =
-      "hello".length  // no () because no side-effect
-      println()       // better to not drop the ()
-      val e: Element = new ArrayElement(Array("hello"))
+      "hello".length // no () because no side-effect
+    println() // better to not drop the ()
+    val e: Element = new ArrayElement(Array("hello"))
 
     println("a123 [" + a123 + "]")
     println("abcLen [" + abcLen + "]")
     println("helloLen [" + helloLen + "]")
     println("e [" + e + "]")
+  }
+
+  abstract class Element {
+    val height = contents.length
+    val width =
+      if (height == 0) 0 else contents(0).length
+
+    def contents: Array[String]
+  }
+
+  class ArrayElement(conts: Array[String]) extends Element {
+    def contents: Array[String] = conts
   }
 }

@@ -22,4 +22,4 @@
  */
 
 object SimpleDatabase extends Database
-    with SimpleFoods with SimpleRecipes
+  with SimpleFoods with SimpleRecipes

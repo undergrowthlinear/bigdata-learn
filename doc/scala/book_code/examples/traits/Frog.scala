@@ -21,8 +21,9 @@
  * http://booksites.artima.com/programming_in_scala
  */
 
-class Animal
 trait HasLegs
+
+class Animal
 
 class Frog extends Animal with Philosophical with HasLegs {
   override def toString = "green"

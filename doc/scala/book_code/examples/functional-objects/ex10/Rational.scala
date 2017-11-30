@@ -25,45 +25,45 @@ class Rational(n: Int, d: Int) {
 
   require(d != 0)
 
-  private val g = gcd(n.abs, d.abs)
   val numer = n / g
   val denom = d / g
+  private val g = gcd(n.abs, d.abs)
 
   def this(n: Int) = this(n, 1)
 
-  def + (that: Rational): Rational =
+  def +(that: Rational): Rational =
     new Rational(
       numer * that.denom + that.numer * denom,
       denom * that.denom
     )
 
-  def + (i: Int): Rational =
+  def +(i: Int): Rational =
     new Rational(numer + i * denom, denom)
 
-  def - (that: Rational): Rational =
+  def -(that: Rational): Rational =
     new Rational(
       numer * that.denom - that.numer * denom,
       denom * that.denom
     )
 
-  def - (i: Int): Rational =
+  def -(i: Int): Rational =
     new Rational(numer - i * denom, denom)
 
-  def * (that: Rational): Rational =
+  def *(that: Rational): Rational =
     new Rational(numer * that.numer, denom * that.denom)
 
-  def * (i: Int): Rational =
+  def *(i: Int): Rational =
     new Rational(numer * i, denom)
 
-  def / (that: Rational): Rational =
+  def /(that: Rational): Rational =
     new Rational(numer * that.denom, denom * that.numer)
 
-  def / (i: Int): Rational =
+  def /(i: Int): Rational =
     new Rational(numer, denom * i)
 
-  override def toString = numer +"/"+ denom
+  override def toString = numer + "/" + denom
 
-  private def gcd(a: Int, b: Int): Int = 
+  private def gcd(a: Int, b: Int): Int =
     if (b == 0) a else gcd(b, a % b)
 }
 
@@ -75,7 +75,7 @@ object Main {
     println("x * 2 [" + (x * 2) + "]")
 
     implicit def intToRational(x: Int) = new Rational(x)
-    val r = new Rational(2,3)
+    val r = new Rational(2, 3)
     println("2 * r [" + (2 * r) + "]")
   }
 }

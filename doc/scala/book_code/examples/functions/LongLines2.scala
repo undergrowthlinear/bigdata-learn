@@ -24,16 +24,19 @@
 import scala.io.Source
 
 object LongLines2 {
+
+  def main(args: Array[String]) = FindLongLines.main(args)
+
   object LongLines {
     def processFile(filename: String, width: Int) {
-    
+
       def processLine(filename: String,
-          width: Int, line: String) {
-    
+                      width: Int, line: String) {
+
         if (line.length > width)
-          print(filename +": "+ line)
-      }    
-    
+          print(filename + ": " + line)
+      }
+
       val source = Source.fromFile(filename)
       for (line <- source.getLines) {
         processLine(filename, width, line)
@@ -46,8 +49,6 @@ object LongLines2 {
       val width = args(0).toInt
       for (arg <- args.drop(1))
         LongLines.processFile(arg, width)
-    } 
-  } 
-
-  def main(args: Array[String]) = FindLongLines.main(args)
+    }
+  }
 }

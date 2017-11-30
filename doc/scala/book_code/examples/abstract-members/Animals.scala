@@ -23,15 +23,19 @@
 
 object Animals {
 
-  class Food
   abstract class Animal {
     type SuitableFood <: Food
+
     def eat(food: SuitableFood)
   }
 
+  class Food
+
   class Grass extends Food
+
   class Cow extends Animal {
     type SuitableFood = Grass
+
     override def eat(food: Grass) {}
   }
 

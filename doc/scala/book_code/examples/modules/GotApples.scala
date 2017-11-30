@@ -24,7 +24,7 @@
 object GotApples {
   def main(args: Array[String]) {
     val db: Database =
-      if(args(0) == "student")
+      if (args(0) == "student")
         StudentDatabase
       else
         SimpleDatabase
@@ -35,7 +35,7 @@ object GotApples {
 
     val apple = SimpleDatabase.foodNamed("Apple").get
 
-    for(recipe <- browser.recipesUsing(apple))
+    for (recipe <- browser.recipesUsing(apple))
       println(recipe)
-  } 
+  }
 }

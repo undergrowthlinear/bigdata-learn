@@ -21,10 +21,6 @@
  * http://booksites.artima.com/programming_in_scala
  */
 
-import org.stairwaybook.layout.Element
-
-import Element.elem
-
 object Spiral {
 
   val space = elem(" ")

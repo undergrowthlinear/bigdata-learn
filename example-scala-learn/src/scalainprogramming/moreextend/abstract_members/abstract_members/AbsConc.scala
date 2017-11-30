@@ -26,28 +26,9 @@ package scalainprogramming.moreextend.abstract_members.abstract_members
 // 把所有未知的东西都变成抽象成员
 object AbsConc {
 
-  trait Abstract {
-    // 抽象类型
-    type T
-
-    // 抽象方法
-    def transform(x: T): T
-
-    // 类参数与抽象字段的字段初始化顺序不一致----类参数被传递类构造器前计算,抽象字段是在超类完成了初始化之后才开始计算
-    // 解决方案----预初始化字段(new {val n:12} with RationalTrait)/懒加载val(lazy val v:String="x")
-    // 抽象常量
-    val initial: T
-    // 抽象变量
-    var current: T
-  }
-
-  class Concrete extends Abstract {
-    type T = String
-
-    def transform(x: String) = x + x
-
-    val initial = "hi"
-    var current = initial
+  def main(args: Array[String]) {
+    val abs: Abstract = new Concrete
+    display(abs)
   }
 
   def display(abs: Abstract): Unit = {
@@ -56,9 +37,26 @@ object AbsConc {
     println(abs.current)
   }
 
-  def main(args: Array[String]) {
-    val abs: Abstract = new Concrete
-    display(abs)
+  trait Abstract {
+    // 抽象类型
+    type T
+    // 类参数与抽象字段的字段初始化顺序不一致----类参数被传递类构造器前计算,抽象字段是在超类完成了初始化之后才开始计算
+    // 解决方案----预初始化字段(new {val n:12} with RationalTrait)/懒加载val(lazy val v:String="x")
+    // 抽象常量
+    val initial: T
+    // 抽象变量
+    var current: T
+
+    // 抽象方法
+    def transform(x: T): T
+  }
+
+  class Concrete extends Abstract {
+    type T = String
+    val initial = "hi"
+    var current = initial
+
+    def transform(x: String) = x + x
   }
 
 }

@@ -12,6 +12,30 @@ import scala.collection.mutable.{ArrayBuffer, ListBuffer}
   */
 object CollectionDemo {
 
+  def mapMaker: mutable.Map[String, Int] = {
+    new mutable.HashMap[String, Int]() with mutable.SynchronizedMap[String, Int]
+  }
+
+  // 提供可变与不可变版本----默认为不可变版本
+  // 不可变与可变版本之前的切换 使用=更易于切换
+  // iterable----iterator----与java类似
+  // seq(array/list/queue/stack) set(hashset) map(hashmap)
+  def main(args: Array[String]) {
+    set_demo()
+    list_demo()
+    //
+    println(hasUpper("what"))
+    println(hasUpper("What"))
+    //
+    map_demo()
+    //
+    countNum("hello world scala world").foreach(println)
+    // 相互转换
+    trans_demo()
+    // 元组使用
+    tuple_demo()
+  }
+
   def set_demo(): Unit = {
     var s = Set(1, 2, 3, 2)
     s += 10
@@ -44,7 +68,6 @@ object CollectionDemo {
 
   def hasUpper(s: String) = s.exists(_.isUpper)
 
-
   // 类似于数组使用
   def map_demo(): Unit = {
     val map = mutable.Map("q" -> 1, "w" -> 10)
@@ -56,10 +79,6 @@ object CollectionDemo {
     treeMap.foreach(println)
     // 同步
 
-  }
-
-  def mapMaker: mutable.Map[String, Int] = {
-    new mutable.HashMap[String, Int]() with mutable.SynchronizedMap[String, Int]
   }
 
   // 统计单词的使用次数
@@ -81,6 +100,11 @@ object CollectionDemo {
     map.toList.foreach(println)
   }
 
+  def tuple_demo(): Unit = {
+    val (num, word) = maxLength("what you name i undergrowth".split("[ ,.!]"))
+    println(num + "\t" + word)
+  }
+
   def maxLength(text: Array[String]) = {
     var word = text(0)
     var num = 0
@@ -91,30 +115,5 @@ object CollectionDemo {
       }
     }
     (num, word)
-  }
-
-  def tuple_demo(): Unit = {
-    val (num, word) = maxLength("what you name i undergrowth".split("[ ,.!]"))
-    println(num + "\t" + word)
-  }
-
-  // 提供可变与不可变版本----默认为不可变版本
-  // 不可变与可变版本之前的切换 使用=更易于切换
-  // iterable----iterator----与java类似
-  // seq(array/list/queue/stack) set(hashset) map(hashmap)
-  def main(args: Array[String]) {
-    set_demo()
-    list_demo()
-    //
-    println(hasUpper("what"))
-    println(hasUpper("What"))
-    //
-    map_demo()
-    //
-    countNum("hello world scala world").foreach(println)
-    // 相互转换
-    trans_demo()
-    // 元组使用
-    tuple_demo()
   }
 }

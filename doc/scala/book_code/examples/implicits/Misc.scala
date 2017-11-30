@@ -22,14 +22,16 @@
  */
 
 object Misc {
-  object Obj1 {
-    implicit def intToString(x: Int) = x.toString
-    implicit def int2double(x: Int): Double = x.toDouble
 
+  object Obj1 {
     val aMap =
       Map(1 -> "one", 2 -> "two", 3 -> "three")
 
-    def maxListUpBound[T <: Ordered[T]](elements: List[T]): T = 
+    implicit def intToString(x: Int) = x.toString
+
+    implicit def int2double(x: Int): Double = x.toDouble
+
+    def maxListUpBound[T <: Ordered[T]](elements: List[T]): T =
       elements match {
         case List() =>
           throw new IllegalArgumentException("empty list!")
@@ -41,45 +43,45 @@ object Misc {
       }
 
     def maxList[T](elements: List[T])
-          (implicit orderer: T => Ordered[T]): T =
-    
+                  (implicit orderer: T => Ordered[T]): T =
+
       elements match {
-        case List() => 
+        case List() =>
           throw new IllegalArgumentException("empty list!")
         case List(x) => x
         case x :: rest =>
-          val maxRest = maxList(rest)  // (orderer) is implicit
-          if (x > maxRest) x           // orderer(x) is implicit
+          val maxRest = maxList(rest) // (orderer) is implicit
+          if (x > maxRest) x // orderer(x) is implicit
           else maxRest
       }
   }
 
   object Obj2 {
     def maxList[T](elements: List[T])
-          (implicit converter: T => Ordered[T]): T =
-      // same body...
+                  (implicit converter: T => Ordered[T]): T =
+    // same body...
       elements match {
-        case List() => 
+        case List() =>
           throw new IllegalArgumentException("empty list!")
         case List(x) => x
         case x :: rest =>
-          val maxRest = maxList(rest)  // (orderer) is implicit
-          if (x > maxRest) x           // orderer(x) is implicit
+          val maxRest = maxList(rest) // (orderer) is implicit
+          if (x > maxRest) x // orderer(x) is implicit
           else maxRest
       }
   }
 
   object Obj3 {
     def maxList[T](elements: List[T])
-          (implicit iceCream: T => Ordered[T]): T =
-      // same body...
+                  (implicit iceCream: T => Ordered[T]): T =
+    // same body...
       elements match {
-        case List() => 
+        case List() =>
           throw new IllegalArgumentException("empty list!")
         case List(x) => x
         case x :: rest =>
-          val maxRest = maxList(rest)  // (orderer) is implicit
-          if (x > maxRest) x           // orderer(x) is implicit
+          val maxRest = maxList(rest) // (orderer) is implicit
+          if (x > maxRest) x // orderer(x) is implicit
           else maxRest
       }
   }
@@ -87,13 +89,14 @@ object Misc {
   object Obj4 {
     def maxList[T <% Ordered[T]](elements: List[T]): T =
       elements match {
-        case List() => 
+        case List() =>
           throw new IllegalArgumentException("empty list!")
         case List(x) => x
         case x :: rest =>
-          val maxRest = maxList(rest)  // (orderer) is implicit
-          if (x > maxRest) x           // orderer(x) is implicit
+          val maxRest = maxList(rest) // (orderer) is implicit
+          if (x > maxRest) x // orderer(x) is implicit
           else maxRest
       }
   }
+
 }

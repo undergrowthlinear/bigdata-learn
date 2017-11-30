@@ -11,10 +11,9 @@ import org.apache.spark.SparkConf;
  */
 public class SparkCommonUtil {
 
-  private static boolean isHome = false;
   private static final String homeSparkHome = "";
   private static final String companySparkHome = "E:\\java_other\\bigdata\\spark\\spark-2.2.0-bin-hadoop2.7";
-
+  private static boolean isHome = false;
 
   public static SparkConf getSparkConf(String appName, String master) {
     SparkConf conf = new SparkConf().setAppName(appName).setMaster(master);

@@ -25,7 +25,10 @@ package scalainprogramming.moreextend.abstract_members.abstract_members
 
 object Animals {
 
-  class Food
+  def main(args: Array[String]) {
+    val cow = new Cow
+    cow.eat(new Grass)
+  }
 
   abstract class Animal {
     // 上界
@@ -34,6 +37,8 @@ object Animals {
 
     def eat(food: SuitableFood)
   }
+
+  class Food
 
   class Grass extends Food
 
@@ -45,11 +50,6 @@ object Animals {
     override def eat(food: Grass) {
       println(food.getClass)
     }
-  }
-
-  def main(args: Array[String]) {
-    val cow = new Cow
-    cow.eat(new Grass)
   }
 
 }

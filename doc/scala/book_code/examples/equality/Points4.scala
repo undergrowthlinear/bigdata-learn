@@ -22,13 +22,17 @@
  */
 
 /** This Point's equality method depends on mutable variables, and
- *  so its results are not stable when the variables change. */
+  * so its results are not stable when the variables change. */
 object Points {
-  class Point(var x: Int, var y: Int) { // Problematic
+
+  class Point(var x: Int, var y: Int) {
+    // Problematic
     override def hashCode = 41 * (41 + x) + y
-    override def equals(other: Any) = other match { 
-      case that: Point => this.x == that.x && this.y == that.y 
-      case _ => false 
+
+    override def equals(other: Any) = other match {
+      case that: Point => this.x == that.x && this.y == that.y
+      case _ => false
     }
   }
+
 }

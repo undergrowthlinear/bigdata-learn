@@ -31,26 +31,6 @@ abstract class BasicCircuitSimulation extends Simulation {
 
   def OrGateDelay: Int
 
-  class Wire {
-
-    private var sigVal = false
-    private var actions: List[Action] = List()
-
-    def getSignal = sigVal
-
-    def setSignal(s: Boolean) =
-      if (s != sigVal) {
-        sigVal = s
-        // 对函数的空参数调用简写
-        actions foreach (_ ())
-      }
-
-    def addAction(a: Action) = {
-      actions = a :: actions
-      a()
-    }
-  }
-
   def inverter(input: Wire, output: Wire) = {
     def invertAction() {
       val inputSig = input.getSignal
@@ -96,21 +76,51 @@ abstract class BasicCircuitSimulation extends Simulation {
     }
     wire addAction probeAction
   }
+
+  class Wire {
+
+    private var sigVal = false
+    private var actions: List[Action] = List()
+
+    def getSignal = sigVal
+
+    def setSignal(s: Boolean) =
+      if (s != sigVal) {
+        sigVal = s
+        // 对函数的空参数调用简写
+        actions foreach (_ ())
+      }
+
+    def addAction(a: Action) = {
+      actions = a :: actions
+      a()
+    }
+  }
 }
 
 abstract class Simulation {
 
   // 类型成员
   type Action = () => Unit
-
-  case class WorkItem(time: Int, action: Action)
-
   // 模拟时间
   private var curtime = 0
+  private var agenda: List[WorkItem] = List()
 
   def currentTime: Int = curtime
 
-  private var agenda: List[WorkItem] = List()
+  // =>Unit 传名参数 不做计算
+  def afterDelay(delay: Int)(block: => Unit) {
+    val item = WorkItem(currentTime + delay, () => block)
+    agenda = insert(agenda, item)
+  }
+
+  def run() {
+    afterDelay(0) {
+      println("*** simulation started, time = " +
+        currentTime + " ***")
+    }
+    while (!agenda.isEmpty) next()
+  }
 
   // 递归插入元素到合适位置
   private def insert(ag: List[WorkItem],
@@ -118,12 +128,6 @@ abstract class Simulation {
 
     if (ag.isEmpty || item.time < ag.head.time) item :: ag
     else ag.head :: insert(ag.tail, item)
-  }
-
-  // =>Unit 传名参数 不做计算
-  def afterDelay(delay: Int)(block: => Unit) {
-    val item = WorkItem(currentTime + delay, () => block)
-    agenda = insert(agenda, item)
   }
 
   private def next() {
@@ -136,26 +140,12 @@ abstract class Simulation {
     }
   }
 
-  def run() {
-    afterDelay(0) {
-      println("*** simulation started, time = " +
-        currentTime + " ***")
-    }
-    while (!agenda.isEmpty) next()
-  }
+  case class WorkItem(time: Int, action: Action)
 }
 
 
 abstract class CircuitSimulation
   extends BasicCircuitSimulation {
-
-  def halfAdder(a: Wire, b: Wire, s: Wire, c: Wire) {
-    val d, e = new Wire
-    orGate(a, b, d)
-    andGate(a, b, c)
-    inverter(c, e)
-    andGate(d, e, s)
-  }
 
   def fullAdder(a: Wire, b: Wire, cin: Wire,
                 sum: Wire, cout: Wire) {
@@ -164,6 +154,14 @@ abstract class CircuitSimulation
     halfAdder(a, cin, s, c1)
     halfAdder(b, s, sum, c2)
     orGate(c1, c2, cout)
+  }
+
+  def halfAdder(a: Wire, b: Wire, s: Wire, c: Wire) {
+    val d, e = new Wire
+    orGate(a, b, d)
+    andGate(a, b, c)
+    inverter(c, e)
+    andGate(d, e, s)
   }
 }
 

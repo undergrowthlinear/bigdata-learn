@@ -22,74 +22,6 @@
  */
 
 object Ex5 {
-  
-  abstract class Food(val name: String) {
-    override def toString = name
-  }
-  
-  class Recipe(
-    val name: String,
-    val ingredients: List[Food],
-    val instructions: String
-  ) {
-    override def toString = name
-  }
-
-  
-  object Apple extends Food("Apple")
-  object Orange extends Food("Orange")
-  object Cream extends Food("Cream")
-  object Sugar extends Food("Sugar")
-  
-  object FruitSalad extends Recipe(
-    "fruit salad",
-    List(Apple, Orange, Cream, Sugar),
-    "Stir it all together."
-  )
-  trait FoodCategories {
-    case class FoodCategory(name: String, foods: List[Food])
-    def allCategories: List[FoodCategory]
-  }
-  trait SimpleFoods {
-    object Pear extends Food("Pear")
-    def allFoods = List(Apple, Pear)
-    def allCategories = Nil
-  }
-
-  trait SimpleRecipes {
-    this: SimpleFoods =>
-  
-    object FruitSalad extends Recipe(
-      "fruit salad",
-      List(Apple, Pear),   // Now Pear is in scope
-      "Mix it all together."
-    )
-    def allRecipes = List(FruitSalad)
-  }
-
-  abstract class Database extends FoodCategories {
-    def allFoods: List[Food]
-    def allRecipes: List[Recipe]
-    def foodNamed(name: String) =
-      allFoods.find(f => f.name == name)
-  }
-  object SimpleDatabase extends Database
-      with SimpleFoods with SimpleRecipes
-
-  abstract class Browser {
-    val database: Database
-  
-    def recipesUsing(food: Food) =
-      database.allRecipes.filter(recipe =>
-        recipe.ingredients.contains(food))
-  
-    def displayCategory(category: database.FoodCategory) { 
-      println(category)
-    }
-  }
-  object SimpleBrowser extends Browser {
-    val database = SimpleDatabase
-  }
 
   def main(args: Array[String]) {
     val apple = SimpleDatabase.foodNamed("Apple").get
@@ -103,5 +35,87 @@ object Ex5 {
     println("appleRecipes [" + appleRecipes + "]")
     println("pearRecipes [" + pearRecipes + "]")
     println("allCategories [" + allCategories + "]")
+  }
+
+  trait FoodCategories {
+
+    def allCategories: List[FoodCategory]
+
+    case class FoodCategory(name: String, foods: List[Food])
+  }
+
+  trait SimpleFoods {
+
+    def allFoods = List(Apple, Pear)
+
+    def allCategories = Nil
+
+    object Pear extends Food("Pear")
+  }
+
+  trait SimpleRecipes {
+    this: SimpleFoods =>
+
+    def allRecipes = List(FruitSalad)
+
+    object FruitSalad extends Recipe(
+      "fruit salad",
+      List(Apple, Pear), // Now Pear is in scope
+      "Mix it all together."
+    )
+  }
+
+  abstract class Food(val name: String) {
+    override def toString = name
+  }
+
+  abstract class Database extends FoodCategories {
+    def allFoods: List[Food]
+
+    def allRecipes: List[Recipe]
+
+    def foodNamed(name: String) =
+      allFoods.find(f => f.name == name)
+  }
+
+  abstract class Browser {
+    val database: Database
+
+    def recipesUsing(food: Food) =
+      database.allRecipes.filter(recipe =>
+        recipe.ingredients.contains(food))
+
+    def displayCategory(category: database.FoodCategory) {
+      println(category)
+    }
+  }
+
+  class Recipe(
+                val name: String,
+                val ingredients: List[Food],
+                val instructions: String
+              ) {
+    override def toString = name
+  }
+
+  object Apple extends Food("Apple")
+
+  object Orange extends Food("Orange")
+
+  object Cream extends Food("Cream")
+
+  object Sugar extends Food("Sugar")
+
+  object FruitSalad extends Recipe(
+    "fruit salad",
+    List(Apple, Orange, Cream, Sugar),
+    "Stir it all together."
+  )
+
+  object SimpleDatabase extends Database
+    with SimpleFoods with SimpleRecipes
+
+  object SimpleBrowser extends Browser {
+    val database = SimpleDatabase
   }
 }

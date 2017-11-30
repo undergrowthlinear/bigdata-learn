@@ -24,7 +24,6 @@
 object Demo {
   def main(args: Array[String]) {
     val circuit = new Circuit with Adders
-    import circuit._
 
     val ain = new Wire("ain", true)
     val bin = new Wire("bin", false)

@@ -1,38 +1,40 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
- "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
+    "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type"
-        content="text/html; charset=ISO-8859-1" />
+        content="text/html; charset=ISO-8859-1"/>
   <title>Code Examples for Programming in Scala</title>
   <link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 <body>
 
-<div id="mainTitles"><h3>Code Examples for</h3><h2>Programming in Scala</h2></div>  <p><a href="../index.html">
-    Return to chapter index
-  </a></p>
-  <h2>30 Actors and Concurrency</h2>
+<div id="mainTitles"><h3>Code Examples for</h3>
+  <h2>Programming in Scala</h2></div>
+<p><a href="../index.html">
+  Return to chapter index
+</a></p>
+<h2>30 Actors and Concurrency</h2>
 
-  <p><a href="../concurrency/transcript.txt">
-    Sample run of chapter's interpreter examples
-  </a></p>
+<p><a href="../concurrency/transcript.txt">
+  Sample run of chapter's interpreter examples
+</a></p>
 
-  <ul>
+<ul>
 
-    <li>30.1 <a href="#sec1">Trouble in paradise</a></li>
-    <li>30.2 <a href="#sec2">Actors and message passing</a></li>
-    <li>30.3 <a href="#sec3">Treating native threads as actors</a></li>
-    <li>30.4 <a href="#sec4">Better performance through thread reuse</a></li>
-    <li>30.5 <a href="#sec5">Good actors style</a></li>
-    <li>30.6 <a href="#sec6">A longer example: Parallel discrete event simulation</a></li>
-    <li>30.7 <a href="#sec7">Conclusion</a></li>
-  </ul>
+  <li>30.1 <a href="#sec1">Trouble in paradise</a></li>
+  <li>30.2 <a href="#sec2">Actors and message passing</a></li>
+  <li>30.3 <a href="#sec3">Treating native threads as actors</a></li>
+  <li>30.4 <a href="#sec4">Better performance through thread reuse</a></li>
+  <li>30.5 <a href="#sec5">Good actors style</a></li>
+  <li>30.6 <a href="#sec6">A longer example: Parallel discrete event simulation</a></li>
+  <li>30.7 <a href="#sec7">Conclusion</a></li>
+</ul>
 
-  <h3><a name="sec1"></a>30.1 Trouble in paradise</h3>
+<h3><a name="sec1"></a>30.1 Trouble in paradise</h3>
 
-  <h3><a name="sec2"></a>30.2 Actors and message passing</h3>
+<h3><a name="sec2"></a>30.2 Actors and message passing</h3>
 
   <pre><hr>
 // In file <a href="../concurrency/Actors.scala">concurrency/Actors.scala</a>
@@ -153,7 +155,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec3"></a>30.3 Treating native threads as actors</h3>
+<h3><a name="sec3"></a>30.3 Treating native threads as actors</h3>
 
   <pre><hr>
   scala&gt; import scala.actors.Actor._
@@ -170,7 +172,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec4"></a>30.4 Better performance through thread reuse</h3>
+<h3><a name="sec4"></a>30.4 Better performance through thread reuse</h3>
 
   <pre><hr>
 // In file <a href="../concurrency/Actors.scala">concurrency/Actors.scala</a>
@@ -231,7 +233,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec5"></a>30.5 Good actors style</h3>
+<h3><a name="sec5"></a>30.5 Good actors style</h3>
 
   <pre><hr>
   actor {
@@ -322,14 +324,15 @@
 
 <hr>
   </pre>
-  <h3><a name="sec6"></a>30.6 A longer example: Parallel discrete event simulation</h3>
+<h3><a name="sec6"></a>30.6 A longer example: Parallel discrete event simulation</h3>
 
   <pre><hr>
   trait Simulant extends Actor
   class Wire extends Simulant
 
 <hr>
-// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+// In file <a
+        href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
 
   case class Ping(time: Int)
   case class Pong(time: Int, from: Actor)
@@ -342,23 +345,27 @@
   }
 
 <hr>
-// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+// In file <a
+        href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
 
   case class WorkItem(time: Int, msg: Any, target: Actor)
 
 <hr>
-// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+// In file <a
+        href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
 
   case class AfterDelay(delay: Int, msg: Any, target: Actor)
 
 <hr>
-// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+// In file <a
+        href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
 
   case object Start
   case object Stop
 
 <hr>
-// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+// In file <a
+        href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
 
   class Clock extends Actor {
     private var running = false
@@ -368,19 +375,22 @@
     private var busySimulants: Set[Actor] = Set.empty
 
 <hr>
-// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+// In file <a
+        href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
 
   start()
 
 <hr>
-// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+// In file <a
+        href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
 
   def add(sim: Simulant) {
     allSimulants = sim :: allSimulants
   }
 
 <hr>
-// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+// In file <a
+        href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
 
   def act() {
     loop {
@@ -392,7 +402,8 @@
   }
 
 <hr>
-// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+// In file <a
+        href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
 
   def advance() {
     if (agenda.isEmpty &amp;&amp; currentTime &gt; 0) {
@@ -413,7 +424,8 @@
   }
 
 <hr>
-// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+// In file <a
+        href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
 
   private def processCurrentEvents() {
     val todoNow = agenda.takeWhile(_.time &lt;= currentTime)
@@ -427,7 +439,8 @@
   }
 
 <hr>
-// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+// In file <a
+        href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
 
   def reactToOneMessage() {
     react {
@@ -450,7 +463,8 @@
   }
 
 <hr>
-// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+// In file <a
+        href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
 
   def act() {
     loop {
@@ -465,7 +479,8 @@
   }
 
 <hr>
-// In file <a href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
+// In file <a
+        href="../concurrency/ParallelSimulation.scala">concurrency/ParallelSimulation.scala</a>
 
   trait Simulant extends Actor {
     val clock: Clock
@@ -749,60 +764,61 @@
 
 <hr>
   </pre>
-  <h3><a name="sec7"></a>30.7 Conclusion</h3>
+<h3><a name="sec7"></a>30.7 Conclusion</h3>
 
 
- <table>
- <tr valign="top">
- <td>
- <div id="moreinfo">
- <p>
- For more information about <em>Programming in Scala</em> (the "Stairway Book"), please visit:
- </p>
- 
- <p>
- <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
- </p>
- 
- <p>
- and:
- </p>
- 
- <p>
- <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
- </p>
- </div>
- </td>
- <td>
- <div id="license">
- <p>
-   Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
- </p>
+<table>
+  <tr valign="top">
+    <td>
+      <div id="moreinfo">
+        <p>
+          For more information about <em>Programming in Scala</em> (the "Stairway Book"), please
+          visit:
+        </p>
 
- <p>
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
- </p>
+        <p>
+          <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
+        </p>
 
- <p style="margin-left: 20px">
-   <a href="http://www.apache.org/licenses/LICENSE-2.0">
-     http://www.apache.org/licenses/LICENSE-2.0
-   </a>
- </p>
+        <p>
+          and:
+        </p>
 
- <p>
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-   implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
- </p>
- </div>
- </td>
- </tr>
- </table>
+        <p>
+          <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
+        </p>
+      </div>
+    </td>
+    <td>
+      <div id="license">
+        <p>
+          Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
+        </p>
+
+        <p>
+          Licensed under the Apache License, Version 2.0 (the "License");
+          you may not use this file except in compliance with the License.
+          You may obtain a copy of the License at
+        </p>
+
+        <p style="margin-left: 20px">
+          <a href="http://www.apache.org/licenses/LICENSE-2.0">
+            http://www.apache.org/licenses/LICENSE-2.0
+          </a>
+        </p>
+
+        <p>
+          Unless required by applicable law or agreed to in writing, software
+          distributed under the License is distributed on an "AS IS" BASIS,
+          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+          implied.
+          See the License for the specific language governing permissions and
+          limitations under the License.
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
 
 </body>
 </html>

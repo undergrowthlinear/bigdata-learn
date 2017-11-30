@@ -26,7 +26,7 @@ package scalainprogramming.moreextend.extractors
 object IsEmail {
   def isEmail(s: String) =
     s match {
-      case EMail(user, domain) => println(user +" AT "+ domain)
+      case EMail(user, domain) => println(user + " AT " + domain)
       case _ => println("not an email address")
     }
 }

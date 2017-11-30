@@ -25,11 +25,11 @@
 object Ex3 {
   def main(args: Array[String]) {
     val greetStrings = new Array[String](3)
-    
+
     greetStrings.update(0, "Hello")
     greetStrings.update(1, ", ")
     greetStrings.update(2, "world!\n")
-    
+
     for (i <- 0.to(2))
       print(greetStrings.apply(i))
 
@@ -46,8 +46,8 @@ object Ex3 {
       val oneTwo = List(1, 2)
       val threeFour = List(3, 4)
       val oneTwoThreeFour = oneTwo ::: threeFour
-      println(""+ oneTwo +" and "+ threeFour +" were not mutated.")
-      println("Thus, "+ oneTwoThreeFour +" is a new list.")
+      println("" + oneTwo + " and " + threeFour + " were not mutated.")
+      println("Thus, " + oneTwoThreeFour + " is a new list.")
     }
 
     {
@@ -73,18 +73,18 @@ object Ex3 {
     println("jetSet [" + (jetSet) + "]")
 
     import scala.collection.mutable.Set
-    
+
     val movieSet = Set("Hitch", "Poltergeist")
     movieSet += "Shrek"
-    println(movieSet) 
+    println(movieSet)
 
     import scala.collection.immutable.HashSet
-    
+
     val hashSet = HashSet("Tomatoes", "Chilies")
     println(hashSet + "Coriander")
 
     import scala.collection.mutable.Map
-    
+
     val treasureMap = Map[Int, String]()
     treasureMap += (1 -> "Go to island.")
     treasureMap += (2 -> "Find big X on ground.")

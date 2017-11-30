@@ -31,6 +31,9 @@ package bobsrockets {
 
       // In package bobsrockets.navigation.tests
       class NavigatorSuite
+
     }
+
   }
+
 }

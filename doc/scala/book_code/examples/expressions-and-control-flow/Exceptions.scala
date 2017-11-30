@@ -36,10 +36,8 @@ object Exceptions {
   }
 
   def throws3 {
-    import java.io.FileReader
-    import java.io.FileNotFoundException
-    import java.io.IOException
-    
+    import java.io.{FileNotFoundException, FileReader, IOException}
+
     try {
       val f = new FileReader("input.txt")
       // Use and close file
@@ -54,18 +52,17 @@ object Exceptions {
 
   def finally1 {
     import java.io.FileReader
-    
+
     val file = new FileReader("input.txt")
     try {
       // Use the file
     } finally {
-      file.close()  // Be sure to close the file
+      file.close() // Be sure to close the file
     }
   }
 
-  import java.net.URL
-  import java.net.MalformedURLException
-  
+  import java.net.{MalformedURLException, URL}
+
   def urlFor(path: String) =
     try {
       new URL(path)
@@ -73,8 +70,18 @@ object Exceptions {
       case e: MalformedURLException =>
         new URL("http://www.scala-lang.org")
     }
-  def f(): Int = try { return 1 } finally { return 2 }
-  def g(): Int = try { 1 } finally { 2 }
+
+  def f(): Int = try {
+    return 1
+  } finally {
+    return 2
+  }
+
+  def g(): Int = try {
+    1
+  } finally {
+    2
+  }
 }
 
 try {

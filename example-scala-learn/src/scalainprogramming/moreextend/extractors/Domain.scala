@@ -26,10 +26,10 @@ package scalainprogramming.moreextend.extractors
 object Domain {
 
   // The injection method (optional)
-  def apply(parts: String*): String = 
+  def apply(parts: String*): String =
     parts.reverse.mkString(".")
 
   // The extraction method (mandatory)
-  def unapplySeq(whole: String): Option[Seq[String]] = 
+  def unapplySeq(whole: String): Option[Seq[String]] =
     Some(whole.split("\\.").reverse)
 }

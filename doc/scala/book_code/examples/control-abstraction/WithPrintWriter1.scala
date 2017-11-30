@@ -24,6 +24,13 @@
 import java.io._
 
 object WithPrintWriter1 {
+  def main(args: Array[String]) {
+    withPrintWriter(
+      new File("date.txt"),
+      writer => writer.println(new java.util.Date)
+    )
+  }
+
   def withPrintWriter(file: File, op: PrintWriter => Unit) {
     val writer = new PrintWriter(file)
     try {
@@ -31,11 +38,5 @@ object WithPrintWriter1 {
     } finally {
       writer.close()
     }
-  }
-  def main(args: Array[String]) {
-    withPrintWriter(
-      new File("date.txt"),
-      writer => writer.println(new java.util.Date)
-    )
   }
 }

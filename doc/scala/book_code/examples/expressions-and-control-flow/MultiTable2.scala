@@ -21,6 +21,19 @@
  * http://booksites.artima.com/programming_in_scala
  */
 
+// Returns table as a string with one row per line
+def multiTable() = {
+
+  val tableSeq = // a sequence of row strings
+    for (row <- 1 to 10)
+      yield makeRow(row)
+
+  tableSeq.mkString("\n")
+}
+
+// Returns a row as a string
+def makeRow(row: Int) = makeRowSeq(row).mkString
+
 // Returns a row as a sequence
 def makeRowSeq(row: Int) =
   for (col <- 1 to 10) yield {
@@ -28,18 +41,5 @@ def makeRowSeq(row: Int) =
     val padding = " " * (4 - prod.length)
     padding + prod
   }
-
-// Returns a row as a string
-def makeRow(row: Int) = makeRowSeq(row).mkString
-
-// Returns table as a string with one row per line
-def multiTable() = {
-
-  val tableSeq = // a sequence of row strings
-    for (row <- 1 to 10)
-    yield makeRow(row)
-
-  tableSeq.mkString("\n")
-}
 
 println("multiTable [" + multiTable + "]")

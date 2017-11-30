@@ -22,13 +22,16 @@
  */
 
 /** Finally, a Point class with a good equals method and
- *  a good hashCode method. */
+  * a good hashCode method. */
 object Points3 {
+
   class Point(val x: Int, val y: Int) {
     override def hashCode = 41 * (41 + x) + y
-    override def equals(other: Any) = other match { 
-      case that: Point => this.x == that.x && this.y == that.y 
-      case _ => false 
+
+    override def equals(other: Any) = other match {
+      case that: Point => this.x == that.x && this.y == that.y
+      case _ => false
     }
   }
+
 }

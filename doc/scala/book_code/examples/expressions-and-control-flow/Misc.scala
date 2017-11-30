@@ -56,7 +56,7 @@ object Misc {
   }
 
   def gcd(x: Long, y: Long): Long =
-    if (y == 0) x else gcd(y, x % y) 
+    if (y == 0) x else gcd(y, x % y)
 
   def whileLoop() {
     def readLine() = {
@@ -70,7 +70,7 @@ object Misc {
     var line = ""
     do {
       line = readLine()
-      println("Read: "+ line)
+      println("Read: " + line)
     } while (line != "")
   }
 

@@ -1,43 +1,45 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
- "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
+    "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type"
-        content="text/html; charset=ISO-8859-1" />
+        content="text/html; charset=ISO-8859-1"/>
   <title>Code Examples for Programming in Scala</title>
   <link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 <body>
 
-<div id="mainTitles"><h3>Code Examples for</h3><h2>Programming in Scala</h2></div>  <p><a href="../index.html">
-    Return to chapter index
-  </a></p>
-  <h2>6 Functional Objects</h2>
+<div id="mainTitles"><h3>Code Examples for</h3>
+  <h2>Programming in Scala</h2></div>
+<p><a href="../index.html">
+  Return to chapter index
+</a></p>
+<h2>6 Functional Objects</h2>
 
-  <p><a href="../functional-objects/transcript.txt">
-    Sample run of chapter's interpreter examples
-  </a></p>
+<p><a href="../functional-objects/transcript.txt">
+  Sample run of chapter's interpreter examples
+</a></p>
 
-  <ul>
+<ul>
 
-    <li>6.1 <a href="#sec1">A specification for class <span class="mono">Rational</span></a></li>
-    <li>6.2 <a href="#sec2">Constructing a <span class="mono">Rational</span></a></li>
-    <li>6.3 <a href="#sec3">Reimplementing the <span class="mono">toString</span> method</a></li>
-    <li>6.4 <a href="#sec4">Checking preconditions</a></li>
-    <li>6.5 <a href="#sec5">Adding fields</a></li>
-    <li>6.6 <a href="#sec6">Self references</a></li>
-    <li>6.7 <a href="#sec7">Auxiliary constructors</a></li>
-    <li>6.8 <a href="#sec8">Private fields and methods</a></li>
-    <li>6.9 <a href="#sec9">Defining operators</a></li>
-    <li>6.10 <a href="#sec10">Identifiers in Scala</a></li>
-    <li>6.11 <a href="#sec11">Method overloading</a></li>
-    <li>6.12 <a href="#sec12">Implicit conversions</a></li>
-    <li>6.13 <a href="#sec13">A word of caution</a></li>
-    <li>6.14 <a href="#sec14">Conclusion</a></li>
-  </ul>
+  <li>6.1 <a href="#sec1">A specification for class <span class="mono">Rational</span></a></li>
+  <li>6.2 <a href="#sec2">Constructing a <span class="mono">Rational</span></a></li>
+  <li>6.3 <a href="#sec3">Reimplementing the <span class="mono">toString</span> method</a></li>
+  <li>6.4 <a href="#sec4">Checking preconditions</a></li>
+  <li>6.5 <a href="#sec5">Adding fields</a></li>
+  <li>6.6 <a href="#sec6">Self references</a></li>
+  <li>6.7 <a href="#sec7">Auxiliary constructors</a></li>
+  <li>6.8 <a href="#sec8">Private fields and methods</a></li>
+  <li>6.9 <a href="#sec9">Defining operators</a></li>
+  <li>6.10 <a href="#sec10">Identifiers in Scala</a></li>
+  <li>6.11 <a href="#sec11">Method overloading</a></li>
+  <li>6.12 <a href="#sec12">Implicit conversions</a></li>
+  <li>6.13 <a href="#sec13">A word of caution</a></li>
+  <li>6.14 <a href="#sec14">Conclusion</a></li>
+</ul>
 
-  <h3><a name="sec1"></a>6.1 A specification for class <span class="mono">Rational</span></h3>
+<h3><a name="sec1"></a>6.1 A specification for class <span class="mono">Rational</span></h3>
 
   <pre><hr>
   scala&gt; val oneHalf = new Rational(1, 2)                     
@@ -51,13 +53,14 @@
 
 <hr>
   </pre>
-  <h3><a name="sec2"></a>6.2 Constructing a <span class="mono">Rational</span></h3>
+<h3><a name="sec2"></a>6.2 Constructing a <span class="mono">Rational</span></h3>
 
   <pre><hr>
   class Rational(n: Int, d: Int)
 
 <hr>
-// In file <a href="../functional-objects/ex1/Rational.scala">functional-objects/ex1/Rational.scala</a>
+// In file <a
+        href="../functional-objects/ex1/Rational.scala">functional-objects/ex1/Rational.scala</a>
 
   class Rational(n: Int, d: Int) {
     println("Created "+ n +"/"+ d)
@@ -70,10 +73,11 @@
 
 <hr>
   </pre>
-  <h3><a name="sec3"></a>6.3 Reimplementing the <span class="mono">toString</span> method</h3>
+<h3><a name="sec3"></a>6.3 Reimplementing the <span class="mono">toString</span> method</h3>
 
   <pre><hr>
-// In file <a href="../functional-objects/ex2/Rational.scala">functional-objects/ex2/Rational.scala</a>
+// In file <a
+        href="../functional-objects/ex2/Rational.scala">functional-objects/ex2/Rational.scala</a>
 
   class Rational(n: Int, d: Int) {
     override def toString = n +"/"+ d
@@ -88,7 +92,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec4"></a>6.4 Checking preconditions</h3>
+<h3><a name="sec4"></a>6.4 Checking preconditions</h3>
 
   <pre><hr>
   scala&gt; new Rational(5, 0)
@@ -102,7 +106,8 @@
 <span class="output">	  at .&lt;clinit&gt;(&lt;console&gt;)...</span>
 
 <hr>
-// In file <a href="../functional-objects/ex4/Rational.scala">functional-objects/ex4/Rational.scala</a>
+// In file <a
+        href="../functional-objects/ex4/Rational.scala">functional-objects/ex4/Rational.scala</a>
 
   class Rational(n: Int, d: Int) {
     require(d != 0)
@@ -111,7 +116,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec5"></a>6.5 Adding fields</h3>
+<h3><a name="sec5"></a>6.5 Adding fields</h3>
 
   <pre><hr>
   class Rational(n: Int, d: Int) { // This won't compile
@@ -130,7 +135,8 @@
                                                             ^
 
 <hr>
-// In file <a href="../functional-objects/ex5/Rational.scala">functional-objects/ex5/Rational.scala</a>
+// In file <a
+        href="../functional-objects/ex5/Rational.scala">functional-objects/ex5/Rational.scala</a>
 
   class Rational(n: Int, d: Int) {
     require(d != 0)
@@ -166,26 +172,29 @@
 
 <hr>
   </pre>
-  <h3><a name="sec6"></a>6.6 Self references</h3>
+<h3><a name="sec6"></a>6.6 Self references</h3>
 
   <pre><hr>
-// In file <a href="../functional-objects/ex6/Rational.scala">functional-objects/ex6/Rational.scala</a>
+// In file <a
+        href="../functional-objects/ex6/Rational.scala">functional-objects/ex6/Rational.scala</a>
 
   def lessThan(that: Rational) = 
     this.numer * that.denom &lt; that.numer * this.denom
 
 <hr>
-// In file <a href="../functional-objects/ex6/Rational.scala">functional-objects/ex6/Rational.scala</a>
+// In file <a
+        href="../functional-objects/ex6/Rational.scala">functional-objects/ex6/Rational.scala</a>
 
   def max(that: Rational) = 
     if (this.lessThan(that)) that else this
 
 <hr>
   </pre>
-  <h3><a name="sec7"></a>6.7 Auxiliary constructors</h3>
+<h3><a name="sec7"></a>6.7 Auxiliary constructors</h3>
 
   <pre><hr>
-// In file <a href="../functional-objects/ex7/Rational.scala">functional-objects/ex7/Rational.scala</a>
+// In file <a
+        href="../functional-objects/ex7/Rational.scala">functional-objects/ex7/Rational.scala</a>
 
   class Rational(n: Int, d: Int) {
 
@@ -211,14 +220,15 @@
 
 <hr>
   </pre>
-  <h3><a name="sec8"></a>6.8 Private fields and methods</h3>
+<h3><a name="sec8"></a>6.8 Private fields and methods</h3>
 
   <pre><hr>
   scala&gt; new Rational(66, 42)
 <span class="output">  res6: Rational = 66/42</span>
 
 <hr>
-// In file <a href="../functional-objects/ex8/Rational.scala">functional-objects/ex8/Rational.scala</a>
+// In file <a
+        href="../functional-objects/ex8/Rational.scala">functional-objects/ex8/Rational.scala</a>
 
   class Rational(n: Int, d: Int) {
 
@@ -248,7 +258,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec9"></a>6.9 Defining operators</h3>
+<h3><a name="sec9"></a>6.9 Defining operators</h3>
 
   <pre><hr>
   x + y
@@ -260,7 +270,8 @@
   x add y
 
 <hr>
-// In file <a href="../functional-objects/ex9/Rational.scala">functional-objects/ex9/Rational.scala</a>
+// In file <a
+        href="../functional-objects/ex9/Rational.scala">functional-objects/ex9/Rational.scala</a>
 
   class Rational(n: Int, d: Int) {
 
@@ -313,9 +324,9 @@
 
 <hr>
   </pre>
-  <h3><a name="sec10"></a>6.10 Identifiers in Scala</h3>
+<h3><a name="sec10"></a>6.10 Identifiers in Scala</h3>
 
-  <h3><a name="sec11"></a>6.11 Method overloading</h3>
+<h3><a name="sec11"></a>6.11 Method overloading</h3>
 
   <pre><hr>
 // In file <a href="../functional-objects/ex10/Rational.scala">functional-objects/ex10/Rational.scala</a>
@@ -378,13 +389,14 @@
 
 <hr>
   </pre>
-  <h3><a name="sec12"></a>6.12 Implicit conversions</h3>
+<h3><a name="sec12"></a>6.12 Implicit conversions</h3>
 
   <pre><hr>
   scala&gt; 2 * r
 <span class="output">  &lt;console&gt;:7: error: overloaded method value * with </span>
 <span class="output">  alternatives (Double)Double &lt;and&gt; (Float)Float &lt;and&gt; </span>
-<span class="output">  (Long)Long &lt;and&gt; (Int)Int &lt;and&gt; (Char)Int &lt;and&gt; (Short)Int </span>
+<span
+    class="output">  (Long)Long &lt;and&gt; (Int)Int &lt;and&gt; (Char)Int &lt;and&gt; (Short)Int </span>
 <span class="output">  &lt;and&gt; (Byte)Int cannot be applied to (Rational)</span>
 <span class="output">         2 * r</span>
 <span class="output">           ^</span>
@@ -401,62 +413,63 @@
 
 <hr>
   </pre>
-  <h3><a name="sec13"></a>6.13 A word of caution</h3>
+<h3><a name="sec13"></a>6.13 A word of caution</h3>
 
-  <h3><a name="sec14"></a>6.14 Conclusion</h3>
+<h3><a name="sec14"></a>6.14 Conclusion</h3>
 
 
- <table>
- <tr valign="top">
- <td>
- <div id="moreinfo">
- <p>
- For more information about <em>Programming in Scala</em> (the "Stairway Book"), please visit:
- </p>
- 
- <p>
- <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
- </p>
- 
- <p>
- and:
- </p>
- 
- <p>
- <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
- </p>
- </div>
- </td>
- <td>
- <div id="license">
- <p>
-   Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
- </p>
+<table>
+  <tr valign="top">
+    <td>
+      <div id="moreinfo">
+        <p>
+          For more information about <em>Programming in Scala</em> (the "Stairway Book"), please
+          visit:
+        </p>
 
- <p>
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
- </p>
+        <p>
+          <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
+        </p>
 
- <p style="margin-left: 20px">
-   <a href="http://www.apache.org/licenses/LICENSE-2.0">
-     http://www.apache.org/licenses/LICENSE-2.0
-   </a>
- </p>
+        <p>
+          and:
+        </p>
 
- <p>
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-   implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
- </p>
- </div>
- </td>
- </tr>
- </table>
+        <p>
+          <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
+        </p>
+      </div>
+    </td>
+    <td>
+      <div id="license">
+        <p>
+          Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
+        </p>
+
+        <p>
+          Licensed under the Apache License, Version 2.0 (the "License");
+          you may not use this file except in compliance with the License.
+          You may obtain a copy of the License at
+        </p>
+
+        <p style="margin-left: 20px">
+          <a href="http://www.apache.org/licenses/LICENSE-2.0">
+            http://www.apache.org/licenses/LICENSE-2.0
+          </a>
+        </p>
+
+        <p>
+          Unless required by applicable law or agreed to in writing, software
+          distributed under the License is distributed on an "AS IS" BASIS,
+          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+          implied.
+          See the License for the specific language governing permissions and
+          limitations under the License.
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
 
 </body>
 </html>

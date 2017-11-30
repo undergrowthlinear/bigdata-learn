@@ -24,44 +24,49 @@ package scalainprogramming.moreextend.type_parameterization
  */
 
 object Queues5 {
-  trait Queue[T] {
-    def head: T
-    def tail: Queue[T]
-    def append(x: T): Queue[T]
-  }
-  
-  object Queue {
-  
-    def apply[T](xs: T*): Queue[T] = 
-      new QueueImpl[T](xs.toList, Nil)
-  
-    private class QueueImpl[T](
-      private val leading: List[T],
-      private val trailing: List[T]
-    ) extends Queue[T] {
-  
-      def mirror = 
-        if (leading.isEmpty)
-          new QueueImpl(trailing.reverse, Nil)
-        else 
-          this
-  
-      def head: T = mirror.leading.head
-  
-      def tail: QueueImpl[T] = {
-        val q = mirror
-        new QueueImpl(q.leading.tail, q.trailing)
-      }
-  
-      def append(x: T) = 
-        new QueueImpl(leading, x :: trailing)
-    override def toString() =
-        (leading ::: trailing.reverse) mkString ("Queue(", ", ", ")")
-    }
-  }
 
   def main(args: Array[String]) {
     val q = Queue[Int]() append 1 append 2
     println(q)
+  }
+
+  trait Queue[T] {
+    def head: T
+
+    def tail: Queue[T]
+
+    def append(x: T): Queue[T]
+  }
+
+  object Queue {
+
+    def apply[T](xs: T*): Queue[T] =
+      new QueueImpl[T](xs.toList, Nil)
+
+    private class QueueImpl[T](
+                                private val leading: List[T],
+                                private val trailing: List[T]
+                              ) extends Queue[T] {
+
+      def head: T = mirror.leading.head
+
+      def tail: QueueImpl[T] = {
+        val q = mirror
+        new QueueImpl(q.leading.tail, q.trailing)
+      }
+
+      def mirror =
+        if (leading.isEmpty)
+          new QueueImpl(trailing.reverse, Nil)
+        else
+          this
+
+      def append(x: T) =
+        new QueueImpl(leading, x :: trailing)
+
+      override def toString() =
+        (leading ::: trailing.reverse) mkString("Queue(", ", ", ")")
+    }
+
   }
 }

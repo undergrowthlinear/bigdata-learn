@@ -23,7 +23,8 @@
 
 
 class Keyed {
-  def computeKey: Int = { // implementation for testing
+  def computeKey: Int = {
+    // implementation for testing
     Thread.sleep(1000)
     123
   }
@@ -31,6 +32,7 @@ class Keyed {
 
 class MemoKeyed extends Keyed {
   private var keyCache: Option[Int] = None
+
   override def computeKey: Int = {
     if (!keyCache.isDefined) keyCache = Some(super.computeKey)
     keyCache.get
@@ -41,7 +43,7 @@ object Ex3 {
   def main(args: Array[String]) {
     val memoKeyed = new MemoKeyed
     val keyed = new Keyed
-    
+
     println("start...");
     println("keyed.computeKey [" + (keyed.computeKey) + "]")
     println("memoKeyed.computeKey [" + (memoKeyed.computeKey) + "]")

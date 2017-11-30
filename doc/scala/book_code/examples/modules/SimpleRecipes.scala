@@ -24,10 +24,11 @@
 trait SimpleRecipes {
   this: SimpleFoods =>
 
+  def allRecipes = List(FruitSalad)
+
   object FruitSalad extends Recipe(
     "fruit salad",
-    List(Apple, Pear),   // Now Pear is in scope
+    List(Apple, Pear), // Now Pear is in scope
     "Mix it all together."
   )
-  def allRecipes = List(FruitSalad)
 }

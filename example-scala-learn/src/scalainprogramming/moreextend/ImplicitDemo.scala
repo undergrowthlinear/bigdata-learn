@@ -1,5 +1,9 @@
 import scalainprogramming.moreextend.Rational
 
+class ProPre(val propre: String)
+
+class ProDrink(val propre: String)
+
 /**
   * @description
   * @author zhangwu
@@ -43,10 +47,6 @@ object ImplicitDemo {
     Greeter.greet("what")
   }
 }
-
-class ProPre(val propre: String)
-
-class ProDrink(val propre: String)
 
 object Greeter {
   def greet(name: String)(implicit prompt: ProPre, drink: ProDrink): Unit = {

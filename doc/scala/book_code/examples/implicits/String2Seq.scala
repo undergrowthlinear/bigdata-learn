@@ -22,12 +22,13 @@
  */
 
 object String2Seq {
-  implicit def stringWrapper(s: String) = 
+  implicit def stringWrapper(s: String) =
     new RandomAccessSeq[Char] {
       def length = s.length
+
       def apply(i: Int) = s.charAt(i)
     }
 
-  def printWithSpaces(seq: RandomAccessSeq[Char]) = 
+  def printWithSpaces(seq: RandomAccessSeq[Char]) =
     seq mkString " "
 }

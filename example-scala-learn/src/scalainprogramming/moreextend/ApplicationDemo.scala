@@ -15,7 +15,7 @@ class ApplicationDemo {
 object ApplicationDemo {
 
   def main(args: Array[String]) {
-    val aD=new ApplicationDemo
+    val aD = new ApplicationDemo
     println(aD.sum)
     println(aD.add(10))
     println(aD.sum)

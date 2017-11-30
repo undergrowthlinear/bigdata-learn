@@ -21,10 +21,8 @@
  * http://booksites.artima.com/programming_in_scala
  */
 
-import ChecksumAccumulator.calculate
-
 object FallWinterSpringSummer extends Application {
 
-for (season <- List("fall", "winter", "spring"))
-  println(season +": "+ calculate(season))
+  for (season <- List("fall", "winter", "spring"))
+    println(season + ": " + calculate(season))
 }

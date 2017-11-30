@@ -12,11 +12,35 @@ import java.util.Date
   */
 object FileMatcher {
 
-  private def fileHere = (new java.io.File(".")).listFiles()
+  def fileEnding2(query: String) = filesMatching(query, (name: String, query: String) => name.endsWith(query))
+
+  def fileContains(query: String) = filesMatching(query, _.contains(_))
+
+  def fileRegex(query: String) = filesMatching(query, _.matches(_))
 
   // 以函数作为参数传递
   def filesMatching(query: String, matcher: (String, String) => Boolean) = {
     for (file <- fileHere; if matcher(file.getName, query)) yield file
+  }
+
+  private def fileHere = (new java.io.File(".")).listFiles()
+
+  def main(args: Array[String]) {
+    println(containNge(List(1, 2, 3)))
+    println(containNge(List(1, -2, 3)))
+    fileEnding("scala").foreach(println)
+    // 柯里化函数 调用
+    println(add(1) _)
+    println(add2(1, 2))
+    println(twice(_ + 1, 5))
+    // 借贷模式
+    withPrintWriter(new File("load.txt"), writer => writer.println(new Date))
+    // 使用花括号替换小括号
+    withPrintWriter2(new File("load1.txt")) {
+      writer => writer.println(new Date)
+    }
+    //
+    val a: Any = 12
   }
 
   // 简化客户端代码
@@ -24,12 +48,6 @@ object FileMatcher {
 
   // _ 占位符
   def fileEnding(query: String) = filesMatching(query, _.endsWith(_))
-
-  def fileEnding2(query: String) = filesMatching(query, (name: String, query: String) => name.endsWith(query))
-
-  def fileContains(query: String) = filesMatching(query, _.contains(_))
-
-  def fileRegex(query: String) = filesMatching(query, _.matches(_))
 
   // 柯里化函数
   def add(x: Int)(y: Int) = x + y
@@ -57,25 +75,6 @@ object FileMatcher {
     } finally {
       writer.close()
     }
-  }
-
-
-  def main(args: Array[String]) {
-    println(containNge(List(1, 2, 3)))
-    println(containNge(List(1, -2, 3)))
-    fileEnding("scala").foreach(println)
-    // 柯里化函数 调用
-    println(add(1) _)
-    println(add2(1, 2))
-    println(twice(_ + 1, 5))
-    // 借贷模式
-    withPrintWriter(new File("load.txt"), writer => writer.println(new Date))
-    // 使用花括号替换小括号
-    withPrintWriter2(new File("load1.txt")) {
-      writer => writer.println(new Date)
-    }
-    //
-    val a: Any = 12
   }
 
 }

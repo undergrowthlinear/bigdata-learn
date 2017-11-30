@@ -22,7 +22,7 @@
  */
 
 class Rational(n: Int, d: Int) {
-  override def toString = n +"/"+ d
+  override def toString = n + "/" + d
 }
 
 object Main {

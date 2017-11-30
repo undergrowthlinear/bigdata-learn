@@ -1,37 +1,39 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
- "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
+    "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type"
-        content="text/html; charset=ISO-8859-1" />
+        content="text/html; charset=ISO-8859-1"/>
   <title>Code Examples for Programming in Scala</title>
   <link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 <body>
 
-<div id="mainTitles"><h3>Code Examples for</h3><h2>Programming in Scala</h2></div>  <p><a href="../index.html">
-    Return to chapter index
-  </a></p>
-  <h2>21 Implicit Conversions and Parameters</h2>
+<div id="mainTitles"><h3>Code Examples for</h3>
+  <h2>Programming in Scala</h2></div>
+<p><a href="../index.html">
+  Return to chapter index
+</a></p>
+<h2>21 Implicit Conversions and Parameters</h2>
 
-  <p><a href="../implicits/transcript.txt">
-    Sample run of chapter's interpreter examples
-  </a></p>
+<p><a href="../implicits/transcript.txt">
+  Sample run of chapter's interpreter examples
+</a></p>
 
-  <ul>
+<ul>
 
-    <li>21.1 <a href="#sec1">Implicit conversions</a></li>
-    <li>21.2 <a href="#sec2">Rules for implicits</a></li>
-    <li>21.3 <a href="#sec3">Implicit conversion to an expected type</a></li>
-    <li>21.4 <a href="#sec4">Converting the receiver</a></li>
-    <li>21.5 <a href="#sec5">Implicit parameters</a></li>
-    <li>21.6 <a href="#sec6">View bounds</a></li>
-    <li>21.7 <a href="#sec7">Debugging implicits</a></li>
-    <li>21.8 <a href="#sec8">Conclusion</a></li>
-  </ul>
+  <li>21.1 <a href="#sec1">Implicit conversions</a></li>
+  <li>21.2 <a href="#sec2">Rules for implicits</a></li>
+  <li>21.3 <a href="#sec3">Implicit conversion to an expected type</a></li>
+  <li>21.4 <a href="#sec4">Converting the receiver</a></li>
+  <li>21.5 <a href="#sec5">Implicit parameters</a></li>
+  <li>21.6 <a href="#sec6">View bounds</a></li>
+  <li>21.7 <a href="#sec7">Debugging implicits</a></li>
+  <li>21.8 <a href="#sec8">Conclusion</a></li>
+</ul>
 
-  <h3><a name="sec1"></a>21.1 Implicit conversions</h3>
+<h3><a name="sec1"></a>21.1 Implicit conversions</h3>
 
   <pre><hr>
 // In file <a href="../implicits/String2Seq.scala">implicits/String2Seq.scala</a>
@@ -66,7 +68,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec2"></a>21.2 Rules for implicits</h3>
+<h3><a name="sec2"></a>21.2 Rules for implicits</h3>
 
   <pre><hr>
 // In file <a href="../implicits/Misc.scala">implicits/Misc.scala</a>
@@ -92,7 +94,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec3"></a>21.3 Implicit conversion to an expected type</h3>
+<h3><a name="sec3"></a>21.3 Implicit conversion to an expected type</h3>
 
   <pre><hr>
   scala&gt; val i: Int = 3.5
@@ -119,7 +121,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec4"></a>21.4 Converting the receiver</h3>
+<h3><a name="sec4"></a>21.4 Converting the receiver</h3>
 
   <pre><hr>
   class Rational(n: Int, d: Int) {
@@ -176,7 +178,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec5"></a>21.5 Implicit parameters</h3>
+<h3><a name="sec5"></a>21.5 Implicit parameters</h3>
 
   <pre><hr>
   class PreferredPrompt(val preference: String)
@@ -306,7 +308,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec6"></a>21.6 View bounds</h3>
+<h3><a name="sec6"></a>21.6 View bounds</h3>
 
   <pre><hr>
 // In file <a href="../implicits/Misc.scala">implicits/Misc.scala</a>
@@ -400,7 +402,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec7"></a>21.7 Debugging implicits</h3>
+<h3><a name="sec7"></a>21.7 Debugging implicits</h3>
 
   <pre><hr>
   scala&gt; val chars: List[Char] = "xyz"
@@ -426,60 +428,61 @@
 
 <hr>
   </pre>
-  <h3><a name="sec8"></a>21.8 Conclusion</h3>
+<h3><a name="sec8"></a>21.8 Conclusion</h3>
 
 
- <table>
- <tr valign="top">
- <td>
- <div id="moreinfo">
- <p>
- For more information about <em>Programming in Scala</em> (the "Stairway Book"), please visit:
- </p>
- 
- <p>
- <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
- </p>
- 
- <p>
- and:
- </p>
- 
- <p>
- <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
- </p>
- </div>
- </td>
- <td>
- <div id="license">
- <p>
-   Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
- </p>
+<table>
+  <tr valign="top">
+    <td>
+      <div id="moreinfo">
+        <p>
+          For more information about <em>Programming in Scala</em> (the "Stairway Book"), please
+          visit:
+        </p>
 
- <p>
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
- </p>
+        <p>
+          <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
+        </p>
 
- <p style="margin-left: 20px">
-   <a href="http://www.apache.org/licenses/LICENSE-2.0">
-     http://www.apache.org/licenses/LICENSE-2.0
-   </a>
- </p>
+        <p>
+          and:
+        </p>
 
- <p>
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-   implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
- </p>
- </div>
- </td>
- </tr>
- </table>
+        <p>
+          <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
+        </p>
+      </div>
+    </td>
+    <td>
+      <div id="license">
+        <p>
+          Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
+        </p>
+
+        <p>
+          Licensed under the Apache License, Version 2.0 (the "License");
+          you may not use this file except in compliance with the License.
+          You may obtain a copy of the License at
+        </p>
+
+        <p style="margin-left: 20px">
+          <a href="http://www.apache.org/licenses/LICENSE-2.0">
+            http://www.apache.org/licenses/LICENSE-2.0
+          </a>
+        </p>
+
+        <p>
+          Unless required by applicable law or agreed to in writing, software
+          distributed under the License is distributed on an "AS IS" BASIS,
+          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+          implied.
+          See the License for the specific language governing permissions and
+          limitations under the License.
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
 
 </body>
 </html>

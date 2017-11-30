@@ -23,9 +23,9 @@
 
 object Test2 {
   def userTwiceUpper(s: String) = s match {
-    case EMail(Twice(x @ UpperCase()), domain) =>
-      "match: "+ x +" in domain "+ domain
-    case _ => 
+    case EMail(Twice(x@UpperCase()), domain) =>
+      "match: " + x + " in domain " + domain
+    case _ =>
       "no match"
   }
 }

@@ -1,38 +1,40 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
- "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
+    "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type"
-        content="text/html; charset=ISO-8859-1" />
+        content="text/html; charset=ISO-8859-1"/>
   <title>Code Examples for Programming in Scala</title>
   <link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 <body>
 
-<div id="mainTitles"><h3>Code Examples for</h3><h2>Programming in Scala</h2></div>  <p><a href="../index.html">
-    Return to chapter index
-  </a></p>
-  <h2>19 Type Parameterization</h2>
+<div id="mainTitles"><h3>Code Examples for</h3>
+  <h2>Programming in Scala</h2></div>
+<p><a href="../index.html">
+  Return to chapter index
+</a></p>
+<h2>19 Type Parameterization</h2>
 
-  <p><a href="../type-parameterization/transcript.txt">
-    Sample run of chapter's interpreter examples
-  </a></p>
+<p><a href="../type-parameterization/transcript.txt">
+  Sample run of chapter's interpreter examples
+</a></p>
 
-  <ul>
+<ul>
 
-    <li>19.1 <a href="#sec1">Functional queues</a></li>
-    <li>19.2 <a href="#sec2">Information hiding</a></li>
-    <li>19.3 <a href="#sec3">Variance annotations</a></li>
-    <li>19.4 <a href="#sec4">Checking variance annotations</a></li>
-    <li>19.5 <a href="#sec5">Lower bounds</a></li>
-    <li>19.6 <a href="#sec6">Contravariance</a></li>
-    <li>19.7 <a href="#sec7">Object private data</a></li>
-    <li>19.8 <a href="#sec8">Upper bounds</a></li>
-    <li>19.9 <a href="#sec9">Conclusion</a></li>
-  </ul>
+  <li>19.1 <a href="#sec1">Functional queues</a></li>
+  <li>19.2 <a href="#sec2">Information hiding</a></li>
+  <li>19.3 <a href="#sec3">Variance annotations</a></li>
+  <li>19.4 <a href="#sec4">Checking variance annotations</a></li>
+  <li>19.5 <a href="#sec5">Lower bounds</a></li>
+  <li>19.6 <a href="#sec6">Contravariance</a></li>
+  <li>19.7 <a href="#sec7">Object private data</a></li>
+  <li>19.8 <a href="#sec8">Upper bounds</a></li>
+  <li>19.9 <a href="#sec9">Conclusion</a></li>
+</ul>
 
-  <h3><a name="sec1"></a>19.1 Functional queues</h3>
+<h3><a name="sec1"></a>19.1 Functional queues</h3>
 
   <pre><hr>
   scala&gt; val q = Queue(1, 2, 3)
@@ -89,7 +91,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec2"></a>19.2 Information hiding</h3>
+<h3><a name="sec2"></a>19.2 Information hiding</h3>
 
   <pre><hr>
 // In file <a href="../type-parameterization/Queues4.scala">type-parameterization/Queues4.scala</a>
@@ -159,7 +161,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec3"></a>19.3 Variance annotations</h3>
+<h3><a name="sec3"></a>19.3 Variance annotations</h3>
 
   <pre><hr>
   scala&gt; def doesNotCompile(q: Queue) {}
@@ -199,7 +201,8 @@
 <span class="output">                ^</span>
 
 <hr>
-// In file <a href="../type-parameterization/JavaArrays.java">type-parameterization/JavaArrays.java</a>
+// In file <a
+        href="../type-parameterization/JavaArrays.java">type-parameterization/JavaArrays.java</a>
 
   // this is Java
   String[] a1 = { "abc" };
@@ -233,7 +236,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec4"></a>19.4 Checking variance annotations</h3>
+<h3><a name="sec4"></a>19.4 Checking variance annotations</h3>
 
   <pre><hr>
   class StrangeIntQueue extends Queue[Int] {
@@ -267,7 +270,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec5"></a>19.5 Lower bounds</h3>
+<h3><a name="sec5"></a>19.5 Lower bounds</h3>
 
   <pre><hr>
   class Queue[+T] (private val leading: List[T],
@@ -278,7 +281,7 @@
 
 <hr>
   </pre>
-  <h3><a name="sec6"></a>19.6 Contravariance</h3>
+<h3><a name="sec6"></a>19.6 Contravariance</h3>
 
   <pre><hr>
 // In file <a href="../type-parameterization/Misc.scala">type-parameterization/Misc.scala</a>
@@ -295,7 +298,8 @@
   }
 
 <hr>
-// In file <a href="../type-parameterization/Customer.scala">type-parameterization/Customer.scala</a>
+// In file <a
+        href="../type-parameterization/Customer.scala">type-parameterization/Customer.scala</a>
 
 class Publication(val title: String)
 class Book(title: String) extends Publication(title)
@@ -349,7 +353,7 @@ object Customer extends Application {
 
 <hr>
   </pre>
-  <h3><a name="sec7"></a>19.7 Object private data</h3>
+<h3><a name="sec7"></a>19.7 Object private data</h3>
 
   <pre><hr>
 <span class="output">  Queues.scala:1: error: covariant type T occurs in </span>
@@ -365,7 +369,7 @@ object Customer extends Application {
 
 <hr>
   </pre>
-  <h3><a name="sec8"></a>19.8 Upper bounds</h3>
+<h3><a name="sec8"></a>19.8 Upper bounds</h3>
 
   <pre><hr>
   scala&gt; val robert = new Person("Robert", "Jones")
@@ -437,60 +441,61 @@ object Customer extends Application {
 
 <hr>
   </pre>
-  <h3><a name="sec9"></a>19.9 Conclusion</h3>
+<h3><a name="sec9"></a>19.9 Conclusion</h3>
 
 
- <table>
- <tr valign="top">
- <td>
- <div id="moreinfo">
- <p>
- For more information about <em>Programming in Scala</em> (the "Stairway Book"), please visit:
- </p>
- 
- <p>
- <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
- </p>
- 
- <p>
- and:
- </p>
- 
- <p>
- <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
- </p>
- </div>
- </td>
- <td>
- <div id="license">
- <p>
-   Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
- </p>
+<table>
+  <tr valign="top">
+    <td>
+      <div id="moreinfo">
+        <p>
+          For more information about <em>Programming in Scala</em> (the "Stairway Book"), please
+          visit:
+        </p>
 
- <p>
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
- </p>
+        <p>
+          <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
+        </p>
 
- <p style="margin-left: 20px">
-   <a href="http://www.apache.org/licenses/LICENSE-2.0">
-     http://www.apache.org/licenses/LICENSE-2.0
-   </a>
- </p>
+        <p>
+          and:
+        </p>
 
- <p>
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-   implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
- </p>
- </div>
- </td>
- </tr>
- </table>
+        <p>
+          <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
+        </p>
+      </div>
+    </td>
+    <td>
+      <div id="license">
+        <p>
+          Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
+        </p>
+
+        <p>
+          Licensed under the Apache License, Version 2.0 (the "License");
+          you may not use this file except in compliance with the License.
+          You may obtain a copy of the License at
+        </p>
+
+        <p style="margin-left: 20px">
+          <a href="http://www.apache.org/licenses/LICENSE-2.0">
+            http://www.apache.org/licenses/LICENSE-2.0
+          </a>
+        </p>
+
+        <p>
+          Unless required by applicable law or agreed to in writing, software
+          distributed under the License is distributed on an "AS IS" BASIS,
+          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+          implied.
+          See the License for the specific language governing permissions and
+          limitations under the License.
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
 
 </body>
 </html>

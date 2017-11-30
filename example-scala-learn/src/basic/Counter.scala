@@ -8,6 +8,12 @@ package basic
   */
 class Counter {
   private var value = 0
-  def increment(step: Int): Unit = { value += step}
-  def current(): Int = { value }
+
+  def increment(step: Int): Unit = {
+    value += step
+  }
+
+  def current(): Int = {
+    value
+  }
 }

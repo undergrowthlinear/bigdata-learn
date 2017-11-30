@@ -22,14 +22,28 @@
  */
 
 /** These equals methods are not symmetric.
- *  Sometimes p.equals(cp) but not cp.equals(p).
- */
+  * Sometimes p.equals(cp) but not cp.equals(p).
+  */
 object Points5 {
-  class Point(var x: Int, var y: Int) { // Problematic
+
+  class Point(var x: Int, var y: Int) {
+    // Problematic
     override def hashCode = 41 * (41 + x) + y
-    override def equals(other: Any) = other match { 
-      case that: Point => this.x == that.x && this.y == that.y 
-      case _ => false 
+
+    override def equals(other: Any) = other match {
+      case that: Point => this.x == that.x && this.y == that.y
+      case _ => false
+    }
+  }
+
+  class ColoredPoint(x: Int, y: Int, val color: Color.Value)
+    extends Point(x, y) {
+    // Problem: equals not symmetric
+
+    override def equals(other: Any) = other match {
+      case that: ColoredPoint =>
+        this.color == that.color && super.equals(that)
+      case _ => false
     }
   }
 
@@ -37,13 +51,4 @@ object Points5 {
     val Red, Orange, Yellow, Green, Blue, Indigo, Violet = Value
   }
 
-  class ColoredPoint(x: Int, y: Int, val color: Color.Value) 
-      extends Point(x, y) { // Problem: equals not symmetric
-  
-    override def equals(other: Any) = other match {
-      case that: ColoredPoint => 
-        this.color == that.color && super.equals(that)
-      case _ => false
-    }
-  }
 }

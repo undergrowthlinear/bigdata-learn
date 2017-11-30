@@ -10,6 +10,18 @@ import scala.io.Source
   */
 object ScalaInProgrammingDemo {
 
+  def main(args: Array[String]) {
+    map_demo()
+    for_demo()
+    array_demo()
+    list_demo()
+    tuple_demo()
+    set_demo()
+    val a = noother_demo(Array("hello", "world"))
+    println(a)
+    read_demo(args)
+  }
+
   def map_demo(): Unit = {
     var capital = Map("US" -> "Washington", "France" -> "Paris")
 
@@ -60,7 +72,6 @@ object ScalaInProgrammingDemo {
 
   def noother_demo(a1: Array[String]) = a1.mkString("\n")
 
-
   def read_demo(args: Array[String]): Unit = {
     if (args.length < 0) println("请输入文件名")
     val list = Source.fromFile(args(0)).getLines().toList
@@ -70,18 +81,6 @@ object ScalaInProgrammingDemo {
       val paddNum = " " * (maxWidth - line.length)
       println(paddNum + "\t" + line.length + "\t" + line)
     })
-  }
-
-  def main(args: Array[String]) {
-    map_demo()
-    for_demo()
-    array_demo()
-    list_demo()
-    tuple_demo()
-    set_demo()
-    val a = noother_demo(Array("hello", "world"))
-    println(a)
-    read_demo(args)
   }
 
 }

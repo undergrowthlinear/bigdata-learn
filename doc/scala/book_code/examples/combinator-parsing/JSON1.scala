@@ -21,32 +21,29 @@
  * http://booksites.artima.com/programming_in_scala
  */
 
-import scala.util.parsing.combinator.syntactical._
+import scala.util.parsing.combinator._
 import scala.util.parsing.input.StreamReader
 
-import scala.util.parsing.combinator._
+class JSON1 extends JavaTokenParsers {
 
-class JSON1 extends JavaTokenParsers {   
-
-  def obj: Parser[Map[String, Any]] = 
-    "{"~> repsep(member, ",") <~"}" ^^ (Map() ++ _)
+  def obj: Parser[Map[String, Any]] =
+    "{" ~> repsep(member, ",") <~ "}" ^^ (Map() ++ _)
 
   def arr: Parser[List[Any]] =
-    "["~> repsep(value, ",") <~"]" 
+    "[" ~> repsep(value, ",") <~ "]"
 
-  def member: Parser[(String, Any)] = 
-    stringLiteral~":"~value ^^ 
-      { case name~":"~value => (name, value) }
+  def member: Parser[(String, Any)] =
+    stringLiteral ~ ":" ~ value ^^ { case name ~ ":" ~ value => (name, value) }
 
   def value: Parser[Any] = (
     obj
-  | arr 
-  | stringLiteral
-  | floatingPointNumber ^^ (_.toDouble) 
-  | "null"  ^^ (x => null) 
-  | "true"  ^^ (x => true) 
-  | "false" ^^ (x => false)
-  )
+      | arr
+      | stringLiteral
+      | floatingPointNumber ^^ (_.toDouble)
+      | "null" ^^ (x => null)
+      | "true" ^^ (x => true)
+      | "false" ^^ (x => false)
+    )
 }
 
 object JSON1Test extends JSON1 {

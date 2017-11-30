@@ -21,20 +21,21 @@
  * http://booksites.artima.com/programming_in_scala
  */
 
-import scala.io.Source
-
 object LongLines3 {
+
   import scala.io.Source
-  
+
+  def main(args: Array[String]) = FindLongLines.main(args)
+
   object LongLines {
-  
+
     def processFile(filename: String, width: Int) {
-  
+
       def processLine(line: String) {
         if (line.length > width)
-          print(filename +": "+ line)
-      }    
-  
+          print(filename + ": " + line)
+      }
+
       val source = Source.fromFile(filename)
       for (line <- source.getLines)
         processLine(line)
@@ -46,9 +47,7 @@ object LongLines3 {
       val width = args(0).toInt
       for (arg <- args.drop(1))
         LongLines.processFile(arg, width)
-    } 
-  } 
-
-  def main(args: Array[String]) = FindLongLines.main(args)
+    }
+  }
 }
 

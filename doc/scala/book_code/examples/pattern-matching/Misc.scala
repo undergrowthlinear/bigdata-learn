@@ -23,24 +23,50 @@
 
 //compile this along with ../compo-inherit/LayoutElement.scala
 
-import org.stairwaybook.layout.Element
-import Element.elem
-
-
 
 object Misc {
 
-  sealed abstract class Expr
-  case class Var(name: String) extends Expr
-  case class Number(num: Double) extends Expr
-  case class UnOp(operator: String, arg: Expr) extends Expr
-  case class BinOp(operator: String, 
-      left: Expr, right: Expr) extends Expr
+  def main(args: Array[String]) {
+    val varExpr = new Var("var")
+    val zeroExpr = new Number(0)
+    val binopExpr = new BinOp("=", varExpr, varExpr)
+    val unopExpr = new UnOp("abs", new Number(3))
+
+    checkbinary(varExpr)
+    checkbinary(binopExpr)
+
+    checkbinary1(varExpr)
+    checkbinary1(binopExpr)
+
+    checkbinary2(varExpr)
+    checkbinary2(binopExpr)
+
+    println("describe(new Number(4)) [" + describe(new Number(4)) + "]")
+    println("describe(varExpr) [" + describe(varExpr) + "]")
+    println("OtherDescribe.describe(new Number(4)) [" +
+      OtherDescribe.describe(new Number(4)) + "]")
+    println("OtherDescribe.describe(varExpr) [" +
+      OtherDescribe.describe(varExpr) + "]")
+    println("f [" + f + "]")
+    println("startsWithZero(0) [" + startsWithZero(0) + "]")
+    println("startsWithZero(\"0\") [" + startsWithZero("0") + "]")
+    deepmatch(zeroExpr)
+    deepmatch(new BinOp("+", varExpr, zeroExpr))
+    startsWithZero1(List(0, 1, 2))
+    startsWithZero1(List(0, 1))
+    startsWithZero1(List(1, 0))
+    startsWithZero2(List(0, 1, 2))
+    startsWithZero2(List(0, 1))
+    startsWithZero2(List(1, 0))
+    println("isInstance(\"foo\") [" + isInstance("foo") + "]")
+    println("matchUnOp(unopExpr) [" + matchUnOp(unopExpr) + "]")
+    println("matchUnOp(new UnOp(\"abs\", unopExpr)) [" + matchUnOp(new UnOp("abs", unopExpr)) + "]")
+  }
 
   def checkbinary(expr: Expr) {
     expr match {
       case BinOp(op, left, right) =>
-        println(expr +" is a binary operation")
+        println(expr + " is a binary operation")
       case _ =>
     }
   }
@@ -48,14 +74,14 @@ object Misc {
   def checkbinary1(expr: Expr) {
     expr match {
       case BinOp(op, left, right) =>
-        println(expr +"is a binary operation")
+        println(expr + "is a binary operation")
       case _ =>
     }
   }
 
   def checkbinary2(expr: Expr) {
     expr match {
-      case BinOp(_, _, _) => println(expr +"is a binary operation")
+      case BinOp(_, _, _) => println(expr + "is a binary operation")
       case _ => println("It's something else")
     }
   }
@@ -78,11 +104,11 @@ object Misc {
   def startsWithZero(expr: Any) = {
     expr match {
       case 0 => "zero"
-      case somethingElse => "not zero: "+ somethingElse
+      case somethingElse => "not zero: " + somethingElse
     }
   }
 
-  def startsWithZero1(expr: List[Int]) = 
+  def startsWithZero1(expr: List[Int]) =
     expr match {
       case List(0, _, _) => println("found it")
       case _ =>
@@ -94,64 +120,38 @@ object Misc {
       case _ =>
     }
 
-  object OtherDescribe {
-    def describe(e: Expr): String = (e: @unchecked) match {
-      case Number(_) => "a number"
-      case Var(_)    => "a variable"
-    }
-  }
-
   def isInstance(expr: Any) = {
     if (
       expr.isInstanceOf[String]
     ) {
-    val s = 
-      expr.asInstanceOf[String]
+      val s =
+        expr.asInstanceOf[String]
       s.length
     } else 0
   }
 
   def matchUnOp(expr: Expr) = {
     expr match {
-      case UnOp("abs", e @ UnOp("abs", _)) => e
+      case UnOp("abs", e@UnOp("abs", _)) => e
       case _ =>
     }
   }
 
-  def main(args: Array[String]) {
-    val varExpr = new Var("var")
-    val zeroExpr = new Number(0)
-    val binopExpr = new BinOp("=", varExpr, varExpr)
-    val unopExpr = new UnOp("abs", new Number(3))
+  sealed abstract class Expr
 
-    checkbinary(varExpr)
-    checkbinary(binopExpr)
+  case class Var(name: String) extends Expr
 
-    checkbinary1(varExpr)
-    checkbinary1(binopExpr)
+  case class Number(num: Double) extends Expr
 
-    checkbinary2(varExpr)
-    checkbinary2(binopExpr)
+  case class UnOp(operator: String, arg: Expr) extends Expr
 
-    println("describe(new Number(4)) [" + describe(new Number(4)) + "]")
-    println("describe(varExpr) [" + describe(varExpr) + "]")
-    println("OtherDescribe.describe(new Number(4)) [" +
-             OtherDescribe.describe(new Number(4)) + "]")
-    println("OtherDescribe.describe(varExpr) [" +
-             OtherDescribe.describe(varExpr) + "]")
-    println("f [" + f + "]")
-    println("startsWithZero(0) [" + startsWithZero(0) + "]")
-    println("startsWithZero(\"0\") [" + startsWithZero("0") + "]")
-    deepmatch(zeroExpr)
-    deepmatch(new BinOp("+", varExpr, zeroExpr))
-    startsWithZero1(List(0, 1, 2))
-    startsWithZero1(List(0, 1))
-    startsWithZero1(List(1, 0))
-    startsWithZero2(List(0, 1, 2))
-    startsWithZero2(List(0, 1))
-    startsWithZero2(List(1, 0))
-    println("isInstance(\"foo\") [" + isInstance("foo") + "]")
-    println("matchUnOp(unopExpr) [" + matchUnOp(unopExpr) + "]")
-    println("matchUnOp(new UnOp(\"abs\", unopExpr)) [" + matchUnOp(new UnOp("abs", unopExpr)) + "]")
+  case class BinOp(operator: String,
+                   left: Expr, right: Expr) extends Expr
+
+  object OtherDescribe {
+    def describe(e: Expr): String = (e: @unchecked) match {
+      case Number(_) => "a number"
+      case Var(_) => "a variable"
+    }
   }
 }

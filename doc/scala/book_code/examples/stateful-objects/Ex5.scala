@@ -23,17 +23,6 @@
 
 
 object Ex5 {
-  class Time {
-  
-    private[this] var h = 12
-    private[this] var m = 0
-  
-    def hour: Int = h
-    def hour_=(x: Int) { h = x }
-  
-    def minute: Int = m
-    def minute_=(x: Int) { m = x }
-  } 
 
   def main(args: Array[String]) {
     val time = new Time
@@ -44,5 +33,23 @@ object Ex5 {
     time.minute = 14
     println("time.hour [" + (time.hour) + "]")
     println("time.minute [" + (time.minute) + "]")
+  }
+
+  class Time {
+
+    private[this] var h = 12
+    private[this] var m = 0
+
+    def hour: Int = h
+
+    def hour_=(x: Int) {
+      h = x
+    }
+
+    def minute: Int = m
+
+    def minute_=(x: Int) {
+      m = x
+    }
   }
 }

@@ -24,7 +24,7 @@
 object EMail {
 
   // The injection method (optional)
-  def apply(user: String, domain: String) = user +"@"+ domain
+  def apply(user: String, domain: String) = user + "@" + domain
 
   // The extraction method (mandatory)
   def unapply(str: String): Option[(String, String)] = {
