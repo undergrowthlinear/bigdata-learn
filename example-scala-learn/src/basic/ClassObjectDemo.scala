@@ -7,7 +7,7 @@ package basic
   * @version 1.0.0
   */
 object ClassObjectDemo {
-  def main(args: Array[String]) {
+  def main(args:Array[String]){
     val myCounter = new Counter()
     myCounter.increment(5)
     println(myCounter.current)

@@ -30,7 +30,7 @@ class Rational(n: Int, d: Int) {
 
   def this(n: Int) = this(n, 1) // auxiliary constructor
 
-  override def toString = numer + "/" + denom
+  override def toString = numer +"/"+ denom
 
   def add(that: Rational): Rational =
     new Rational(

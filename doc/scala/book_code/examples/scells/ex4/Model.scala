@@ -23,22 +23,21 @@
 
 package org.stairwaybook.scells
 
-class Model(val height: Int, val width: Int)
-  extends Evaluator with Arithmetic {
-
-  val cells = new Array[Array[Cell]](height, width)
+class Model(val height: Int, val width: Int) 
+    extends Evaluator with Arithmetic { 
 
   case class Cell(row: Int, column: Int) {
     var formula: Formula = Empty
+    def value = evaluate(formula)
 
     override def toString = formula match {
       case Textual(s) => s
       case _ => value.toString
     }
-
-    def value = evaluate(formula)
   }
 
-  for (i <- 0 until height; j <- 0 until width)
+  val cells = new Array[Array[Cell]](height, width) 
+
+  for (i <- 0 until height; j <- 0 until width) 
     cells(i)(j) = new Cell(i, j)
 }

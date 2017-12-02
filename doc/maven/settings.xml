@@ -43,9 +43,9 @@ under the License.
  | values (values used when the setting is not specified) are provided.
  |
  |-->
-<settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
   <!-- localRepository
    | The path to the local repository maven will use to store artifacts.
    |
@@ -130,22 +130,22 @@ under the License.
       <passphrase>optional; leave empty if not used.</passphrase>
     </server>
     -->
-    <server>
+	<server>
       <id>releases</id>
       <username>admin</username>
       <password>iyourcar</password>
     </server>
-    <server>
+	<server>
       <id>snapshot</id>
       <username>admin</username>
       <password>iyourcar</password>
     </server>
-    <server>
+	<server>
       <id>Snapshots</id>
       <username>admin</username>
       <password>iyourcar</password>
     </server>
-    <server>
+	<server>
       <id>local_mirror</id>
       <username>admin</username>
       <password>iyourcar</password>
@@ -212,27 +212,27 @@ under the License.
    |
    |-->
   <profiles>
-
-
-    <profile>
-      <id>profile_repos</id>
-      <repositories>
-        <repository>
-          <id>aliyun</id>
-          <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-        </repository>
-        <repository>
-          <id>youcheyihou</id>
-          <url>http://maven.repos.suv163.com/nexus/content/groups/public/</url>
-        </repository>
-      </repositories>
-    </profile>
+    
+	
+		<profile>
+			<id>profile_repos</id>
+			<repositories>
+				<repository>
+					<id>aliyun</id>
+					<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+				</repository>
+				<repository>
+					<id>youcheyihou</id>
+					<url>http://maven.repos.suv163.com/nexus/content/groups/public/</url>
+				</repository>
+			</repositories>
+		</profile>
 
   </profiles>
-
+  
   <activeProfiles>
-    <activeProfile>profile_repos</activeProfile>
-  </activeProfiles>
+		<activeProfile>profile_repos</activeProfile>
+	</activeProfiles>
 
   <!-- activeProfiles
    | List of profiles that are active for all builds.
@@ -245,6 +245,6 @@ under the License.
    <activeProfiles>
     <activeProfile>nexus</activeProfile>
   </activeProfiles>   -->
-
-
+  
+  
 </settings>

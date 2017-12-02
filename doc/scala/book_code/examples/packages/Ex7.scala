@@ -22,20 +22,17 @@
  */
 
 package Notebooks {
-
   class Apple
-
 }
 
 package Fruits {
-
   class Apple
-
 }
 
 object Ex7 {
 
-  import Fruits.{Apple => _}
+  import Notebooks._
+  import Fruits.{Apple => _, _}
 
   def main(args: Array[String]) {
     println("new Apple [" + (new Apple) + "]")

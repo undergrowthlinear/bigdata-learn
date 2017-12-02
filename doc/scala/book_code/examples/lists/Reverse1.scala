@@ -29,6 +29,6 @@ object Reverse1 {
 
   def main(args: Array[String]) {
     println("rev(List(5, 7, 1, 3)) [" +
-      rev(List(5, 7, 1, 3)) + "]")
+             rev(List(5, 7, 1, 3)) + "]")
   }
 }

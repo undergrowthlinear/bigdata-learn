@@ -14,26 +14,26 @@ import org.apache.spark.sql.SparkSession;
  */
 public class SparkSqlDemo {
 
-  public static void main(String[] args) {
-    SparkSession spark = SparkSession
-        .builder()
-        .appName("Java Spark SQL basic example")
-        .config("spark.some.config.option", "some-value")
-        .master("local")
-        .getOrCreate();
-    Dataset<Row> df = spark.read().json("example-spark-learn\\src\\main\\resources\\people.json");
+    public static void main(String[] args) {
+        SparkSession spark = SparkSession
+            .builder()
+            .appName("Java Spark SQL basic example")
+            .config("spark.some.config.option", "some-value")
+            .master("local")
+            .getOrCreate();
+        Dataset<Row> df = spark.read().json("example-spark-learn\\src\\main\\resources\\people.json");
 
 // Displays the content of the DataFrame to stdout
-    df.show();
-    // Print the schema in a tree format
-    df.printSchema();
-    // Select only the "name" column
-    df.select("name").show();
-    df.select(col("name"), col("age").plus(1)).show();
-    // Select people older than 21
-    df.filter(col("age").gt(21)).show();
-    // Count people by age
-    df.groupBy("age").count().show();
-  }
+        df.show();
+        // Print the schema in a tree format
+        df.printSchema();
+        // Select only the "name" column
+        df.select("name").show();
+        df.select(col("name"), col("age").plus(1)).show();
+        // Select people older than 21
+        df.filter(col("age").gt(21)).show();
+        // Count people by age
+        df.groupBy("age").count().show();
+    }
 
 }

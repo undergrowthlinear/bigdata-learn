@@ -1,42 +1,40 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
+ "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type"
-        content="text/html; charset=ISO-8859-1"/>
+        content="text/html; charset=ISO-8859-1" />
   <title>Code Examples for Programming in Scala</title>
   <link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 <body>
 
-<div id="mainTitles"><h3>Code Examples for</h3>
-  <h2>Programming in Scala</h2></div>
-<p><a href="../index.html">
-  Return to chapter index
-</a></p>
-<h2>26 Working with XML</h2>
+<div id="mainTitles"><h3>Code Examples for</h3><h2>Programming in Scala</h2></div>  <p><a href="../index.html">
+    Return to chapter index
+  </a></p>
+  <h2>26 Working with XML</h2>
 
-<p><a href="../xml/transcript.txt">
-  Sample run of chapter's interpreter examples
-</a></p>
+  <p><a href="../xml/transcript.txt">
+    Sample run of chapter's interpreter examples
+  </a></p>
 
-<ul>
+  <ul>
 
-  <li>26.1 <a href="#sec1">Semi-structured data</a></li>
-  <li>26.2 <a href="#sec2">XML overview</a></li>
-  <li>26.3 <a href="#sec3">XML literals</a></li>
-  <li>26.4 <a href="#sec4">Serialization</a></li>
-  <li>26.5 <a href="#sec5">Taking XML apart</a></li>
-  <li>26.6 <a href="#sec6">Deserialization</a></li>
-  <li>26.7 <a href="#sec7">Loading and saving</a></li>
-  <li>26.8 <a href="#sec8">Pattern matching on XML</a></li>
-  <li>26.9 <a href="#sec9">Conclusion</a></li>
-</ul>
+    <li>26.1 <a href="#sec1">Semi-structured data</a></li>
+    <li>26.2 <a href="#sec2">XML overview</a></li>
+    <li>26.3 <a href="#sec3">XML literals</a></li>
+    <li>26.4 <a href="#sec4">Serialization</a></li>
+    <li>26.5 <a href="#sec5">Taking XML apart</a></li>
+    <li>26.6 <a href="#sec6">Deserialization</a></li>
+    <li>26.7 <a href="#sec7">Loading and saving</a></li>
+    <li>26.8 <a href="#sec8">Pattern matching on XML</a></li>
+    <li>26.9 <a href="#sec9">Conclusion</a></li>
+  </ul>
 
-<h3><a name="sec1"></a>26.1 Semi-structured data</h3>
+  <h3><a name="sec1"></a>26.1 Semi-structured data</h3>
 
-<h3><a name="sec2"></a>26.2 XML overview</h3>
+  <h3><a name="sec2"></a>26.2 XML overview</h3>
 
   <pre><hr>
   // Illegal XML
@@ -57,7 +55,7 @@
 
 <hr>
   </pre>
-<h3><a name="sec3"></a>26.3 XML literals</h3>
+  <h3><a name="sec3"></a>26.3 XML literals</h3>
 
   <pre><hr>
   scala&gt; &lt;a&gt;
@@ -101,7 +99,7 @@
 
 <hr>
   </pre>
-<h3><a name="sec4"></a>26.4 Serialization</h3>
+  <h3><a name="sec4"></a>26.4 Serialization</h3>
 
   <pre><hr>
 // In file <a href="../xml/CCTherm.scala">xml/CCTherm.scala</a>
@@ -173,7 +171,7 @@
 
 <hr>
   </pre>
-<h3><a name="sec5"></a>26.5 Taking XML apart</h3>
+  <h3><a name="sec5"></a>26.5 Taking XML apart</h3>
 
   <pre><hr>
   scala&gt; &lt;a&gt;Sounds &lt;tag/&gt; good&lt;/a&gt;.text
@@ -216,7 +214,7 @@
 
 <hr>
   </pre>
-<h3><a name="sec6"></a>26.6 Deserialization</h3>
+  <h3><a name="sec6"></a>26.6 Deserialization</h3>
 
   <pre><hr>
 // In file <a href="../xml/CCTherm.scala">xml/CCTherm.scala</a>
@@ -248,7 +246,7 @@
 
 <hr>
   </pre>
-<h3><a name="sec7"></a>26.7 Loading and saving</h3>
+  <h3><a name="sec7"></a>26.7 Loading and saving</h3>
 
   <pre><hr>
 // In file <a href="../xml/Misc.scala">xml/Misc.scala</a>
@@ -288,7 +286,7 @@
 
 <hr>
   </pre>
-<h3><a name="sec8"></a>26.8 Pattern matching on XML</h3>
+  <h3><a name="sec8"></a>26.8 Pattern matching on XML</h3>
 
   <pre><hr>
   def proc(node: scala.xml.Node): String =
@@ -379,61 +377,60 @@
 
 <hr>
   </pre>
-<h3><a name="sec9"></a>26.9 Conclusion</h3>
+  <h3><a name="sec9"></a>26.9 Conclusion</h3>
 
 
-<table>
-  <tr valign="top">
-    <td>
-      <div id="moreinfo">
-        <p>
-          For more information about <em>Programming in Scala</em> (the "Stairway Book"), please
-          visit:
-        </p>
+ <table>
+ <tr valign="top">
+ <td>
+ <div id="moreinfo">
+ <p>
+ For more information about <em>Programming in Scala</em> (the "Stairway Book"), please visit:
+ </p>
+ 
+ <p>
+ <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
+ </p>
+ 
+ <p>
+ and:
+ </p>
+ 
+ <p>
+ <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
+ </p>
+ </div>
+ </td>
+ <td>
+ <div id="license">
+ <p>
+   Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
+ </p>
 
-        <p>
-          <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
-        </p>
+ <p>
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ </p>
 
-        <p>
-          and:
-        </p>
+ <p style="margin-left: 20px">
+   <a href="http://www.apache.org/licenses/LICENSE-2.0">
+     http://www.apache.org/licenses/LICENSE-2.0
+   </a>
+ </p>
 
-        <p>
-          <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
-        </p>
-      </div>
-    </td>
-    <td>
-      <div id="license">
-        <p>
-          Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
-        </p>
-
-        <p>
-          Licensed under the Apache License, Version 2.0 (the "License");
-          you may not use this file except in compliance with the License.
-          You may obtain a copy of the License at
-        </p>
-
-        <p style="margin-left: 20px">
-          <a href="http://www.apache.org/licenses/LICENSE-2.0">
-            http://www.apache.org/licenses/LICENSE-2.0
-          </a>
-        </p>
-
-        <p>
-          Unless required by applicable law or agreed to in writing, software
-          distributed under the License is distributed on an "AS IS" BASIS,
-          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-          implied.
-          See the License for the specific language governing permissions and
-          limitations under the License.
-        </p>
-      </div>
-    </td>
-  </tr>
-</table>
+ <p>
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+   implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ </p>
+ </div>
+ </td>
+ </tr>
+ </table>
 
 </body>
 </html>

@@ -30,15 +30,18 @@ object Test extends CircuitSimulation with Application {
   val AndGateDelay = 3
   val OrGateDelay = 5
 
+  def readOut(w: Wire) = if (w.getSignal) 1 else 0
+  def bool(x: Int) = if (x == 0) false else true
+  
   def invertTest() {
     val ain, cout = new Wire
     inverter(ain, cout)
     def result = readOut(cout)
-
+    
     def test(a: Int) {
       ain setSignal bool(a)
       run()
-      println("!" + a + " = " + result + "\n")
+      println("!"+a+" = "+result+"\n")
     }
     probe("out  ", cout)
     test(0)
@@ -54,18 +57,14 @@ object Test extends CircuitSimulation with Application {
       ain setSignal bool(a)
       bin setSignal bool(b)
       run()
-      println(a + " & " + b + " = " + result + "\n")
+      println(a+" & "+b+" = "+result+"\n")
     }
     probe("out  ", cout)
-    test(0, 0)
-    test(0, 1)
-    test(1, 0)
-    test(1, 1)
+    test(0,0)
+    test(0,1)
+    test(1,0)
+    test(1,1)
   }
-
-  def readOut(w: Wire) = if (w.getSignal) 1 else 0
-
-  def bool(x: Int) = if (x == 0) false else true
 
   def orTest() {
     val ain, bin, cout = new Wire
@@ -76,13 +75,13 @@ object Test extends CircuitSimulation with Application {
       ain setSignal bool(a)
       bin setSignal bool(b)
       run()
-      println(a + " | " + b + " = " + result + "\n")
+      println(a+" | "+b+" = "+result+"\n")
     }
     probe("out  ", cout)
-    test(0, 0)
-    test(0, 1)
-    test(1, 0)
-    test(1, 1)
+    test(0,0)
+    test(0,1)
+    test(1,0)
+    test(1,1)
   }
 
   def halfTest() {
@@ -95,15 +94,15 @@ object Test extends CircuitSimulation with Application {
       ain setSignal bool(a)
       bin setSignal bool(b)
       run()
-      println(a + " + " + b + " = " + result + "\n")
+      println(a+" + "+b+" = "+result+"\n")
     }
 
     probe("sum  ", sout)
     probe("carry", cout)
-    test(0, 0)
-    test(0, 1)
-    test(1, 0)
-    test(1, 1)
+    test(0,0)
+    test(0,1)
+    test(1,0)
+    test(1,1)
   }
 
   def fullTest() {
@@ -117,19 +116,19 @@ object Test extends CircuitSimulation with Application {
       bin setSignal bool(b)
       cin setSignal bool(c)
       run()
-      println(a + " + " + b + " + " + c + " = " + result + "\n")
+      println(a+" + "+b+" + "+c+" = "+result+"\n")
     }
 
     probe("sum  ", sout)
     probe("carry", cout)
-    test(0, 0, 0)
-    test(0, 0, 1)
-    test(0, 1, 0)
-    test(0, 1, 1)
-    test(1, 0, 0)
-    test(1, 0, 1)
-    test(1, 1, 0)
-    test(1, 1, 1)
+    test(0,0,0)
+    test(0,0,1)
+    test(0,1,0)
+    test(0,1,1)
+    test(1,0,0)
+    test(1,0,1)
+    test(1,1,0)
+    test(1,1,1)
   }
 
   invertTest()

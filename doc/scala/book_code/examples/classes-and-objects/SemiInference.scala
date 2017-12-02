@@ -26,8 +26,7 @@ object SemiInference {
   /* This method has multiple statements on the same line,
    * so you need to write semicolons explicitly. */
   def printProd2() {
-    val s = "hello";
-    println(s)
+    val s = "hello"; println(s)
   }
 
   /* This method has just one statement.  The compiler

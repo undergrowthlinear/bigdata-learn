@@ -34,11 +34,6 @@ package scalainprogramming.moreextend.type_parameterization
 // [T<:Ordered[T]] 类型参数T具有上界,T必须是Ordered的子类型
 object Queues1 {
 
-  def main(args: Array[String]) {
-    val q = new SlowAppendQueue(Nil) append 1 append 2
-    println(q)
-  }
-
   class SlowAppendQueue[T](elems: List[T]) {
     // Not efficient
     def head = elems.head
@@ -46,5 +41,10 @@ object Queues1 {
     def tail = new SlowAppendQueue(elems.tail)
 
     def append(x: T) = new SlowAppendQueue(elems ::: List(x))
+  }
+
+  def main(args: Array[String]) {
+    val q = new SlowAppendQueue(Nil) append 1 append 2
+    println(q)
   }
 }

@@ -31,18 +31,44 @@ object Misc {
       List(0, 0, 1)
     )
   val empty = List()
+
+  object ExplicitTypes {
+    val fruit: List[String] = List("apples", "oranges", "pears")
+    val nums: List[Int] = List(1, 2, 3, 4)
+    val diag3: List[List[Int]] =
+      List(
+        List(1, 0, 0),
+        List(0, 1, 0),
+        List(0, 0, 1)
+      )
+    val empty: List[Nothing] = List()
+  }
+
   // List() is also of type List[String]!
-  val xs: List[String] = List()
+  val xs: List[String] = List()  
+
+  object ExplicitCons {
+    val fruit = "apples" :: ("oranges" :: ("pears" :: Nil))
+    val nums  = 1 :: (2 :: (3 :: (4 :: Nil)))
+    val diag3 = (1 :: (0 :: (0 :: Nil))) ::
+                (0 :: (1 :: (0 :: Nil))) ::
+                (0 :: (0 :: (1 :: Nil))) :: Nil
+    val empty = Nil
+  }
+ 
+  object NoParens {
+    val nums = 1 :: 2 :: 3 :: 4 :: Nil
+  }
 
   def append[T](xs: List[T], ys: List[T]): List[T] =
-    xs match {
+    xs match { 
       case List() => ys
       case x :: xs1 => x :: append(xs1, ys)
     }
 
   def msort[T](less: (T, T) => Boolean)
-              (xs: List[T]): List[T] = {
-
+      (xs: List[T]): List[T] = {
+  
     def merge(xs: List[T], ys: List[T]): List[T] =
       (xs, ys) match {
         case (Nil, _) => ys
@@ -51,7 +77,7 @@ object Misc {
           if (less(x, y)) x :: merge(xs1, ys)
           else y :: merge(xs, ys1)
       }
-
+  
     val n = xs.length / 2
     if (n == 0) xs
     else {
@@ -78,33 +104,8 @@ object Misc {
   def main(args: Array[String]) {
     println("assoc [" + assoc + "]")
     println("msort((x: Int, y: Int) => x < y)(List(5, 7, 1, 3)) [" +
-      msort((x: Int, y: Int) => x < y)(List(5, 7, 1, 3)) + "]")
+             msort((x: Int, y: Int) => x < y)(List(5, 7, 1, 3)) + "]")
 
     println("forList [" + forList + "]")
-  }
-
-  object ExplicitTypes {
-    val fruit: List[String] = List("apples", "oranges", "pears")
-    val nums: List[Int] = List(1, 2, 3, 4)
-    val diag3: List[List[Int]] =
-      List(
-        List(1, 0, 0),
-        List(0, 1, 0),
-        List(0, 0, 1)
-      )
-    val empty: List[Nothing] = List()
-  }
-
-  object ExplicitCons {
-    val fruit = "apples" :: ("oranges" :: ("pears" :: Nil))
-    val nums = 1 :: (2 :: (3 :: (4 :: Nil)))
-    val diag3 = (1 :: (0 :: (0 :: Nil))) ::
-      (0 :: (1 :: (0 :: Nil))) ::
-      (0 :: (0 :: (1 :: Nil))) :: Nil
-    val empty = Nil
-  }
-
-  object NoParens {
-    val nums = 1 :: 2 :: 3 :: 4 :: Nil
   }
 }

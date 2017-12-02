@@ -23,6 +23,23 @@
 
 
 object Ex6 {
+  class Time {
+  
+    private[this] var h = 12
+    private[this] var m = 12
+  
+    def hour: Int = h
+    def hour_= (x: Int) {
+      require(0 <= x && x < 24)
+      h = x
+    }
+  
+    def minute = m
+    def minute_= (x: Int) {
+      require(0 <= x && x < 60)
+      m = x
+    }
+  } 
 
   def main(args: Array[String]) {
     val time = new Time
@@ -38,26 +55,6 @@ object Ex6 {
       time.minute = 75
     } catch {
       case ex: IllegalArgumentException => println("caught exception")
-    }
-  }
-
-  class Time {
-
-    private[this] var h = 12
-    private[this] var m = 12
-
-    def hour: Int = h
-
-    def hour_=(x: Int) {
-      require(0 <= x && x < 24)
-      h = x
-    }
-
-    def minute = m
-
-    def minute_=(x: Int) {
-      require(0 <= x && x < 60)
-      m = x
     }
   }
 }

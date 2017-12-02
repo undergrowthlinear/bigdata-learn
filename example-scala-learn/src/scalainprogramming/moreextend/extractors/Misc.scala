@@ -29,7 +29,7 @@ object Misc {
 
     val user = "foo"
     val domain = "bar.com"
-    val result1 =
+    val result1 = 
       EMail.unapply(EMail.apply(user, domain))
     println("result1 [" + result1 + "]")
 

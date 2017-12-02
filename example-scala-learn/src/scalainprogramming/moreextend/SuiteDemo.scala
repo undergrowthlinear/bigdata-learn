@@ -8,6 +8,14 @@ package scalainprogramming.moreextend
   */
 object SuiteDemo {
 
+  def assert_demo(): Unit = {
+    assert(false, "测试错误")
+  }
+
+  def assert1_demo(): Unit = {
+    assert(3 == 2)
+  }
+
   def main(args: Array[String]) {
     try {
       assert_demo()
@@ -23,14 +31,6 @@ object SuiteDemo {
         println(ex)
       }
     }
-  }
-
-  def assert_demo(): Unit = {
-    assert(false, "测试错误")
-  }
-
-  def assert1_demo(): Unit = {
-    assert(3 == 2)
   }
 
 }

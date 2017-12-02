@@ -23,6 +23,9 @@
 
 /* A test case usable by JUnit */
 
+import org.junit.Test
+import org.junit.Assert.assertEquals
+
 class SetTest {
 
   @Test

@@ -22,68 +22,72 @@
  */
 
 object Misc {
+  case class Person(name: String, 
+                    isMale: Boolean, 
+                    children: Person*)
 
   val lara = Person("Lara", false)
   val bob = Person("Bob", true)
   val julie = Person("Julie", false, lara, bob)
   val persons = List(lara, bob, julie)
-  val xss = List(List(1, 2, 3), List(2, 3, 4), List(4, 5, 6))
 
   def for1 = {
-    for (p <- persons; n = p.name; if (n startsWith "To"))
-      yield n
+    for (p <- persons; n = p.name; if (n startsWith "To")) 
+    yield n
   }
 
   def for2 = {
     for {
-      p <- persons // a generator
-      n = p.name // a definition
-      if (n startsWith "To") // a filter
+      p <- persons              // a generator
+      n = p.name                // a definition
+      if (n startsWith "To")    // a filter
     } yield n
   }
 
   def queens(n: Int): List[List[(Int, Int)]] = {
     def placeQueens(k: Int): List[List[(Int, Int)]] =
-      if (k == 0)
+      if (k == 0) 
         List(List())
-      else
+      else 
         for {
           queens <- placeQueens(k - 1)
           column <- 1 to n
           queen = (k, column)
-          if isSafe(queen, queens)
+          if isSafe(queen, queens) 
         } yield queen :: queens
-
+  
     placeQueens(n)
   }
 
-  def isSafe(queen: (Int, Int), queens: List[(Int, Int)]) =
+  def isSafe(queen: (Int, Int), queens: List[(Int, Int)]) = 
     queens forall (q => !inCheck(queen, q))
-
-  def inCheck(q1: (Int, Int), q2: (Int, Int)) =
-    q1._1 == q2._1 || // same row
-      q1._2 == q2._2 || // same column
-      (q1._1 - q2._1).abs == (q1._2 - q2._2).abs // on diagonal
+  
+  def inCheck(q1: (Int, Int), q2: (Int, Int)) = 
+    q1._1 == q2._1 ||  // same row
+    q1._2 == q2._2 ||  // same column
+    (q1._1 - q2._1).abs == (q1._2 - q2._2).abs // on diagonal
 
   def removeDuplicates[A](xs: List[A]): List[A] = {
     if (xs.isEmpty) xs
     else
-      xs.head :: removeDuplicates(
-        for (x <- xs.tail if x != xs.head) yield x
-      )
+       xs.head :: removeDuplicates(
+         for (x <- xs.tail if x != xs.head) yield x
+       )
   }
 
   def expensiveComputationNotInvolvingX = 3
 
   def for4 = {
     for (x <- 1 to 1000; y = expensiveComputationNotInvolvingX)
-      yield x * y
+    yield x * y
   }
 
   def for5 = {
     val y = expensiveComputationNotInvolvingX
     for (x <- 1 to 1000) yield x * y
   }
+
+  val xss = List(List(1, 2, 3), List(2, 3, 4), List(4, 5, 6))
 
   def sumXss1 = {
     var sum = 0
@@ -93,10 +97,28 @@ object Misc {
 
   def sumXss2 = {
     var sum = 0
-    xss foreach (xs =>
+    xss foreach (xs => 
       xs foreach (x =>
         sum += x))
     sum
+  }
+
+  object Demo {
+    def map[A, B](xs: List[A], f: A => B): List[B] =
+      for (x <- xs) yield f(x)
+  
+    def flatMap[A, B](xs: List[A], f: A => List[B]): List[B] =
+      for (x <- xs; y <- f(x)) yield y
+  
+    def filter[A](xs: List[A], p: A => Boolean): List[A] =
+      for (x <- xs if p(x)) yield x
+  }
+
+  abstract class C[A] {
+    def map[B](f: A => B): C[B]
+    def flatMap[B](f: A => C[B]): C[B]
+    def filter(p: A => Boolean): C[A]
+    def foreach(b: A => Unit): Unit
   }
 
   def main(args: Array[String]) {
@@ -110,30 +132,5 @@ object Misc {
     println("sumXss2 [" + sumXss2 + "]")
 
     println("Demo.map(List(1, 2), (a: Int) => a + 1) [" + Demo.map(List(1, 2), (a: Int) => a + 1) + "]")
-  }
-
-  abstract class C[A] {
-    def map[B](f: A => B): C[B]
-
-    def flatMap[B](f: A => C[B]): C[B]
-
-    def filter(p: A => Boolean): C[A]
-
-    def foreach(b: A => Unit): Unit
-  }
-
-  case class Person(name: String,
-                    isMale: Boolean,
-                    children: Person*)
-
-  object Demo {
-    def map[A, B](xs: List[A], f: A => B): List[B] =
-      for (x <- xs) yield f(x)
-
-    def flatMap[A, B](xs: List[A], f: A => List[B]): List[B] =
-      for (x <- xs; y <- f(x)) yield y
-
-    def filter[A](xs: List[A], p: A => Boolean): List[A] =
-      for (x <- xs if p(x)) yield x
   }
 }

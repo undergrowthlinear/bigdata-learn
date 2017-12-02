@@ -22,25 +22,24 @@
  */
 
 /** The capitals example from Chapter 1, both with
-  * immutable and mutable collections.
-  */
+ *  immutable and mutable collections.
+ */
 object Capitals {
-  def main(args: Array[String]) {
-    useImmut()
-    useMut()
-  }
-
   def useImmut() {
     var capital = Map("US" -> "Washington", "France" -> "Paris")
     capital += ("Japan" -> "Tokyo")
-    println(capital("France"))
+    println(capital("France")) 
   }
 
   def useMut() {
-    import scala.collection.mutable.Map
-    // only change needed!
+    import scala.collection.mutable.Map  // only change needed!
     var capital = Map("US" -> "Washington", "France" -> "Paris")
     capital += ("Japan" -> "Tokyo")
-    println(capital("France"))
+    println(capital("France")) 
+  }
+
+  def main(args: Array[String]) {
+    useImmut()
+    useMut()
   }
 }

@@ -22,18 +22,17 @@
  */
 
 object Ex7 {
-
-  def main(args: Array[String]) {
-    val tiger = new Tiger(true, 12)
-    println("tiger [" + tiger + "]")
-  }
-
   class Cat {
     val dangerous = false
   }
 
   class Tiger(
-               override val dangerous: Boolean,
-               private var age: Int
-             ) extends Cat
+    override val dangerous: Boolean,
+    private var age: Int
+  ) extends Cat
+
+  def main(args: Array[String]) {
+    val tiger = new Tiger(true, 12)
+    println("tiger [" + tiger + "]")
+  }
 }

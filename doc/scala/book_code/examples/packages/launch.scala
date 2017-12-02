@@ -23,8 +23,6 @@
 
 // In file launch.scala
 package launch {
-
   class Booster3
-
 }
 

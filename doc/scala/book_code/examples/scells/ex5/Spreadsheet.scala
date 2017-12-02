@@ -22,14 +22,13 @@
  */
 
 package org.stairwaybook.scells
+import swing._, event._
 
-import scala.swing._
-import scala.swing.event._
-
-class Spreadsheet(val height: Int, val width: Int)
-  extends ScrollPane {
+class Spreadsheet(val height: Int, val width: Int) 
+    extends ScrollPane {
 
   val cellModel = new Model(height, width)
+  import cellModel._
 
   val table = new Table(height, width) {
 
@@ -37,26 +36,26 @@ class Spreadsheet(val height: Int, val width: Int)
     autoResizeMode = Table.AutoResizeMode.Off
     showGrid = true
     gridColor = new java.awt.Color(150, 150, 150)
-
     override def rendererComponent(
-                                    isSelected: Boolean, hasFocus: Boolean,
-                                    row: Int, column: Int) =
+         isSelected: Boolean, hasFocus: Boolean, 
+         row: Int, column: Int) =
 
       if (hasFocus) new TextField(userData(row, column))
       else
-        new Label(cells(row)(column).toString) {
-          xAlignment = Alignment.Right
+        new Label(cells(row)(column).toString) { 
+          xAlignment = Alignment.Right 
         }
 
-    def userData(row: Int, column: Int): String = {
-      val v = this (row, column)
+    def userData(row: Int, column: Int): String = 
+
+{
+      val v = this(row, column)
       if (v == null) "" else v.toString
     }
-
     reactions += {
       case TableUpdated(table, rows, column) =>
         for (row <- rows)
-          cells(row)(column).formula =
+          cells(row)(column).formula = 
             FormulaParsers.parse(userData(row, column))
       case ValueChanged(cell) =>
         updateCell(cell.row, cell.column)

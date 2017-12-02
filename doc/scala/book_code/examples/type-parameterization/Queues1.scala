@@ -22,18 +22,14 @@
  */
 
 object Queues1 {
+  class SlowAppendQueue[T](elems: List[T]) { // Not efficient
+    def head = elems.head
+    def tail = new SlowAppendQueue(elems.tail)
+    def append(x: T) = new SlowAppendQueue(elems ::: List(x))
+  }
 
   def main(args: Array[String]) {
     val q = new SlowAppendQueue(Nil) append 1 append 2
     println(q)
-  }
-
-  class SlowAppendQueue[T](elems: List[T]) {
-    // Not efficient
-    def head = elems.head
-
-    def tail = new SlowAppendQueue(elems.tail)
-
-    def append(x: T) = new SlowAppendQueue(elems ::: List(x))
   }
 }

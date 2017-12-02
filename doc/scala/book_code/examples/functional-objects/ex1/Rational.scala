@@ -22,7 +22,7 @@
  */
 
 class Rational(n: Int, d: Int) {
-  println("Created " + n + "/" + d)
+  println("Created "+ n +"/"+ d)
 }
 
 object Main {

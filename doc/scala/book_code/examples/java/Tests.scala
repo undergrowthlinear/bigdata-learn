@@ -24,6 +24,9 @@
 /* An example of using a Java annotation.  See FindTests.scala */
 
 object Tests {
+  @Ignore
+  def testData = List(0, 1, -1, 5, -5)
+
   def test1 {
     assert(testData == (testData.head :: testData.tail))
   }
@@ -31,7 +34,4 @@ object Tests {
   def test2 {
     assert(testData.contains(testData.head))
   }
-
-  @Ignore
-  def testData = List(0, 1, -1, 5, -5)
 }

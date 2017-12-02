@@ -21,28 +21,28 @@
  * http://booksites.artima.com/programming_in_scala
  */
 
-class Rational(private val numer: Int, private val denom: Int) {
+  class Rational(private val numer: Int, private val denom: Int) {
 
-  def this(n: Int) = this(n, 1)
+    def this(n: Int) = this(n, 1)
 
-  def add(that: Rational): Rational =
-    new Rational(
-      numer * that.denom + that.numer * denom,
-      denom * that.denom
-    )
+    def add(that: Rational): Rational =
+      new Rational(
+        numer * that.denom + that.numer * denom,
+        denom * that.denom
+      )
 
-  def sub(that: Rational): Rational =
-    new Rational(
-      numer * that.denom - that.numer * denom,
-      denom * that.denom
-    )
+    def sub(that: Rational): Rational =
+      new Rational(
+        numer * that.denom - that.numer * denom, 
+        denom * that.denom
+      )
 
-  def mul(that: Rational): Rational =
-    new Rational(numer * that.numer, denom * that.denom)
+    def mul(that: Rational): Rational =
+      new Rational(numer * that.numer, denom * that.denom)
 
-  def div(that: Rational): Rational =
-    new Rational(numer * that.denom, denom * that.numer)
+    def div(that: Rational): Rational =
+      new Rational(numer * that.denom, denom * that.numer)
 
-  override def toString() = numer + "/" + denom
-}
+    override def toString() = numer+"/"+denom
+  }
 

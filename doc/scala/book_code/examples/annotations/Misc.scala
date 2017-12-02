@@ -22,6 +22,13 @@
  */
 
 object Misc {
+  @deprecated def bigMistake() = //...
+    "bigMistake"
+
+  @deprecated class QuickAndDirty {
+    //...
+  }
+
   def unchecked(e: Any) {
     (e: @unchecked) match {
       case "foo" => println("foo")
@@ -30,12 +37,5 @@ object Misc {
 
   def main(args: Array[String]) {
     bigMistake()
-  }
-
-  @deprecated def bigMistake() = //...
-    "bigMistake"
-
-  @deprecated class QuickAndDirty {
-    //...
   }
 }

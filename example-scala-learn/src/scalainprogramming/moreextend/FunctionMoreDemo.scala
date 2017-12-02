@@ -8,6 +8,15 @@ package scalainprogramming.moreextend
   */
 object FunctionMoreDemo {
 
+  def method_demo(): Unit = {
+    val what = new WhatFunction
+    what.say("hello world")
+  }
+
+  def repeat_demo(ar: String*): Unit = {
+    ar.foreach(println)
+  }
+
   def main(args: Array[String]) {
     val i = 10
     // 类成员
@@ -25,15 +34,6 @@ object FunctionMoreDemo {
     list.filter(_ > 2).foreach(println)
     // 重复参数 _*(当做每一个参数传递)
     repeat_demo("1", "2")
-  }
-
-  def method_demo(): Unit = {
-    val what = new WhatFunction
-    what.say("hello world")
-  }
-
-  def repeat_demo(ar: String*): Unit = {
-    ar.foreach(println)
   }
 
 }

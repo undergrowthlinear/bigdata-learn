@@ -23,6 +23,16 @@
 
 
 object Ex7 {
+  class Thermometer {
+  
+    var celsius: Float = _
+  
+    def fahrenheit = celsius * 9 / 5 + 32
+    def fahrenheit_= (f: Float) {
+      celsius = (f - 32) * 5 / 9
+    }
+    override def toString = fahrenheit +"F/"+ celsius +"C"
+  }
 
   def main(args: Array[String]) {
     val t = new Thermometer
@@ -32,18 +42,5 @@ object Ex7 {
 
     t.fahrenheit = -40
     println("t [" + (t) + "]")
-  }
-
-  class Thermometer {
-
-    var celsius: Float = _
-
-    override def toString = fahrenheit + "F/" + celsius + "C"
-
-    def fahrenheit = celsius * 9 / 5 + 32
-
-    def fahrenheit_=(f: Float) {
-      celsius = (f - 32) * 5 / 9
-    }
   }
 }

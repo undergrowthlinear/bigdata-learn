@@ -26,6 +26,15 @@ package scalainprogramming.moreextend.annotations
 // @注解类(参数列表)
 // 标准注解----@deprecated、@volatile、@transient、@serializable、@SerialVersionUID、@unchecked
 object Misc {
+  @deprecated def bigMistake() = //...
+    "bigMistake"
+
+  @deprecated class QuickAndDirty {
+    //...
+  }
+
+  class Q {}
+
   def unchecked(e: Any) {
     (e: @unchecked) match {
       case "foo" => println("foo")
@@ -35,13 +44,4 @@ object Misc {
   def main(args: Array[String]) {
     bigMistake()
   }
-
-  @deprecated def bigMistake() = //...
-    "bigMistake"
-
-  @deprecated class QuickAndDirty {
-    //...
-  }
-
-  class Q {}
 }

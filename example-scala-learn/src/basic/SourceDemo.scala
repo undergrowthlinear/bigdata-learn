@@ -12,19 +12,19 @@ import scala.io.Source
   */
 object SourceDemo {
 
-  def main(args: Array[String]) {
-    write_some()
-    println("文件内容为:")
-    Source.fromFile("test.txt").foreach {
-      print
-    }
-  }
-
   def write_some() = {
-    val writer = new PrintWriter(new File("test.txt"))
+    val writer = new PrintWriter(new File("test.txt" ))
 
     writer.write("菜鸟教程")
     writer.close()
+  }
+
+  def main(args: Array[String]) {
+    write_some()
+    println("文件内容为:" )
+    Source.fromFile("test.txt" ).foreach{
+      print
+    }
   }
 
 }

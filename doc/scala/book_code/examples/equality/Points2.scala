@@ -23,7 +23,6 @@
 
 /** A point class that overrides equals but not hashCode */
 object Points2 {
-
   class Point(val x: Int, val y: Int) {
     // A better definition, but still not perfect
     override def equals(other: Any) = other match {
@@ -31,5 +30,4 @@ object Points2 {
       case _ => false
     }
   }
-
 }

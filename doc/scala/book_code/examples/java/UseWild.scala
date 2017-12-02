@@ -21,32 +21,33 @@
  * http://booksites.artima.com/programming_in_scala
  */
 
+import java.util.Collection
+import scala.collection.mutable.Set
+
 /** Accessing wildcard types from Scala */
 object UseWild {
-
-  import java.util.Collection
-
   import scala.collection.mutable.Set
-
-  val setAndType = javaSet2ScalaSet((new Wild).contents)
-  val set: Set[setAndType.Elem] =
-    setAndType.set
-
+  import java.util.Collection
+  
+  abstract class SetAndType {
+    type Elem
+    val set: Set[Elem]
+  }
+  
   def javaSet2ScalaSet[T](jset: Collection[T]): SetAndType = {
-    val sset = Set.empty[T] // now T can be named!
-
+    val sset = Set.empty[T]  // now T can be named!
+  
     val iter = jset.iterator
     while (iter.hasNext)
       sset += iter.next()
-
+  
     return new SetAndType {
       type Elem = T
       val set = sset
     }
   }
 
-  abstract class SetAndType {
-    type Elem
-    val set: Set[Elem]
-  }
+  val setAndType = javaSet2ScalaSet((new Wild).contents)
+  val set: Set[setAndType.Elem] =
+    setAndType.set
 }

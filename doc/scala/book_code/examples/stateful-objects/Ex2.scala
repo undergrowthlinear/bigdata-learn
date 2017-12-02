@@ -33,13 +33,13 @@ class BankAccount {
     bal += amount
   }
 
-  def withdraw(amount: Int): Boolean =
+  def withdraw(amount: Int): Boolean = 
     if (amount > bal) false
     else {
       bal -= amount
       true
     }
-}
+} 
 
 object Ex2 {
   def main(args: Array[String]) {

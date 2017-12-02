@@ -23,10 +23,10 @@
 
 object MaxList1 {
   def maxListImpParm[T](elements: List[T])
-                       (implicit orderer: T => Ordered[T]): T =
-
+        (implicit orderer: T => Ordered[T]): T =
+  
     elements match {
-      case List() =>
+      case List() => 
         throw new IllegalArgumentException("empty list!")
       case List(x) => x
       case x :: rest =>

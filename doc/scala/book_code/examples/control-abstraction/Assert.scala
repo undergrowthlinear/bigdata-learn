@@ -23,6 +23,14 @@
 
 object Assert {
   var assertionsEnabled = true
+  
+  def myAssert(predicate: () => Boolean) =
+    if (assertionsEnabled && !predicate())
+      throw new AssertionError
+
+  def byNameAssert(predicate: => Boolean) =
+    if (assertionsEnabled && !predicate)
+      throw new AssertionError
 
   def main(args: Array[String]) {
     try {
@@ -41,12 +49,4 @@ object Assert {
       case ex: AssertionError => println("ex [" + ex + "]")
     }
   }
-
-  def myAssert(predicate: () => Boolean) =
-    if (assertionsEnabled && !predicate())
-      throw new AssertionError
-
-  def byNameAssert(predicate: => Boolean) =
-    if (assertionsEnabled && !predicate)
-      throw new AssertionError
 }

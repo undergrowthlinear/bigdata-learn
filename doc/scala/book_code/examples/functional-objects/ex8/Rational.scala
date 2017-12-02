@@ -25,9 +25,9 @@ class Rational(n: Int, d: Int) {
 
   require(d != 0)
 
+  private val g = gcd(n.abs, d.abs)
   val numer = n / g
   val denom = d / g
-  private val g = gcd(n.abs, d.abs)
 
   def this(n: Int) = this(n, 1)
 
@@ -37,9 +37,9 @@ class Rational(n: Int, d: Int) {
       denom * that.denom
     )
 
-  override def toString = numer + "/" + denom
+  override def toString = numer +"/"+ denom
 
-  private def gcd(a: Int, b: Int): Int =
+  private def gcd(a: Int, b: Int): Int = 
     if (b == 0) a else gcd(b, a % b)
 }
 

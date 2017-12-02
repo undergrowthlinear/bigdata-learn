@@ -23,6 +23,10 @@
 
 
 object Ex4 {
+  class Time {
+    var hour = 12
+    var minute = 0
+  }
 
   def main(args: Array[String]) {
     val time = new Time
@@ -33,10 +37,5 @@ object Ex4 {
     time.minute = 14
     println("time.hour [" + (time.hour) + "]")
     println("time.minute [" + (time.minute) + "]")
-  }
-
-  class Time {
-    var hour = 12
-    var minute = 0
   }
 }

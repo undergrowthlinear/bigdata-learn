@@ -24,7 +24,7 @@
 import scala.actors._
 
 object SillyActor extends Actor {
-  def act() {
+  def act() { 
     for (i <- 1 to 5) {
       println("I'm acting!")
       Thread.sleep(1000)
@@ -35,7 +35,7 @@ object SillyActor extends Actor {
 import scala.actors._
 
 object SeriousActor extends Actor {
-  def act() {
+  def act() { 
     for (i <- 1 to 5) {
       println("To be or not to be.")
       Thread.sleep(1000)
@@ -43,14 +43,14 @@ object SeriousActor extends Actor {
   }
 }
 
-import scala.actors.Actor._
+import Actor._
 
 object EchoActor {
   val echoActor = actor {
     while (true) {
       receive {
         case msg =>
-          println("received message: " + msg)
+          println("received message: "+ msg)
       }
     }
   }
@@ -58,19 +58,18 @@ object EchoActor {
 
 
 object NameResolver extends Actor {
-
   import java.net.{InetAddress, UnknownHostException}
 
-  def act() {
+  def act() { 
     react {
       case (name: String, actor: Actor) =>
         actor ! getIp(name)
         act()
       case "EXIT" =>
         println("Name resolver exiting.")
-      // quit
+        // quit
       case msg =>
-        println("Unhandled message: " + msg)
+        println("Unhandled message: "+ msg)
         act()
     }
   }
@@ -79,16 +78,16 @@ object NameResolver extends Actor {
     try {
       Some(InetAddress.getByName(name))
     } catch {
-      case _: UnknownHostException => None
+      case _:UnknownHostException => None
     }
   }
 }
 
 object NameResolverLoop extends Actor {
-
+  import java.net.{InetAddress, UnknownHostException}
   import NameResolver.getIp
 
-  def act() {
+  def act() { 
     loop {
       react {
         case (name: String, actor: Actor) =>
@@ -109,10 +108,10 @@ object SillyActor2 {
         mainActor ! "Emote"
       }
     }
-
+  
     var emoted = 0
     emoteLater()
-
+  
     loop {
       react {
         case "Emote" =>
@@ -121,26 +120,27 @@ object SillyActor2 {
           if (emoted < 5)
             emoteLater()
         case msg =>
-          println("Received: " + msg)
+          println("Received: "+ msg)
       }
     }
   }
 }
 
 object NameResolver2 {
+  import NameResolver.getIp
 
+  import scala.actors.Actor._
   import java.net.{InetAddress, UnknownHostException}
-
+  
   case class LookupIP(name: String, respondTo: Actor)
-
   case class LookupResult(
-                           name: String,
-                           address: Option[InetAddress]
-                         )
-
+    name: String, 
+    address: Option[InetAddress]
+  )
+  
   object NameResolver2 extends Actor {
-
-    def act() {
+  
+    def act() { 
       loop {
         react {
           case LookupIP(name, actor) =>
@@ -148,17 +148,16 @@ object NameResolver2 {
         }
       }
     }
-
+  
     def getIp(name: String): Option[InetAddress] = {
       // As before (in Listing 30.3)
       try {
         Some(InetAddress.getByName(name))
       } catch {
-        case _: UnknownHostException => None
+        case _:UnknownHostException => None
       }
     }
   }
-
 }
 
 object Actors {

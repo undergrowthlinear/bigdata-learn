@@ -23,14 +23,7 @@
 
 object Files {
   val filesHere = (new java.io.File(".")).listFiles
-  val forLineLengths =
-    for {
-      file <- filesHere
-      if file.getName.endsWith(".scala")
-      line <- fileLines(file)
-      trimmed = line.trim
-      if trimmed.matches(".*for.*")
-    } yield trimmed.length
+  
 
   def printFiles() {
     for (file <- filesHere)
@@ -45,7 +38,7 @@ object Files {
 
   def printScalaFiles() {
     val filesHere = (new java.io.File(".")).listFiles
-
+    
     for (file <- filesHere if file.getName.endsWith(".scala"))
       println(file)
   }
@@ -64,10 +57,9 @@ object Files {
     ) println(file)
   }
 
-  def grepGcd() {
-    def grep(pattern: String) = grepParens(pattern)
-    grep(".*gcd.*")
-  }
+  def fileLines(file: java.io.File) = 
+    scala.io.Source.fromFile(file).getLines.toList
+  
 
   def grepParens(pattern: String) {
     def grep(pattern: String) =
@@ -75,10 +67,15 @@ object Files {
         file <- filesHere
         if file.getName.endsWith(".scala");
         line <- fileLines(file)
-        if line.trim.matches(pattern)
-      ) println(file + ": " + line.trim)
-
+        if line.trim.matches(pattern) 
+      ) println(file +": "+ line.trim)
+    
     grep(pattern)
+  }
+
+  def grepGcd() {
+    def grep(pattern: String) = grepParens(pattern)
+    grep(".*gcd.*")
   }
 
   def grepGcd2() {
@@ -88,20 +85,26 @@ object Files {
         if file.getName.endsWith(".scala")
         line <- fileLines(file)
         trimmed = line.trim
-        if trimmed.matches(pattern)
-      } println(file + ": " + trimmed)
-
+        if trimmed.matches(pattern)  
+      } println(file +": "+ trimmed)
+    
     grep(".*gcd.*")
   }
-
-  def fileLines(file: java.io.File) =
-    scala.io.Source.fromFile(file).getLines.toList
 
   def scalaFiles =
     for {
       file <- filesHere
       if file.getName.endsWith(".scala")
     } yield file
+
+  val forLineLengths =
+    for {
+      file <- filesHere
+      if file.getName.endsWith(".scala")
+      line <- fileLines(file)
+      trimmed = line.trim
+      if trimmed.matches(".*for.*")  
+    } yield trimmed.length
 }
 
 Files.printFiles()

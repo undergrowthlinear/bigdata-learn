@@ -1,6 +1,7 @@
 package com.undergrowth.sql;
 
 import com.undergrowth.bean.Person;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import org.apache.spark.api.java.function.MapFunction;
@@ -37,13 +38,12 @@ public class SparkDataSetDemo {
     );
     javaBeanDS.show();
     // Encoders for most common types are provided in class Encoders
-    Encoder<Integer> integerEncoder = Encoders.INT();
+        Encoder<Integer> integerEncoder = Encoders.INT();
     Dataset<Integer> primitiveDS = spark.createDataset(Arrays.asList(1, 2, 3), integerEncoder);
     Dataset<Integer> transformedDS = primitiveDS.map(
         (MapFunction<Integer, Integer>) value -> value + 1,
         integerEncoder);
-    System.out.println(transformedDS.collect());
-    ; // Returns [2, 3, 4]
+    System.out.println(transformedDS.collect());; // Returns [2, 3, 4]
 
 // DataFrames can be converted to a Dataset by providing a class. Mapping based on name
     String path = "example-spark-learn\\src\\main\\resources\\people.json";

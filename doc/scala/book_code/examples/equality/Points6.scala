@@ -23,21 +23,21 @@
 
 /** These equality methods are symmetric but not transitive */
 object Points6 {
-
-  class Point(var x: Int, var y: Int) {
-    // Problematic
+  class Point(var x: Int, var y: Int) { // Problematic
     override def hashCode = 41 * (41 + x) + y
-
-    override def equals(other: Any) = other match {
-      case that: Point => this.x == that.x && this.y == that.y
-      case _ => false
+    override def equals(other: Any) = other match { 
+      case that: Point => this.x == that.x && this.y == that.y 
+      case _ => false 
     }
   }
 
-  class ColoredPoint(x: Int, y: Int, val color: Color.Value)
-    extends Point(x, y) {
-    // Problem: equals not transitive
+  object Color extends Enumeration {
+    val Red, Orange, Yellow, Green, Blue, Indigo, Violet = Value
+  }
 
+  class ColoredPoint(x: Int, y: Int, val color: Color.Value) 
+      extends Point(x, y) { // Problem: equals not transitive
+  
     override def equals(other: Any) = other match {
       case that: ColoredPoint =>
         (this.color == that.color) && super.equals(that)
@@ -47,10 +47,5 @@ object Points6 {
         false
     }
   }
-
-  object Color extends Enumeration {
-    val Red, Orange, Yellow, Green, Blue, Indigo, Violet = Value
-  }
-
 }
 

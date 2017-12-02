@@ -24,11 +24,9 @@
 /** A point class whose equals method has the wrong
   * type signature. */
 object Points1 {
-
   class Point(val x: Int, val y: Int) {
     // An utterly wrong definition of equals
     def equals(other: Point): Boolean =
       this.x == other.x && this.y == other.y
   }
-
 }

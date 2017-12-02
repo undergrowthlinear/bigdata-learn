@@ -22,18 +22,18 @@
  */
 
 /**
-  * A rational number. The primary constructor takes a
-  * numerator, n, and denominator, d. The value passed
-  * as d must be non-zero.
-  *
-  * @throw IllegalArgumentException if d is zero.
-  */
+ * A rational number. The primary constructor takes a
+ * numerator, n, and denominator, d. The value passed
+ * as d must be non-zero.
+ *
+ * @throw IllegalArgumentException if d is zero.
+ */
 class Rational(n: Int, d: Int) {
 
   if (d == 0)
     throw new IllegalArgumentException
 
-  override def toString = n + "/" + d
+  override def toString = n +"/"+ d
 }
 
 // throws IllegalArgumentException

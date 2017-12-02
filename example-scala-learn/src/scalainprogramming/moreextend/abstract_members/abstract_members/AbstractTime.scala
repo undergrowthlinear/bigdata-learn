@@ -24,7 +24,6 @@ package scalainprogramming.moreextend.abstract_members.abstract_members
  */
 
 object AbstractTime {
-
   trait AbstractTime1 {
     var hour: Int
     var minute: Int
@@ -32,16 +31,10 @@ object AbstractTime {
 
 
   trait AbstractTime2 {
-    def hour: Int
-
-    // getter for `hour'
-    def hour_=(x: Int)
-
-    // setter for `hour'
-    def minute: Int
-
-    // getter for `minute'
-    def minute_=(x: Int) // setter for `minute'
+    def hour: Int          // getter for `hour'
+    def hour_=(x: Int)     // setter for `hour'
+    def minute: Int        // getter for `minute'
+    def minute_=(x: Int)   // setter for `minute'
   }
 
 
@@ -50,5 +43,4 @@ object AbstractTime {
     var hour: Int = 10
     var minute: Int = 10
   }
-
 }

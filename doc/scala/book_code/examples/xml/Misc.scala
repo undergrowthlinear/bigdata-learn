@@ -22,7 +22,7 @@
  */
 
 object Misc {
-
+  
   val therm = new CCTherm {
     val description = "hot dog #5"
     val yearMade = 1952

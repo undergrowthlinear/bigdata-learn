@@ -24,19 +24,15 @@ package scalainprogramming.moreextend.type_parameterization
  */
 
 object Queues2 {
+  class SlowHeadQueue[T](smele: List[T]) { // Not efficient
+    // smele is elems reversed
+    def head = smele.last
+    def tail = new SlowHeadQueue(smele.init)
+    def append(x: T) = new SlowHeadQueue(x :: smele)
+  }
 
   def main(args: Array[String]) {
     val q = new SlowHeadQueue(Nil) append 1 append 2
     println(q)
-  }
-
-  class SlowHeadQueue[T](smele: List[T]) {
-    // Not efficient
-    // smele is elems reversed
-    def head = smele.last
-
-    def tail = new SlowHeadQueue(smele.init)
-
-    def append(x: T) = new SlowHeadQueue(x :: smele)
   }
 }

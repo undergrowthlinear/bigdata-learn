@@ -24,12 +24,12 @@
 object MaxList2 {
   def maxList[T <% Ordered[T]](elements: List[T]): T =
     elements match {
-      case List() =>
+      case List() => 
         throw new IllegalArgumentException("empty list!")
       case List(x) => x
       case x :: rest =>
-        val maxRest = maxList(rest) // (orderer) is implicit
-        if (x > maxRest) x // orderer(x) is implicit
+        val maxRest = maxList(rest)  // (orderer) is implicit
+        if (x > maxRest) x           // orderer(x) is implicit
         else maxRest
     }
 }

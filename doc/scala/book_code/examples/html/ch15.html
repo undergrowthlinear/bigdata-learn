@@ -1,40 +1,38 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
+ "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type"
-        content="text/html; charset=ISO-8859-1"/>
+        content="text/html; charset=ISO-8859-1" />
   <title>Code Examples for Programming in Scala</title>
   <link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 <body>
 
-<div id="mainTitles"><h3>Code Examples for</h3>
-  <h2>Programming in Scala</h2></div>
-<p><a href="../index.html">
-  Return to chapter index
-</a></p>
-<h2>15 Case Classes and Pattern Matching</h2>
+<div id="mainTitles"><h3>Code Examples for</h3><h2>Programming in Scala</h2></div>  <p><a href="../index.html">
+    Return to chapter index
+  </a></p>
+  <h2>15 Case Classes and Pattern Matching</h2>
 
-<p><a href="../pattern-matching/transcript.txt">
-  Sample run of chapter's interpreter examples
-</a></p>
+  <p><a href="../pattern-matching/transcript.txt">
+    Sample run of chapter's interpreter examples
+  </a></p>
 
-<ul>
+  <ul>
 
-  <li>15.1 <a href="#sec1">A simple example</a></li>
-  <li>15.2 <a href="#sec2">Kinds of patterns</a></li>
-  <li>15.3 <a href="#sec3">Pattern guards</a></li>
-  <li>15.4 <a href="#sec4">Pattern overlaps</a></li>
-  <li>15.5 <a href="#sec5">Sealed classes</a></li>
-  <li>15.6 <a href="#sec6">The <span class="mono">Option</span> type</a></li>
-  <li>15.7 <a href="#sec7">Patterns everywhere</a></li>
-  <li>15.8 <a href="#sec8">A larger example</a></li>
-  <li>15.9 <a href="#sec9">Conclusion</a></li>
-</ul>
+    <li>15.1 <a href="#sec1">A simple example</a></li>
+    <li>15.2 <a href="#sec2">Kinds of patterns</a></li>
+    <li>15.3 <a href="#sec3">Pattern guards</a></li>
+    <li>15.4 <a href="#sec4">Pattern overlaps</a></li>
+    <li>15.5 <a href="#sec5">Sealed classes</a></li>
+    <li>15.6 <a href="#sec6">The <span class="mono">Option</span> type</a></li>
+    <li>15.7 <a href="#sec7">Patterns everywhere</a></li>
+    <li>15.8 <a href="#sec8">A larger example</a></li>
+    <li>15.9 <a href="#sec9">Conclusion</a></li>
+  </ul>
 
-<h3><a name="sec1"></a>15.1 A simple example</h3>
+  <h3><a name="sec1"></a>15.1 A simple example</h3>
 
   <pre><hr>
   abstract class Expr
@@ -103,7 +101,7 @@
 
 <hr>
   </pre>
-<h3><a name="sec2"></a>15.2 Kinds of patterns</h3>
+  <h3><a name="sec2"></a>15.2 Kinds of patterns</h3>
 
   <pre><hr>
 // In file <a href="../pattern-matching/Misc.scala">pattern-matching/Misc.scala</a>
@@ -322,7 +320,7 @@ scala&gt;  def isIntIntMap(x: Any) = x match {
 
 <hr>
   </pre>
-<h3><a name="sec3"></a>15.3 Pattern guards</h3>
+  <h3><a name="sec3"></a>15.3 Pattern guards</h3>
 
   <pre><hr>
   BinOp("+", Var("x"), Var("x"))
@@ -356,7 +354,7 @@ scala&gt;  def isIntIntMap(x: Any) = x match {
 
 <hr>
   </pre>
-<h3><a name="sec4"></a>15.4 Pattern overlaps</h3>
+  <h3><a name="sec4"></a>15.4 Pattern overlaps</h3>
 
   <pre><hr>
   def simplifyAll(expr: Expr): Expr = expr match {
@@ -384,7 +382,7 @@ scala&gt;  def isIntIntMap(x: Any) = x match {
 
 <hr>
   </pre>
-<h3><a name="sec5"></a>15.5 Sealed classes</h3>
+  <h3><a name="sec5"></a>15.5 Sealed classes</h3>
 
   <pre><hr>
 // In file <a href="../pattern-matching/Misc.scala">pattern-matching/Misc.scala</a>
@@ -426,7 +424,7 @@ scala&gt;  def isIntIntMap(x: Any) = x match {
 
 <hr>
   </pre>
-<h3><a name="sec6"></a>15.6 The <span class="mono">Option</span> type</h3>
+  <h3><a name="sec6"></a>15.6 The <span class="mono">Option</span> type</h3>
 
   <pre><hr>
   scala&gt; val capitals = 
@@ -459,7 +457,7 @@ scala&gt;  def isIntIntMap(x: Any) = x match {
 
 <hr>
   </pre>
-<h3><a name="sec7"></a>15.7 Patterns everywhere</h3>
+  <h3><a name="sec7"></a>15.7 Patterns everywhere</h3>
 
   <pre><hr>
   scala&gt; val myTuple = (123, "abc")
@@ -562,7 +560,7 @@ scala&gt;  def isIntIntMap(x: Any) = x match {
 
 <hr>
   </pre>
-<h3><a name="sec8"></a>15.8 A larger example</h3>
+  <h3><a name="sec8"></a>15.8 A larger example</h3>
 
   <pre><hr>
   BinOp("+", 
@@ -578,8 +576,7 @@ scala&gt;  def isIntIntMap(x: Any) = x match {
   )
 
 <hr>
-// In file <a
-        href="../pattern-matching/ExprFormatter.scala">pattern-matching/ExprFormatter.scala</a>
+// In file <a href="../pattern-matching/ExprFormatter.scala">pattern-matching/ExprFormatter.scala</a>
 
   package org.stairwaybook.expr
   import layout.Element.elem
@@ -621,8 +618,7 @@ scala&gt;  def isIntIntMap(x: Any) = x match {
     // continued in Listing 15.21...
 
 <hr>
-// In file <a
-        href="../pattern-matching/ExprFormatter.scala">pattern-matching/ExprFormatter.scala</a>
+// In file <a href="../pattern-matching/ExprFormatter.scala">pattern-matching/ExprFormatter.scala</a>
 
   // ...continued from Listing 15.20
 
@@ -726,61 +722,60 @@ scala&gt;  def isIntIntMap(x: Any) = x match {
 
 <hr>
   </pre>
-<h3><a name="sec9"></a>15.9 Conclusion</h3>
+  <h3><a name="sec9"></a>15.9 Conclusion</h3>
 
 
-<table>
-  <tr valign="top">
-    <td>
-      <div id="moreinfo">
-        <p>
-          For more information about <em>Programming in Scala</em> (the "Stairway Book"), please
-          visit:
-        </p>
+ <table>
+ <tr valign="top">
+ <td>
+ <div id="moreinfo">
+ <p>
+ For more information about <em>Programming in Scala</em> (the "Stairway Book"), please visit:
+ </p>
+ 
+ <p>
+ <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
+ </p>
+ 
+ <p>
+ and:
+ </p>
+ 
+ <p>
+ <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
+ </p>
+ </div>
+ </td>
+ <td>
+ <div id="license">
+ <p>
+   Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
+ </p>
 
-        <p>
-          <a href="http://www.artima.com/shop/programming_in_scala">http://www.artima.com/shop/programming_in_scala</a>
-        </p>
+ <p>
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ </p>
 
-        <p>
-          and:
-        </p>
+ <p style="margin-left: 20px">
+   <a href="http://www.apache.org/licenses/LICENSE-2.0">
+     http://www.apache.org/licenses/LICENSE-2.0
+   </a>
+ </p>
 
-        <p>
-          <a href="http://booksites.artima.com/programming_in_scala">http://booksites.artima.com/programming_in_scala</a>
-        </p>
-      </div>
-    </td>
-    <td>
-      <div id="license">
-        <p>
-          Copyright &copy; 2007-2008 Artima, Inc. All rights reserved.
-        </p>
-
-        <p>
-          Licensed under the Apache License, Version 2.0 (the "License");
-          you may not use this file except in compliance with the License.
-          You may obtain a copy of the License at
-        </p>
-
-        <p style="margin-left: 20px">
-          <a href="http://www.apache.org/licenses/LICENSE-2.0">
-            http://www.apache.org/licenses/LICENSE-2.0
-          </a>
-        </p>
-
-        <p>
-          Unless required by applicable law or agreed to in writing, software
-          distributed under the License is distributed on an "AS IS" BASIS,
-          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-          implied.
-          See the License for the specific language governing permissions and
-          limitations under the License.
-        </p>
-      </div>
-    </td>
-  </tr>
-</table>
+ <p>
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+   implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ </p>
+ </div>
+ </td>
+ </tr>
+ </table>
 
 </body>
 </html>

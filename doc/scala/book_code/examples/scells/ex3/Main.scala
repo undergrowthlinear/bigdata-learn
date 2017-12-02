@@ -22,8 +22,7 @@
  */
 
 package org.stairwaybook.scells
-
-import scala.swing._
+import swing._
 
 object Main extends SimpleGUIApplication {
   def top = new MainFrame {
