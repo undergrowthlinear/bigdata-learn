@@ -107,3 +107,8 @@ object HelloWorld {
   - 在我们实例化一个类的时，可以带上0个或者多个的参数，使用unapplySeq
   - 编译器在实例化的时会调用 apply 方法。我们可以在类和对象中都定义 apply 方法
 - Scala 文件 I/O----Scala 进行文件写操作，直接用的都是 java中 的 I/O 类 （java.io.File)：
+- Actor与并发----不共享数据,依赖消息传递
+  - actor为邮箱,act方法执行
+  - ! 发送消息,可接收消息处理(receive 阻塞等待)/使用偏函数,应用apply返回true,匹配case消息
+  - 将原生线程当做actor,(self ! "hello world"),(self.receive){case x=>x} self.receiveWithin(1000)){case x=>x})
+  - 重用线程react,抛弃调用者线程堆栈,使用单线程即可循环执行处理请求
