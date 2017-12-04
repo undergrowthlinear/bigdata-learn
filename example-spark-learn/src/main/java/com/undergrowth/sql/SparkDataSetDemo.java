@@ -21,7 +21,7 @@ public class SparkDataSetDemo {
   public static void main(String[] args) {
     SparkSession spark = SparkSession
         .builder()
-        .appName("Java Spark SQL basic example")
+        .appName("Java Spark SQL basic.basic example")
         .config("spark.some.config.option", "some-value")
         .master("local")
         .getOrCreate();
