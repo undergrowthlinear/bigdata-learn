@@ -1,4 +1,4 @@
-package scalainprogramming.moreextend
+package scalainprogramming.moreextend.trait_test
 
 import scala.collection.mutable.ArrayBuffer
 
