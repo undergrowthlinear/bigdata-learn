@@ -1,7 +1,9 @@
+# scala 2.11.7学习笔记1之概述
 # 参考
 - http://www.runoob.com/scala/scala-file-io.html
 - http://www.jianshu.com/p/e0fc0ab7a9d2
 - http://blog.csdn.net/fjse51/article/details/52152362
+- Scala编程中文版(33章全).pdf
 # 概念
 ## 名词
 - 可扩展语言/是面向对象与函数式编程加入静态类型的混合体
@@ -107,3 +109,5 @@ object HelloWorld {
   - 在我们实例化一个类的时，可以带上0个或者多个的参数，使用unapplySeq
   - 编译器在实例化的时会调用 apply 方法。我们可以在类和对象中都定义 apply 方法
 - Scala 文件 I/O----Scala 进行文件写操作，直接用的都是 java中 的 I/O 类 （java.io.File)：
+# Code
+- https://github.com/undergrowthlinear/bigdata-learn.git

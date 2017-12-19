@@ -1,5 +1,7 @@
+# spark 2.2.0学习笔记1之概述
 # 参考
 - https://github.com/databricks/learning-spark
+- Spark快速大数据分析.pdf
 # 概念
 - 基于内存----快速/通用----计算
 - Spark 是一个用来实现快速而通用的集群计算的平台
@@ -114,3 +116,5 @@
     - hive
 - 数据库与键值存储
     - jdbc/cassandra/hbase/elasticsearch
+# Code
+- https://github.com/undergrowthlinear/bigdata-learn.git
