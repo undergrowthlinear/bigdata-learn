@@ -32,4 +32,9 @@
   - Executor----执行计算任务的进程
 - Driver App----客户端驱动程序,将程序任务转换为RDD与DAG,并负责与Cluster Manager进行通信
 ## 源码分析
+- jmx监控
+ ```
+  -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9999
+   -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false
+ ```
 ### SparkContext初始化
