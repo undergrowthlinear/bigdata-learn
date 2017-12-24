@@ -1,6 +1,7 @@
 package spark30.basic
 
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
@@ -21,6 +22,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 object SparkContextUtil {
 
   val master: String = "local"
+  val master2: String = "local[2]"
 
   def getSparkSession(appName: String): SparkSession = {
     SparkSession
@@ -28,6 +30,12 @@ object SparkContextUtil {
       .appName(appName)
       .master(master)
       .getOrCreate()
+  }
+
+  def getStreamingContext(appName: String): StreamingContext = {
+    val sparkConf = new SparkConf().setAppName(appName).setMaster(master2)
+    val ssc = new StreamingContext(sparkConf, Seconds(1))
+    ssc
   }
 
   def getSparkContext(appName: String): SparkContext = {
