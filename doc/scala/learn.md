@@ -118,5 +118,17 @@ object HelloWorld {
         - 4、在元组中，可以用方法_1, _2, _3访问组员。如a._2。其中句点可以用空格替代。
         - 5、使用模式匹配可以用来获取元组的组员，例如val (first, second, third) = t但如果不是所有的部件都需要，那么可以在不需要的部件位置上使用_。比如上一例中val (first, second, _) = t
         - 6、还有一点，下划线_代表的是某一类型的默认值。对于Int来说，它是0。对于Double来说，它是0.0对于引用类型，它是null。
+- https://www.cnblogs.com/xinlingyoulan/p/6031157.html----scala中常用但其他语言不常见的符号含义
+    - :::三个冒号运算符----表示list的连接操作
+    - :: 两个冒号运算符----表示普通元素与list的连接操作
+    - _N下划线数字运算符----用于访问元组的第N个元素，N的取值从1开始。元组的元素访问方法与数组不同是因为元组的元素类型可以不同。
+    - -> 返回一个二元元组
+    - <- 用于遍历集合对象
+    - =>  把左边的东西改成右边的东西；可以看做创建函数实例的语法糖
+        - =>：Example：Int => String表示函数输入为Int型，返回String型，同Function(Int,String)
+        - ()=>：Example：() => T表示函数没有输入参数，但返回T
+        - Unit=>：Unit相当于无值的值，相当于C++中的Void  
+    - +=：为map类型变量添加元素
+    - -=：为map类型变量移除元素及其对应的值          
 # Code
 - https://github.com/undergrowthlinear/bigdata-learn.git
