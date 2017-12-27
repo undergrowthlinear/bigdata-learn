@@ -38,3 +38,34 @@
    -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false
  ```
 ### SparkContext初始化
+- 创建SparkEnv
+  - org.apache.spark.SparkEnv#create
+  - RpcEnv/JavaSerializer/SerializerManager/BroadcastManager/MapOutputTrackerMaster/ShuffleManager/MemoryManager
+  - BlockManager/BlockManagerMaster/NettyBlockTransferService
+  - MetricsSystem/OutputCommitCoordinator
+- 创建SparkUI
+  - org.apache.spark.ui.SparkUI#create
+  - listenerBus.addListener
+  - EnvironmentListener/StorageStatusListener/ExecutorsListener/StorageListener/RDDOperationGraphListener/_jobProgressListener
+- 创建_taskScheduler、_schedulerBackend、_dagScheduler
+  - org.apache.spark.scheduler.DAGScheduler
+    - waitingStages/runningStages/failedStages/activeJobs
+### 存储体系
+- Driver Program 和 Executor 都会创建BlockManager
+  - BlockManager
+    - BlockManagerMaster----BlockManagerMasterEndpoint is an ThreadSafeRpcEndpoint on the master node to track statuses of all slaves' block managers.
+      - org.apache.spark.storage.BlockManagerMasterEndpoint.receiveAndReply
+    - NettyBlockTransferService/ExternalShuffleClient----用于与其他Executor上传/下载数据块(eg:map的中间结果)
+      - NettyBlockRpcServer----接收上传/下载Blocks(OpenBlocks/UploadBlock)
+      - TransportContext----底层使用netty进行通信
+        - org.apache.spark.network.client.TransportClientFactory
+        - org.apache.spark.network.TransportContext.createServer
+          - TransportServer
+            - org.apache.spark.network.server.TransportServer.init
+              - io.netty.bootstrap.ServerBootstrap
+      - fetchBlocks----org.apache.spark.network.shuffle.OneForOneBlockFetcher.start----client.sendRpc----OpenBlocks
+      - uploadBlock----client.sendRpc----new UploadBlock
+    - DiskBlockManager---
+        - Creates and maintains the logical mapping between logical blocks and physical on-disk
+        - locations. One block is mapped to one file with a name given by its BlockId
+    - MemoryStore/DiskStore----Actual storage of where blocks are kept
