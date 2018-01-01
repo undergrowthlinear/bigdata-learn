@@ -69,3 +69,12 @@
         - Creates and maintains the logical mapping between logical blocks and physical on-disk
         - locations. One block is mapped to one file with a name given by its BlockId
     - MemoryStore/DiskStore----Actual storage of where blocks are kept
+### 任务的提交与执行----任务的执行需要执行引擎的能力
+- build operator DAG----完成RDD的转换以及DAG的创建----RDD Objects
+  - 数据模型----RDD模型支持所有场景的数据处理----转换与行动
+  - 依赖划分----一个RDD包含一个或者多个分区,一个分区包含一个数据集合片段,NarrowDep划分在一个Stage,ShuffleDep依赖上游RDD需要跨界点传输
+  - 数据处理效率----ShuDep的父RDD可并行执行
+  - 容错处理----多机备份,重新调度
+- split graph into stage of tasks----划分、准备提交stage以及task----DAGScheduler
+- luanch task by cluster manager----使用集群管理器进行任务的分配与调度----TaskScheduler
+- executor tasks----执行任务,将中间结果与数据写入存储体系
