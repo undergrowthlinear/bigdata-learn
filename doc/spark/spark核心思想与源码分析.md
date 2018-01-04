@@ -76,5 +76,20 @@
   - 数据处理效率----ShuDep的父RDD可并行执行
   - 容错处理----多机备份,重新调度
 - split graph into stage of tasks----划分、准备提交stage以及task----DAGScheduler
+  - Each Stage is associated with one or many RDDs, with the boundary of a Stage marked by shuffle dependencies.
 - luanch task by cluster manager----使用集群管理器进行任务的分配与调度----TaskScheduler
 - executor tasks----执行任务,将中间结果与数据写入存储体系
+- 关键代码
+    - 主要依靠DAGScheduler完成Job提交/Stage提交、划分
+      - org.apache.spark.scheduler.DAGScheduler.submitJob
+      - org.apache.spark.scheduler.DAGSchedulerEventProcessLoop#doOnReceive----进行事件的中转
+      - org.apache.spark.scheduler.DAGScheduler#submitStage
+    - TaskScheduler进行任务的提交
+      - org.apache.spark.scheduler.TaskSchedulerImpl.submitTasks
+    - org.apache.spark.scheduler.local.LocalSchedulerBackend.reviveOffers----将任务的提交与执行连接起来
+      - org.apache.spark.scheduler.local.LocalEndpoint.receive
+        - org.apache.spark.scheduler.local.LocalEndpoint.reviveOffers----
+    - Executor进行任务的执行
+      - org.apache.spark.executor.Executor.launchTask
+    - org.apache.spark.scheduler.ResultTask.runTask
+      - 最终回调rdd的迭代方法----func(context, rdd.iterator(partition, context))
