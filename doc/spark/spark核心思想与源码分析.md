@@ -112,3 +112,29 @@
     - map端溢出分区文件,reduce端组合合并----适用于分区数量较小,map不进行缓存、不进行聚合与分组/排序
     - map端简单缓存,简单排序/分组,不进行聚合,reduce组合----分区数目较多,未指定聚合函数
     - map缓存聚合,分组/排序,逐条输出,reduce组合----指定聚合函数
+### 部署模式----Driver提需求,由Master负责主控,分配给Worker,由Worker的Executor负责干活
+- 部署方式
+  - 本地模式/本地集群模式----local/local[n]/local[n,maxRetry]/local-cluster[n,cores,memory]----不具备容错模式
+    - local模式只有Driver,没有Master/Worker,Executor在一个JVM进程中
+      - org.apache.spark.SparkContext.submitJob
+        - org.apache.spark.scheduler.DAGScheduler.submitJob----DAGScheduler完成job创建、Stage创建与提交、拆分Stage以及提交Task
+          - org.apache.spark.scheduler.DAGScheduler.handleJobSubmitted
+            - org.apache.spark.scheduler.DAGScheduler#submitStage
+              - org.apache.spark.scheduler.DAGScheduler#submitMissingTasks
+                - org.apache.spark.scheduler.TaskSchedulerImpl.submitTasks
+                  - org.apache.spark.scheduler.local.LocalSchedulerBackend.reviveOffers----发送申请资源
+                  - org.apache.spark.scheduler.local.LocalEndpoint.receive----处理资源申请
+                    - org.apache.spark.scheduler.local.LocalEndpoint.reviveOffers
+                      - org.apache.spark.scheduler.TaskSchedulerImpl.resourceOffers----回调任务调度器获取处理任务
+                      - org.apache.spark.executor.Executor.launchTask----启动执行器执行任务
+                        - org.apache.spark.scheduler.ResultTask.runTask
+                              - 最终回调rdd的迭代方法----func(context, rdd.iterator(partition, context))
+    - local-cluster----org.apache.spark.deploy.LocalSparkCluster
+      - Driver/Master/Worker存在于一个JVM里面,可有多个Executor存在于另一个JVM
+      - org.apache.spark.deploy.LocalSparkCluster.start----创建master与worker
+      - org.apache.spark.scheduler.TaskSchedulerImpl.initialize
+      - org.apache.spark.scheduler.TaskSchedulerImpl.start----启动backend.start()
+        - org.apache.spark.scheduler.cluster.StandaloneSchedulerBackend.start
+          - org.apache.spark.deploy.client.StandaloneAppClient.start
+  - Standalone模式----spak:// ----支持分布式部署/具备容错模式
+  - 第三方部署模式----zk:// mesos:// yarn-cluster yarn-standalone
