@@ -93,3 +93,22 @@
       - org.apache.spark.executor.Executor.launchTask
     - org.apache.spark.scheduler.ResultTask.runTask
       - 最终回调rdd的迭代方法----func(context, rdd.iterator(partition, context))
+### 计算引擎----Spark是一个层层叠代计算的过程
+- RDD是Spark是各种数据计算模型的统一抽象
+  - org.apache.spark.scheduler.ShuffleMapTask.runTask
+    - org.apache.spark.shuffle.sort.SortShuffleWriter.write----写中间文件到缓存以及创建相应的索引文件
+      - org.apache.spark.util.collection.ExternalSorter.insertAll----调用merge与combine
+        - org.apache.spark.util.collection.SizeTrackingAppendOnlyMap.changeValue
+      - org.apache.spark.shuffle.IndexShuffleBlockResolver.writeIndexFileAndCommit
+    - org.apache.spark.rdd.HadoopRDD.compute
+      - org.apache.hadoop.mapred.LineRecordReader.next----最终读取一行一行记录
+  - shuffle----shuffle是所有MapReduce计算框架所必须经过的阶段,shuffle连接map的输出与reduce的输入
+    - map端对计算结果处理----对计算结果做简单缓存/对计算结果在缓存中进行聚合与排序/直接将结果写入磁盘,由reduce端进行计算结果的聚合与排序
+    - 每个map任务实际上最后只会产生一个磁盘文件(相当于多个分组(bucket)被合并到了一个文件,通过索引去查找分区的bucket)
+  - reduce端处理
+    - org.apache.spark.shuffle.BlockStoreShuffleReader.read
+      - org.apache.spark.storage.ShuffleBlockFetcherIterator----获取本地与远程的Block
+  - map与reduce端组合分析
+    - map端溢出分区文件,reduce端组合合并----适用于分区数量较小,map不进行缓存、不进行聚合与分组/排序
+    - map端简单缓存,简单排序/分组,不进行聚合,reduce组合----分区数目较多,未指定聚合函数
+    - map缓存聚合,分组/排序,逐条输出,reduce组合----指定聚合函数
