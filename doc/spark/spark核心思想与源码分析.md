@@ -146,3 +146,9 @@
   - Standalone模式----spak:// ----支持分布式部署/具备容错模式
     - 容错机制支持Executor/Worker/Master不辞而别
   - 第三方部署模式----zk:// mesos:// yarn-cluster yarn-standalone
+### Spark SQL
+- Projection----Data Source----Filter
+  - Result----Data Source----Operation
+  - Query-Parse-Bind-Optimize-Execute
+- DataFrame----which is a Dataset of Row/Datasets are lazy
+  - Operations available on Datasets are divided into transformations and actions
