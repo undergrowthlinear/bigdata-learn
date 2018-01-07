@@ -135,6 +135,14 @@
       - org.apache.spark.scheduler.TaskSchedulerImpl.initialize
       - org.apache.spark.scheduler.TaskSchedulerImpl.start----启动backend.start()
         - org.apache.spark.scheduler.cluster.StandaloneSchedulerBackend.start
-          - org.apache.spark.deploy.client.StandaloneAppClient.start
+          - org.apache.spark.deploy.client.StandaloneAppClient.start----代表Driver与Master进行通信
+          - command----以命令的方式带入
+          - org.apache.spark.executor.CoarseGrainedExecutorBackend.receive----Executor的执行后台
+      - org.apache.spark.deploy.master.Master#schedule----进行资源的分配(逻辑分配和物理分配)
+        - org.apache.spark.deploy.master.Master#startExecutorsOnWorkers
+          - org.apache.spark.deploy.master.Master#launchExecutor
+            - worker.endpoint.send(LaunchExecutor)----向Worker发送创建执行器消息
+            - exec.application.driver.send(ExecutorAdded)----向Driver发送执行器添加消息
   - Standalone模式----spak:// ----支持分布式部署/具备容错模式
+    - 容错机制支持Executor/Worker/Master不辞而别
   - 第三方部署模式----zk:// mesos:// yarn-cluster yarn-standalone
