@@ -152,3 +152,10 @@
   - Query-Parse-Bind-Optimize-Execute
 - DataFrame----which is a Dataset of Row/Datasets are lazy
   - Operations available on Datasets are divided into transformations and actions
+- SQL执行过程----
+  - SQL经过SQLParser解析成UnresolvedLogicPlan
+  - Analyzer经过Catalog进行绑定,生成ResolvedLogicPlan
+  - 使用Optimizer对ResolvedLogicPlan进行优化,生成OptimizedLogicPlan
+  - 使用SparkPlan将LogicPlan转为PhysicalPlan
+  - 使用prepareForExecution将PhysicalPlan转为物理执行计划
+  - 使用executr执行物理执行计划,生成SchemaRDD
