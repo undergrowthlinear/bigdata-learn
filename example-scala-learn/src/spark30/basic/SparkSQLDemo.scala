@@ -40,7 +40,7 @@ object SparkSQLDemo {
 
   def main(args: Array[String]) {
     // $example on:init_session$
-    val spark = SparkContextUtil.getSparkSession("Spark SQL basic example")
+    val spark = SparkContextUtil.getSparkSession("spark://test1:7077","Spark SQL basic example")
      /* SparkSession
       .builder()
       .appName("Spark SQL basic example")

@@ -32,6 +32,14 @@ object SparkContextUtil {
       .getOrCreate()
   }
 
+  def getSparkSession(master: String, appName: String): SparkSession = {
+    SparkSession
+      .builder()
+      .appName(appName)
+      .master(master).config("spark.executor.memory", "512M").config("spark.executor.cores", "1")
+      .getOrCreate()
+  }
+
   def getStreamingContext(appName: String): StreamingContext = {
     val sparkConf = new SparkConf().setAppName(appName).setMaster(master2)
     val ssc = new StreamingContext(sparkConf, Seconds(1))
