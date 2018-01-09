@@ -158,4 +158,11 @@
   - 使用Optimizer对ResolvedLogicPlan进行优化,生成OptimizedLogicPlan
   - 使用SparkPlan将LogicPlan转为PhysicalPlan
   - 使用prepareForExecution将PhysicalPlan转为物理执行计划
-  - 使用executr执行物理执行计划,生成SchemaRDD
+  - 使用execute执行物理执行计划,生成SchemaRDD
+#### 代码
+- org.apache.spark.sql.internal.SessionState----拥有SparkSession相关的所有状态
+- 语法树---->TreeNode---->QueryPlan---->SparkPlan
+                        ---->LogicalPlan---->BinaryNode/UnaryNode/LeafNode---->Command/RunnableCommand/SetCommand
+          ---->Expression---->UnaryExpression/BinaryExpression/TernaryExpression
+- 词法解析器---->SqlBaseParser---->Parser
+                 SparkSqlParser---->AbstractSqlParser
