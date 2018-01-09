@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<configuration>
+    <property name="LOG_PATTERN_CONSOLE" value="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %logger{36} - %msg%n"/>
+    <property name="LOG_PATTERN_FILE" value="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %logger{36} - %msg%n"/>
+
+    <!-- appender -->
+    <appender class="ch.qos.logback.core.ConsoleAppender" name="APPENDER_CONSOLE">
+        <encoder>
+            <pattern>${LOG_PATTERN_CONSOLE}</pattern>
+        </encoder>
+    </appender>
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="APPENDER_FILE">
+        <file>${LOG_PATH}${LOG_FILE}</file>
+        <encoder>
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}${LOG_FILE}.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="APPENDER_FILE_ERROR">
+        <file>${LOG_PATH}error.log</file>
+        <encoder>
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}error.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+    <!-- 开发模式 -->
+    <springProfile name="dev">
+        <root>
+            <level value="${LOG_LEVEL_ROOT}"/>
+            <appender-ref ref="APPENDER_CONSOLE"/>
+            <appender-ref ref="APPENDER_FILE"/>
+        </root>
+    </springProfile>
+    <!-- 上线模式 -->
+    <springProfile name="test,prod">
+        <root>
+            <level value="${LOG_LEVEL_ROOT}"/>
+            <appender-ref ref="APPENDER_CONSOLE"/>
+            <appender-ref ref="APPENDER_FILE"/>
+            <appender-ref ref="APPENDER_FILE_ERROR"/>
+        </root>
+    </springProfile>
+</configuration>
