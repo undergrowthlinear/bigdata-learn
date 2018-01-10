@@ -165,4 +165,8 @@
                         ---->LogicalPlan---->BinaryNode/UnaryNode/LeafNode---->Command/RunnableCommand/SetCommand
           ---->Expression---->UnaryExpression/BinaryExpression/TernaryExpression
 - 词法解析器---->SqlBaseParser---->Parser
-                 SparkSqlParser---->AbstractSqlParser
+                 ---->SparkSqlParser---->AbstractSqlParser
+                 ---->org.apache.spark.sql.catalyst.plans.logical.Command/RunnableCommand/DropDatabaseCommand
+                 ---->org.apache.spark.sql.catalyst.rules.Rule---->分析和优化的操作
+                 ---->org.apache.spark.sql.catalyst.rules.RuleExecutor
+- 词法解析发生在任务提交前
