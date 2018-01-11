@@ -171,3 +171,6 @@
                  ---->org.apache.spark.sql.catalyst.rules.RuleExecutor
                  ---->org.apache.spark.sql.execution.QueryExecution.prepareForExecution
 - 词法解析发生在任务提交前
+### 流式计算----高吞吐量(以一定时间范围内的数据为批次)/容错能力强
+- kafka/flume/hdfs/mqtt/zeromq等---->spark streaming---->spark engine---->hdfs/databases等
+- 离散流DStream,本质上是RDD序列
