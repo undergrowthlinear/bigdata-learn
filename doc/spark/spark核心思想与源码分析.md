@@ -156,17 +156,18 @@
   - SQL经过SQLParser解析成UnresolvedLogicPlan
   - Analyzer经过Catalog进行绑定,生成ResolvedLogicPlan
   - 使用Optimizer对ResolvedLogicPlan进行优化,生成OptimizedLogicPlan
-  - 使用SparkPlan将LogicPlan转为PhysicalPlan
+  - 使用org.apache.spark.sql.catalyst.planning.QueryPlanner.plan将LogicPlan转为PhysicalPlan(实际上是SparkPlan)
   - 使用prepareForExecution将PhysicalPlan转为物理执行计划
   - 使用execute执行物理执行计划,生成SchemaRDD
 #### 代码
 - org.apache.spark.sql.internal.SessionState----拥有SparkSession相关的所有状态
-- 语法树---->TreeNode---->QueryPlan---->SparkPlan
-                        ---->LogicalPlan---->BinaryNode/UnaryNode/LeafNode---->Command/RunnableCommand/SetCommand
-          ---->Expression---->UnaryExpression/BinaryExpression/TernaryExpression
+- 语法树---->TreeNode---->QueryPlan---->SparkPlan(物理计划)
+                                    ---->LogicalPlan(逻辑计划)---->BinaryNode/UnaryNode/LeafNode---->Command/RunnableCommand/SetCommand
+                     ---->Expression---->UnaryExpression/BinaryExpression/TernaryExpression
 - 词法解析器---->SqlBaseParser---->Parser
                  ---->SparkSqlParser---->AbstractSqlParser
                  ---->org.apache.spark.sql.catalyst.plans.logical.Command/RunnableCommand/DropDatabaseCommand
                  ---->org.apache.spark.sql.catalyst.rules.Rule---->分析和优化的操作
                  ---->org.apache.spark.sql.catalyst.rules.RuleExecutor
+                 ---->org.apache.spark.sql.execution.QueryExecution.prepareForExecution
 - 词法解析发生在任务提交前
