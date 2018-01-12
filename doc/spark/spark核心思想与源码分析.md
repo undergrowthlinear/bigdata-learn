@@ -174,3 +174,11 @@
 ### 流式计算----高吞吐量(以一定时间范围内的数据为批次)/容错能力强
 - kafka/flume/hdfs/mqtt/zeromq等---->spark streaming---->spark engine---->hdfs/databases等
 - 离散流DStream,本质上是RDD序列
+  - DStream中的每个RDD包含了一定间隔的数据
+  - DStream到RDD的转换
+- org.apache.spark.streaming.StreamingContext
+  - org.apache.spark.streaming.scheduler.JobScheduler
+  - org.apache.spark.streaming.DStreamGraph
+  - org.apache.spark.streaming.Duration
+  - org.apache.spark.streaming.Checkpoint
+  - org.apache.spark.streaming.receiver.Receiver
