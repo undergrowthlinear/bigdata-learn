@@ -28,8 +28,8 @@ import org.apache.spark.sql.types._
 
 object SparkSQLDemo {
 
-  val personJsonPath: String = "example-spark-learn\\src\\main\\resources\\people.json"
-  val personTextPath: String = "example-spark-learn\\src\\main\\resources\\people.txt"
+  var personJsonPath: String = "example-spark-learn\\src\\main\\resources\\people.json"
+  var personTextPath: String = "example-spark-learn\\src\\main\\resources\\people.txt"
 
   /* val personJsonPath: String = "people.json"
    val personTextPath: String = "people.txt"*/
@@ -43,18 +43,14 @@ object SparkSQLDemo {
 
   def main(args: Array[String]) {
     // $example on:init_session$
-    val spark = SparkContextUtil.getSparkSession("Spark SQL basic example")
-    //val spark = SparkContextUtil.getSparkSession("spark://test1:7077","Spark SQL basic example")
-    /* SparkSession
-     .builder()
-     .appName("Spark SQL basic example")
-       .master("local")
-     .config("spark.some.config.option", "some-value")
-     .getOrCreate()*/
-
+    if (args == null || args.length != 3) throw new IllegalArgumentException("参数不合法.eg: 1 personJsonPath personTextPath")
+    var spark: SparkSession = null
+    if ("1".equals(args(0))) spark = SparkContextUtil.getSparkSession("Spark SQL basic example")
+    else spark = SparkContextUtil.getSparkSession("spark://test1:7077", "Spark SQL basic example")
     // For implicit conversions like converting RDDs to DataFrames
     // $example off:init_session$
-
+    personJsonPath = args(1)
+    personTextPath = args(2)
     runBasicDataFrameExample(spark)
     runDatasetCreationExample(spark)
     runInferSchemaExample(spark)
