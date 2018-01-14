@@ -1,4 +1,4 @@
-package spark30.basic
+package spark
 
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.streaming.{Seconds, StreamingContext}
