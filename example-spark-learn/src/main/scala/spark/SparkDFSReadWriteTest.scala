@@ -102,7 +102,7 @@ object SparkDFSReadWriteTest {
 
     println("Creating SparkSession")
     val spark = SparkContextUtil.getSparkSession("spark://test1:7077", "DFS Read Write Test")
-
+     spark.sparkContext.addJar("E:\\code\\github\\bigdata\\bigdata-learn\\example-spark-learn\\target\\example-spark-learn-1.0-SNAPSHOT.jar")
     //println("Writing local file to DFS")
     val dfsFilename = dfsDirPath + "/wordcount.txt"
     /* val fileRDD = spark.sparkContext.parallelize(fileContents)
@@ -120,8 +120,10 @@ object SparkDFSReadWriteTest {
       .values
       .sum
 
-    val fileRDD = spark.sparkContext.makeRDD(Seq(dfsWordCount))
-    fileRDD.saveAsTextFile(preUrl + "/Output/num_count")
+    println("dfsWordCount---->" + dfsWordCount)
+
+    /* val fileRDD = spark.sparkContext.makeRDD(Seq(dfsWordCount))
+     fileRDD.saveAsTextFile(preUrl + "/Output/num_count")*/
 
     spark.stop()
 
