@@ -46,7 +46,10 @@ object SparkSQLDemo {
     if (args == null || args.length != 3) throw new IllegalArgumentException("参数不合法.eg: 1 personJsonPath personTextPath")
     var spark: SparkSession = null
     if ("1".equals(args(0))) spark = SparkContextUtil.getSparkSession("Spark SQL basic example")
-    else spark = SparkContextUtil.getSparkSession("spark://test1:7077", "Spark SQL basic example")
+    else {
+      spark = SparkContextUtil.getSparkSession("spark://test1:7077", "Spark SQL basic example")
+      spark.sparkContext.addJar("E:\\code\\github\\bigdata\\bigdata-learn\\example-spark-learn\\target\\example-spark-learn-1.0-SNAPSHOT.jar")
+    }
     // For implicit conversions like converting RDDs to DataFrames
     // $example off:init_session$
     personJsonPath = args(1)
