@@ -23,5 +23,6 @@ build/
 nbbuild/
 dist/
 out/
+metastore_db/
 nbdist/
 .nb-gradle/
