@@ -100,6 +100,7 @@ object HelloWorld {
   - 一个模式匹配包含了一系列备选项，每个都开始于关键字 case。每个备选项都包含了
   一个模式及一到多个表达式。箭头符号 => 隔开了模式和表达式
   - case关键字的类定义就是就是样例类(case classes)，样例类是种特殊的类，经过优化以用于模式匹配
+  - Case Class是一个很好的选择，实际上，这正是DTO（或者也有叫作VO）做的事情，所以说Case Class的一个典型应用场景就是DTO
 - Scala 正则表达式----http://www.runoob.com/scala/scala-regular-expressions.html
 - Scala 异常处理----throw new IllegalArgumentException/与java类似
   - catch字句是按次序捕捉的。因此，在catch字句中，越具体的异常越要靠前，越普遍的异常越靠后
@@ -125,9 +126,9 @@ object HelloWorld {
     - -> 返回一个二元元组
     - <- 用于遍历集合对象
     - =>  把左边的东西改成右边的东西；可以看做创建函数实例的语法糖
-        - =>：Example：Int => String表示函数输入为Int型，返回String型，同Function(Int,String)
-        - ()=>：Example：() => T表示函数没有输入参数，但返回T
-        - Unit=>：Unit相当于无值的值，相当于C++中的Void  
+        - => ：Example：Int => String 表示函数输入为Int型，返回String型，同Function(Int,String)
+        - ()=> ：Example：() => T 表示函数没有输入参数，但返回T
+        - Unit=> ：Unit相当于无值的值，相当于C++中的Void  
     - +=：为map类型变量添加元素
     - -=：为map类型变量移除元素及其对应的值          
 # Code
