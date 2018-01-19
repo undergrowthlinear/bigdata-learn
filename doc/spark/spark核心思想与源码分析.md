@@ -176,9 +176,33 @@
 - 离散流DStream,本质上是RDD序列
   - DStream中的每个RDD包含了一定间隔的数据
   - DStream到RDD的转换
-- org.apache.spark.streaming.StreamingContext
-  - org.apache.spark.streaming.scheduler.JobScheduler
-  - org.apache.spark.streaming.DStreamGraph
-  - org.apache.spark.streaming.Duration
-  - org.apache.spark.streaming.Checkpoint
-  - org.apache.spark.streaming.receiver.Receiver
+    - org.apache.spark.streaming.scheduler.ReceiverTracker.ReceiverTrackerEndpoint#startReceiver
+  - 提供窗口计算,可以转换滑动窗口的数据----窗口的长度/滑动的间隔
+  - Spark Streaming为了解决数据源的持续性,首先创建一个驻留在Executor内的任务提供数据流的持续接入,
+    - 并不断生成任务去拉去最新的数据并计算
+  - 核心类
+    - org.apache.spark.streaming.StreamingContext
+    - org.apache.spark.streaming.scheduler.JobScheduler
+    - org.apache.spark.streaming.DStreamGraph
+    - org.apache.spark.streaming.Duration
+    - org.apache.spark.streaming.Checkpoint
+    - org.apache.spark.streaming.receiver.Receiver
+  - 大致流程代码
+    - org.apache.spark.streaming.StreamingContext.receiverStream
+      - org.apache.spark.streaming.dstream.DStream.toPairDStreamFunctions----将转换DStream隐式转为行为DStream
+    - org.apache.spark.streaming.StreamingContext.start
+      - org.apache.spark.streaming.scheduler.JobScheduler.start
+        - org.apache.spark.streaming.scheduler.JobScheduler#processEvent
+        - org.apache.spark.streaming.scheduler.ReceiverTracker.start---->接收数据,存储为spark存储体系
+          - org.apache.spark.streaming.receiver.Receiver.store---->接收器接收数据
+          - org.apache.spark.streaming.receiver.ReceiverSupervisorImpl.pushSingle
+          - org.apache.spark.streaming.receiver.BlockGenerator.addData----接收数据存入currentBuffer
+          - org.apache.spark.streaming.receiver.BlockGenerator#updateCurrentBuffer---->
+            - 定时任务调度将currentBuffer转为Block,存入blocksForPushing队列
+          - org.apache.spark.streaming.receiver.BlockGenerator#keepPushingBlocks---->从blocksForPushing获取block,以消息机制推送block
+            - org.apache.spark.streaming.receiver.WriteAheadLogBasedBlockHandler.storeBlock
+            - org.apache.spark.storage.BlockManager.putBytes---->最终通过block管理器存入spark存储体系
+        - org.apache.spark.streaming.scheduler.JobGenerator.start---->从DStreams产生Job
+          - org.apache.spark.streaming.scheduler.JobGenerator#timer---->用于定时产生job
+          - org.apache.spark.streaming.scheduler.JobGenerator#generateJobs---->通过事件分发回调
+            - org.apache.spark.streaming.dstream.DStream.getOrCompute---->DStream转换为RDD
