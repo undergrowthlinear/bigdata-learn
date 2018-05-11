@@ -33,6 +33,7 @@ object HelloWorld {
     - AnyVal----Boolean/Byte Char/Short Int/Float/ Long/Double/ Unit(java void)--------9
       - 值类以方法的名称支持运算符
     - AnyRef(java.lang.Object)----ScalaObject/Iterable/Seq/List java对象/scala对象 String Null/Nothing--------9
+    - [T <: Anmial] ---->T的上边界(包括Anmial) [T >: Anmial]---->T的下边界 https://blog.csdn.net/i6448038/article/details/52061287
 - '<标识符>/'/"/"""/var/val/类型推断
   - VariableName : DataType [=  Initial Value]----与java相反
   - +----字符串连接
@@ -86,6 +87,7 @@ object HelloWorld {
     - 因此class文件中的main方法也就没什么用了，scala object 中所有成员变量和方法默认都是 static 的所以 可以直接访问main方法
   - 在scala中，类名可以和对象名为同一个名字，该对象称为该类的伴生对象，
     - 类和伴生对象可以相互访问他们的私有属性，但是他们必须在同一个源文件内。
+  - 主构造器/辅助构造器/私有构造器----https://blog.csdn.net/njiang/article/details/48088831
 - Scala Trait(特征)----与接口不同的是，它还可以定义属性和方法的实现
   - 它使用的关键字是 trait
   - Scala的类只能够继承单一父类，但是如果是 Trait(特征) 的话就可以继承多个，从结果来看就是实现了多重继承
