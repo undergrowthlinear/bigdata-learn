@@ -14,17 +14,17 @@ import org.apache.spark.sql.streaming.StreamingQueryException;
  *
  * * Example:
  *    `$ bin/run-example \
- *      sql.streaming.JavaKafkaCount host1:port1,host2:port2 \
+ *      sql.streaming.JavaKafkaSqlStreamCount host1:port1,host2:port2 \
  *      subscribe topic1,topic2`
  * @author zhangwu
  * @version 1.0.0
  * @date 2018-05-11-15:39
  */
-public class JavaKafkaCount {
+public class JavaKafkaSqlStreamCount {
 
     public static void main(String[] args) throws StreamingQueryException {
         /*if (args.length < 3) {
-            System.err.println("Usage: JavaKafkaCount <bootstrap-servers> " +
+            System.err.println("Usage: JavaKafkaSqlStreamCount <bootstrap-servers> " +
                 "<subscribe-type> <topics>");
             System.exit(1);
         }*/
@@ -38,7 +38,7 @@ public class JavaKafkaCount {
 
         SparkSession spark = SparkSession
             .builder()
-            .appName("JavaKafkaCount").master("local")
+            .appName("JavaKafkaSqlStreamCount").master("local[2]")
             .getOrCreate();
 
         // Create DataSet representing the stream of input lines from kafka
