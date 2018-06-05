@@ -34,13 +34,12 @@ public class SingleThreadProducer {
     }
 
 
-
     public static void executeNoBlocking(final String topicName) {
         IntStream.range(0, 1000).forEach(i -> {
             try {
                 producer.send(new ProducerRecord<>(
-                        topicName,
-                        String.format("{\"type\":\"test\", \"t\":%.3f, \"k\":%d}", System.nanoTime() * 1e-9, i))).get();
+                    topicName,
+                    String.format("{\"type\":\"test\", \"t\":%.3f, \"k\":%d}", System.nanoTime() * 1e-9, i))).get();
                 logger.info("send {} message ", i);
             } catch (InterruptedException e) {
                 logger.error("interrupt error: {}", e.getMessage());
@@ -54,9 +53,9 @@ public class SingleThreadProducer {
         IntStream.range(0, 10).forEach(i -> {
             try {
                 Future<RecordMetadata> record = producer.send(new ProducerRecord<>(
-                                topicName,
-                                String.format("{\"type\":\"aaaaaaa\", \"t\":%.3f, \"k\":%d}", System.nanoTime() * 1e-9, i)),
-                        (metadata, e) -> System.out.println("The offset of the record we just sent is: " + metadata.partition() + "|" + metadata.offset())
+                        topicName,
+                        String.format("{\"type\":\"aaaaaaa\", \"t\":%.3f, \"k\":%d}", System.nanoTime() * 1e-9, i)),
+                    (metadata, e) -> System.out.println("The offset of the record we just sent is: " + metadata.partition() + "|" + metadata.offset())
                 );
                 record.get();
             } catch (Exception e) {
@@ -68,15 +67,17 @@ public class SingleThreadProducer {
 
     /**
      * 事务producer
+     *
      * @param topicName topic名称
      */
-    public static void transactionEexecute(final String topicName){
+    public static void transactionEexecute(final String topicName) {
         producer.initTransactions();
 
         try {
             producer.beginTransaction();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 100; i++) {
                 producer.send(new ProducerRecord<>(topicName, Integer.toString(i), Integer.toString(i)));
+            }
             producer.commitTransaction();
         } catch (ProducerFencedException | OutOfOrderSequenceException | AuthorizationException e) {
             // We can't recover from these exceptions, so our only option is to close the producer and exit.

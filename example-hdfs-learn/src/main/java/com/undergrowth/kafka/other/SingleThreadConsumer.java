@@ -20,18 +20,20 @@ public class SingleThreadConsumer {
             InputStream props = Resources.getResource("consumer.props").openStream();
             Properties properties = new Properties();
             properties.load(props);
-            consumer=new KafkaConsumer<>(properties);
+            consumer = new KafkaConsumer<>(properties);
 
         } catch (IOException e) {
             logger.error("producer initialize failed:{}", e.getMessage());
         }
     }
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         consumer.subscribe(Arrays.asList("test"));
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(100);
-            for (ConsumerRecord<String, String> record : records)
+            for (ConsumerRecord<String, String> record : records) {
                 System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
+            }
         }
     }
 }

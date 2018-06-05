@@ -74,63 +74,65 @@ public class HBaseCrudDemo {
             try {
                 //Scan scan = new Scan(Bytes.toBytes("u120000"), Bytes.toBytes("u200000"));
                 rs = table.getScanner(new Scan());
-                for(Result r:rs){
+                for (Result r : rs) {
                     NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> navigableMap = r.getMap();
-                    for(Map.Entry<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> entry : navigableMap.entrySet()){
+                    for (Map.Entry<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> entry : navigableMap.entrySet()) {
                         logger.info("row:{} key:{}", Bytes.toString(r.getRow()), Bytes.toString(entry.getKey()));
-                        NavigableMap<byte[], NavigableMap<Long, byte[]>> map =entry.getValue();
-                        for(Map.Entry<byte[], NavigableMap<Long, byte[]>> en:map.entrySet()){
-                            System.out.print(Bytes.toString(en.getKey())+"##");
+                        NavigableMap<byte[], NavigableMap<Long, byte[]>> map = entry.getValue();
+                        for (Map.Entry<byte[], NavigableMap<Long, byte[]>> en : map.entrySet()) {
+                            System.out.print(Bytes.toString(en.getKey()) + "##");
                             NavigableMap<Long, byte[]> ma = en.getValue();
-                            for(Map.Entry<Long, byte[]>e: ma.entrySet()){
-                                System.out.print(e.getKey()+"###");
+                            for (Map.Entry<Long, byte[]> e : ma.entrySet()) {
+                                System.out.print(e.getKey() + "###");
                                 System.out.println(Bytes.toString(e.getValue()));
                             }
                         }
                     }
                 }
             } finally {
-                if(rs!=null) {
+                if (rs != null) {
                     rs.close();
                 }
             }
         } finally {
-            if(table!=null) {
+            if (table != null) {
                 table.close();
             }
         }
     }
 
     //根据row key获取表中的该行数据
-    public void get(Connection connection,TableName tableName,String rowKey) throws IOException {
+    public void get(Connection connection, TableName tableName, String rowKey) throws IOException {
         Table table = null;
         try {
             table = connection.getTable(tableName);
             Get get = new Get(Bytes.toBytes(rowKey));
             Result result = table.get(get);
             NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> navigableMap = result.getMap();
-            for(Map.Entry<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> entry : navigableMap.entrySet()){
+            for (Map.Entry<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> entry : navigableMap.entrySet()) {
 
                 logger.info("columnFamily:{}", Bytes.toString(entry.getKey()));
-                NavigableMap<byte[], NavigableMap<Long, byte[]>> map =entry.getValue();
-                for(Map.Entry<byte[], NavigableMap<Long, byte[]>> en:map.entrySet()){
-                    System.out.print(Bytes.toString(en.getKey())+"##");
+                NavigableMap<byte[], NavigableMap<Long, byte[]>> map = entry.getValue();
+                for (Map.Entry<byte[], NavigableMap<Long, byte[]>> en : map.entrySet()) {
+                    System.out.print(Bytes.toString(en.getKey()) + "##");
                     NavigableMap<Long, byte[]> nm = en.getValue();
-                    for(Map.Entry<Long, byte[]> me : nm.entrySet()){
+                    for (Map.Entry<Long, byte[]> me : nm.entrySet()) {
                         logger.info("column key:{}, value:{}", me.getKey(), Bytes.toString(me.getValue()));
                     }
                 }
             }
         } finally {
-            if(table!=null) {
+            if (table != null) {
                 table.close();
             }
         }
     }
 
-    /**批量插入可以使用 Table.put(List<Put> list)**/
+    /**
+     * 批量插入可以使用 Table.put(List<Put> list)
+     **/
     public void put(Connection connection, TableName tableName,
-                    String rowKey, String columnFamily, String column, String data) throws IOException {
+        String rowKey, String columnFamily, String column, String data) throws IOException {
 
         Table table = null;
         try {
@@ -139,7 +141,7 @@ public class HBaseCrudDemo {
             put.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes(column), Bytes.toBytes(data));
             table.put(put);
         } finally {
-            if(table!=null) {
+            if (table != null) {
                 table.close();
             }
         }
@@ -149,18 +151,18 @@ public class HBaseCrudDemo {
         Admin admin = null;
         try {
             admin = connection.getAdmin();
-            if(admin.tableExists(tableName)){
+            if (admin.tableExists(tableName)) {
                 logger.warn("table:{} exists!", tableName.getName());
-            }else{
+            } else {
                 HTableDescriptor tableDescriptor = new HTableDescriptor(tableName);
-                for(String columnFamily : columnFamilies) {
+                for (String columnFamily : columnFamilies) {
                     tableDescriptor.addFamily(new HColumnDescriptor(columnFamily));
                 }
                 admin.createTable(tableDescriptor);
                 logger.info("create table:{} success!", tableName.getName());
             }
         } finally {
-            if(admin!=null) {
+            if (admin != null) {
                 admin.close();
             }
         }
@@ -177,7 +179,7 @@ public class HBaseCrudDemo {
                 admin.deleteTable(tableName);
             }
         } finally {
-            if(admin!=null) {
+            if (admin != null) {
                 admin.close();
             }
         }
@@ -187,11 +189,11 @@ public class HBaseCrudDemo {
         Admin admin = null;
         try {
             admin = connection.getAdmin();
-            if(admin.tableExists(tableName)){
+            if (admin.tableExists(tableName)) {
                 admin.disableTable(tableName);
             }
         } finally {
-            if(admin!=null) {
+            if (admin != null) {
                 admin.close();
             }
         }

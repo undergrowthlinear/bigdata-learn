@@ -1,4 +1,3 @@
-
 package com.undergrowth.kafka;
 
 import com.google.gson.annotations.Expose;

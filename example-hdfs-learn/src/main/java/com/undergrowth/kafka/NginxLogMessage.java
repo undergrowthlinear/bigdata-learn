@@ -1,10 +1,9 @@
-
 package com.undergrowth.kafka;
 
-import java.util.Map;
-import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import java.util.Map;
+import javax.annotation.Generated;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
@@ -31,7 +30,7 @@ public class NginxLogMessage {
     @SerializedName("req_body")
     private String reqBody;
     @Expose
-    private Map<String,String> reqBodyMap;
+    private Map<String, String> reqBodyMap;
     @Expose
     @SerializedName("req_len")
     private String reqLen;

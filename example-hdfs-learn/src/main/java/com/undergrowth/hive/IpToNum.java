@@ -12,8 +12,7 @@ import org.apache.hadoop.hive.ql.exec.UDF;
  */
 
 /**
- * Convert IPv4 to a num which type is Long in java.
- * Created by Liam on 2016/4/11.
+ * Convert IPv4 to a num which type is Long in java. Created by Liam on 2016/4/11.
  */
 @Description(name = "IpToNum", value = "_FUNC_(ip) - Convert IPv4 to a num(long).")
 public class IpToNum extends UDF {

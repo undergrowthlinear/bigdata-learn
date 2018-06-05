@@ -18,9 +18,10 @@ public class MultipeThreadConsumer {
 
     private static Logger logger = LoggerFactory.getLogger(SingleThreadConsumer.class);
 
-    private static ExecutorService executorService= Executors.newFixedThreadPool(10);
+    private static ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     private static Properties properties;
+
     static {
         try {
             InputStream props = Resources.getResource("consumer.props").openStream();
@@ -32,7 +33,7 @@ public class MultipeThreadConsumer {
         }
     }
 
-    public static  void main(String[] args){
+    public static void main(String[] args) {
         executorService.submit(new KafkaConsumerRunner(properties));
 
     }
@@ -44,9 +45,10 @@ class KafkaConsumerRunner implements Runnable {
     private final AtomicBoolean closed = new AtomicBoolean(false);
     private final KafkaConsumer consumer;
 
-    KafkaConsumerRunner(Properties properties){
-        consumer=new KafkaConsumer(properties);
+    KafkaConsumerRunner(Properties properties) {
+        consumer = new KafkaConsumer(properties);
     }
+
     public void run() {
         try {
             consumer.subscribe(Arrays.asList("topic"));
@@ -56,7 +58,9 @@ class KafkaConsumerRunner implements Runnable {
             }
         } catch (WakeupException e) {
             // Ignore exception if closing
-            if (!closed.get()) throw e;
+            if (!closed.get()) {
+                throw e;
+            }
         } finally {
             consumer.close();
         }

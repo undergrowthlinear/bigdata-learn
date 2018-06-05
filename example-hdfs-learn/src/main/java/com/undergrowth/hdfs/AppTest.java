@@ -10,8 +10,8 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
 /**
- * test
- *  https://blog.csdn.net/jiecxy/article/details/78011630
+ * test https://blog.csdn.net/jiecxy/article/details/78011630
+ *
  * @author zhangwu
  * @version 1.0.0
  * @date 2018-04-19-15:39
@@ -24,7 +24,7 @@ public class AppTest {
             // 不设置该代码会出现错误：java.io.IOException: No FileSystem for scheme: hdfs
             conf.set("fs.hdfs.impl", "org.apache.hadoop.hdfs.DistributedFileSystem");
 
-            String filePath = HDFSConstant.HDFS_URL+"/test/Hadoop/Input/wordcount.txt";
+            String filePath = HDFSConstant.HDFS_URL + "/test/Hadoop/Input/wordcount.txt";
             Path path = new Path(filePath);
 
             // 这里需要设置URI，否则出现错误：java.lang.IllegalArgumentException: Wrong FS: hdfs://127.0.0.1:9000/test/test.txt, expected: file:///
