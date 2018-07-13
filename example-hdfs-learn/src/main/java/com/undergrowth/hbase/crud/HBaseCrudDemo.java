@@ -38,19 +38,28 @@ public class HBaseCrudDemo {
             TableName tableName = TableName.valueOf("demo");
 
             //创建HBase表
-            createTable(connection, tableName, "cf1", "cf2");
+            //createTable(connection, tableName, "cf1", "cf2");
+            createTable(connection, tableName, "cf1");
 
             //put
             String rowKey = "u12000";
-            put(connection, tableName, rowKey, "cf1", "name", "ricky");
-            put(connection, tableName, rowKey, "cf1", "password", "root");
-            put(connection, tableName, rowKey, "cf1", "age", "28");
+            long start = System.currentTimeMillis();
+            for (int i = 0; System.currentTimeMillis() < (start + 1000); i++
+                ) {
+                long startLoop = System.currentTimeMillis();
+                put(connection, tableName, rowKey, "cf1", "name", "ricky" + i);
+                System.out.println("Loop 第" + i + "次,time 耗时:" + (System.currentTimeMillis() - startLoop) + "ms");
+            }
+            System.out.println("总time 耗时:" + (System.currentTimeMillis() - start) + "ms");
+
+            // put(connection, tableName, rowKey, "cf1", "password", "root");
+            //put(connection, tableName, rowKey, "cf1", "age", "28");
 
             //get
             get(connection, tableName, rowKey);
 
             //scan
-            scan(connection, tableName);
+            // scan(connection, tableName);
 
             //delete
             deleteTable(connection, tableName);
