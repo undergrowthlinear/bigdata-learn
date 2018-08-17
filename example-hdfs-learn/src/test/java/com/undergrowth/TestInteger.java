@@ -1,5 +1,7 @@
 package com.undergrowth;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import org.junit.Test;
 
 /**
@@ -17,6 +19,13 @@ public class TestInteger {
         testNum(num7);
         int num10000 = 10000;
         testNum(num10000);
+    }
+
+    @Test
+    public void testDate() throws ParseException {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(format.parse("2018-07-30 00:00:00").getTime());
+        System.out.println(format.parse("2018-07-30 23:59:59").getTime());
     }
 
     private void testNum(int num7) {
