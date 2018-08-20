@@ -17,12 +17,13 @@
  */
 package com.undergrowth.mapreduce.learnperiod.pi.math;
 
+import com.undergrowth.mapreduce.learnperiod.pi.Combinable;
+import com.undergrowth.mapreduce.learnperiod.pi.Container;
+import com.undergrowth.mapreduce.learnperiod.pi.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.hadoop.examples.pi.Combinable;
-import org.apache.hadoop.examples.pi.Container;
-import org.apache.hadoop.examples.pi.Util;
+
 
 /** Represent the summation \sum \frac{2^e \mod n}{n}. */
 public class Summation implements Container<Summation>, Combinable<Summation> {

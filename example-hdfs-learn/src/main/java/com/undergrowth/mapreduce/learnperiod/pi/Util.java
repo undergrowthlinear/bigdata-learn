@@ -17,6 +17,7 @@
  */
 package com.undergrowth.mapreduce.learnperiod.pi;
 
+import com.undergrowth.mapreduce.learnperiod.pi.DistSum.Machine;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,7 +40,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 
-import org.apache.hadoop.examples.pi.DistSum.Machine;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;

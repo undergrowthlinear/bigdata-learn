@@ -17,7 +17,8 @@
  */
 package com.undergrowth.mapreduce.learnperiod.pi.math;
 
-import org.apache.hadoop.examples.pi.Util;
+
+import com.undergrowth.mapreduce.learnperiod.pi.Util;
 
 /** An arithmetic progression */
 public class ArithmeticProgression implements Comparable<ArithmeticProgression> {

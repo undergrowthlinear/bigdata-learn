@@ -17,17 +17,17 @@
  */
 package com.undergrowth.mapreduce.learnperiod.pi;
 
+import com.undergrowth.mapreduce.learnperiod.pi.DistSum.Computation;
+import com.undergrowth.mapreduce.learnperiod.pi.DistSum.Parameters;
+import com.undergrowth.mapreduce.learnperiod.pi.math.Bellard;
+import com.undergrowth.mapreduce.learnperiod.pi.math.Bellard.Parameter;
+import com.undergrowth.mapreduce.learnperiod.pi.math.Summation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.examples.pi.DistSum.Computation;
-import org.apache.hadoop.examples.pi.DistSum.Parameters;
-import org.apache.hadoop.examples.pi.math.Bellard;
-import org.apache.hadoop.examples.pi.math.Summation;
-import org.apache.hadoop.examples.pi.math.Bellard.Parameter;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 

@@ -17,6 +17,8 @@
  */
 package com.undergrowth.mapreduce.learnperiod.pi.math;
 
+import com.undergrowth.mapreduce.learnperiod.pi.Container;
+import com.undergrowth.mapreduce.learnperiod.pi.Util;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,8 +29,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.NoSuchElementException;
 
-import org.apache.hadoop.examples.pi.Container;
-import org.apache.hadoop.examples.pi.Util;
 
 /**
  * Bellard's BBP-type Pi formula

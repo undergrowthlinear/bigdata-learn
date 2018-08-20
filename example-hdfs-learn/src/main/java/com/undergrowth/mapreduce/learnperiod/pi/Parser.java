@@ -17,6 +17,8 @@
  */
 package com.undergrowth.mapreduce.learnperiod.pi;
 
+import com.undergrowth.mapreduce.learnperiod.pi.math.Bellard;
+import com.undergrowth.mapreduce.learnperiod.pi.math.Bellard.Parameter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,8 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.hadoop.examples.pi.math.Bellard;
-import org.apache.hadoop.examples.pi.math.Bellard.Parameter;
 
 import com.google.common.base.Charsets;
 
