@@ -99,6 +99,7 @@ public class GrepDemo extends Configured implements Tool {
   }
 
   public static void main(String[] args) throws Exception {
+    // E:\java_other\bigdata\hadoop\test_some\test_word.txt  E:\java_other\bigdata\hadoop\test_some\grep_output h[a-z]*
     int res = ToolRunner.run(new Configuration(), new GrepDemo(), args);
     System.exit(res);
   }

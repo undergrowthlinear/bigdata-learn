@@ -247,6 +247,7 @@ public class RandomTextWriterDemo extends Configured implements Tool {
   }
   
   public static void main(String[] args) throws Exception {
+    // E:\java_other\bigdata\hadoop\test_some\random_text_writer_output
     int res = ToolRunner.run(new Configuration(), new RandomTextWriterDemo(), args);
     System.exit(res);
   }
