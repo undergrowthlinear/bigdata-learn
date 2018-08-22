@@ -193,6 +193,7 @@ public class SortDemo<K,V> extends Configured implements Tool {
 
 
   public static void main(String[] args) throws Exception {
+    // E-totalOrder 100 10000 1000 E:\java_other\bigdata\hadoop\test_some\random_writer_output\part-m-00000 E:\java_other\bigdata\hadoop\test_some\sort_output
     int res = ToolRunner.run(new Configuration(), new SortDemo(), args);
     System.exit(res);
   }
