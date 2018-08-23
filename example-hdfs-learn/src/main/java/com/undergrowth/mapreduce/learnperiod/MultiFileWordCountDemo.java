@@ -253,6 +253,7 @@ public class MultiFileWordCountDemo extends Configured implements Tool {
   }
 
   public static void main(String[] args) throws Exception {
+    // E:\java_other\bigdata\hadoop\test_some\small_file\ E:\java_other\bigdata\hadoop\test_some\multifile_output
     int ret = ToolRunner.run(new MultiFileWordCountDemo(), args);
     System.exit(ret);
   }
