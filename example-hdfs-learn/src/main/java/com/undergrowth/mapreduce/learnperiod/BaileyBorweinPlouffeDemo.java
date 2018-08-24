@@ -432,6 +432,7 @@ public class BaileyBorweinPlouffeDemo extends Configured implements Tool {
 
   /** The main method for running it as a stand alone command. */
   public static void main(String[] argv) throws Exception {
+    // 1 100 1 E:\java_other\bigdata\hadoop\test_some\plouffe_output
     System.exit(ToolRunner.run(null, new BaileyBorweinPlouffeDemo(), argv));
   }
 
