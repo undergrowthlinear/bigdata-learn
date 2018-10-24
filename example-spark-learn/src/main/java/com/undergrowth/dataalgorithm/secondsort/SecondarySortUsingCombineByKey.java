@@ -40,7 +40,7 @@ import scala.Tuple2;
 public class SecondarySortUsingCombineByKey {
 
     public static void main(String[] args) throws Exception {
-
+        // data/sample_input.txt dataout/
         // STEP-1: read input parameters and validate them
         if (args.length < 2) {
             System.err.println("Usage: SecondarySortUsingCombineByKey <input> <output>");
