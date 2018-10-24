@@ -62,7 +62,7 @@ public class HBaseCrudDemo {
             // scan(connection, tableName);
 
             //delete
-            deleteTable(connection, tableName);
+           // deleteTable(connection, tableName);
 
         } catch (IOException e) {
             e.printStackTrace();
