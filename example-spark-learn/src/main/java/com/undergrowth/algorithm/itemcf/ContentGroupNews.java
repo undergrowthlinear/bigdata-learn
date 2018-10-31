@@ -41,7 +41,7 @@ public class ContentGroupNews {
             System.exit(1);
         }
         String inputFilePath = args[0];
-        double sim=0.3;
+        double sim = 0.3;
         String outputPath = PathAppendUtil.pathAppend(args[1], ContentGroupNews.class.getSimpleName());
         SparkConf sparkConf = new SparkConf().setMaster("local[2]");
         sparkConf.setAppName("ContentGroupNews");
@@ -82,7 +82,7 @@ public class ContentGroupNews {
             .mapValues((Function<Vector, List<Tuple2<Integer, Double>>>) v1 -> {
                 int[] index = v1.toSparse().indices();
                 double[] value = v1.toSparse().values();
-                int topNum = 10;
+                int topNum = 40;
                 List<Tuple2<Integer, Double>> indexValueList = Lists.newArrayList();
                 for (int i = 0; i < index.length; i++) {
                     indexValueList.add(new Tuple2<>(index[i], value[i]));
@@ -139,7 +139,7 @@ public class ContentGroupNews {
                     result.add(new Tuple3<>(t._1, relT._1, cosSim));
                 });
                 return result.iterator();
-            }).filter((Function<Tuple3<Integer, Integer, Double>, Boolean>) v1 -> v1._3>sim);
+            }).filter((Function<Tuple3<Integer, Integer, Double>, Boolean>) v1 -> v1._3 > sim);
         articleSim.foreach((VoidFunction<Tuple3<Integer, Integer, Double>>) t -> System.out.println(
             "articleSim---->" + t._1 + "," + bIdTitleMap.value().get(t._1)._2 + "\t" + t._2 + "," + bIdTitleMap.value().get(t._2)._2
                 + "\t" + t._3));
@@ -148,12 +148,15 @@ public class ContentGroupNews {
 
     }
 
+    /**
+     * 参看 https://blog.csdn.net/u012160689/article/details/15341303
+     */
     public static double dot(int[] oneIndex, double[] oneValue, int[] secondIndex, double[] secondValue) {
         double sum = 0.0;
         int num = oneIndex.length;
-        if (oneIndex.length > secondIndex.length) { // 使用较少的矩阵进行计算
+        /*if (oneIndex.length > secondIndex.length) { // 使用较少的矩阵进行计算
             num = secondIndex.length;
-        }
+        }*/
         for (int i = 0; i < num; i++) {
             int index = oneIndex[i];
             double secValue = findSec(index, secondIndex, secondValue);
@@ -191,4 +194,19 @@ public class ContentGroupNews {
     public static double norm(double[] oneValue) {
         return Math.sqrt(dot(oneValue, oneValue));
     }
+
+    /**
+     * 标签相同自然文章比较相关，所以标签是重要的一个因素，所以标签在相似度计算中权重要大一些，比如一篇文章 标签完全相同，我计为10，分类完全相同我计为1，时间完全相同我计为1，计算两组标签的相似度算法，在上一篇文章中有介绍
+     *
+     * @param time1
+     * @param time2
+     * @return
+     */
+    public static final double MonthSecond = 60 * 60 * 24 * 30;
+
+    public static double UnixTimeSmiler(Long time1, Long time2) {
+        double d = (double) Math.abs(time1 - time2) / MonthSecond;
+        return d > 1 ? 0 : 1 - d;
+    }
+
 }

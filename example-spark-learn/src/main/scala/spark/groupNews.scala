@@ -18,7 +18,7 @@ object groupNews {
   def main(args: Array[String]): Unit = {
 
     //相似度阈值
-    val sim = 0.2
+    val sim = 0.3
     val sparkconfig = new SparkConf().setAppName("DocSim").setMaster("local[2]")
 
     val ctx = new SparkContext(sparkconfig)

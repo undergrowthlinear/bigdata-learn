@@ -22,4 +22,9 @@ public class ContentGroupNewsTest {
         System.out.println(ContentGroupNews.norm(two));
     }
 
+    @Test
+    public void timeTest(){
+        System.out.println(ContentGroupNews.UnixTimeSmiler(System.currentTimeMillis()/1000,System.currentTimeMillis()/1000));
+    }
+
 }
