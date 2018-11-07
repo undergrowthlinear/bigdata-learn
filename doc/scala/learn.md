@@ -133,7 +133,9 @@ object HelloWorld {
         - ()=> ：Example：() => T 表示函数没有输入参数，但返回T
         - Unit=> ：Unit相当于无值的值，相当于C++中的Void  
     - +=：为map类型变量添加元素
-    - -=：为map类型变量移除元素及其对应的值          
+    - -=：为map类型变量移除元素及其对应的值  
+    - ::: 该方法只能用于连接两个List类型的集合
+    - :+和+: 两者的区别在于:+方法用于在尾部追加元素，+:方法用于在头部追加元素        
 # Code
 - https://github.com/undergrowthlinear/bigdata-learn.git
 ## unknown

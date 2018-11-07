@@ -1,5 +1,7 @@
 package basic
 
+import org.apache.spark.mllib.linalg.Vectors
+
 import scala.collection.mutable
 
 
@@ -96,8 +98,24 @@ object LeakageInspectionCompletion {
   }
 
   def demo_vector() = {
-    val v=Vector(1,2,3)
+    val v=Vectors.dense(Array(1.0,2,3))
+    println(v.argmax)
+    println(v.size)
+  }
 
+  def demo_zip_unzip() = {
+    val list1: List[Int] =List(1,2,3,4,12)
+    val list2: List[Int] =List(5,6,7,8,9)
+    val list3: List[Int] =List(2,3,4,5,6)
+    val list4: List[Int] =List(7,8,9,0,3)
+    // zip函数将传进来的两个参数中相应位置上的元素组成一个pair数组。如果其中一个参数元素比较长，那么多余的参数会被删掉
+    val ends: List[(Int, Int)] =list1.zip(list2)
+    println("元素相同，进行zip拉链操作结果："+ends)
+    //4、unzip函数拆分元祖为List
+    val tuples=List((0,11),(1,12),(2,15),(3,17))
+    val unzipEnd: (List[Int], List[Int]) =tuples.unzip
+    println("unzip函数拆分后的结果--1："+unzipEnd._1)
+    println("unzip函数拆分后的结果--2："+unzipEnd._2)
   }
 
   def main(args: Array[String]): Unit = {
@@ -123,6 +141,7 @@ object LeakageInspectionCompletion {
     println("================ ================")
     demo_vector()
     println("================ ================")
+    demo_zip_unzip()
     println("================ ================")
   }
 
