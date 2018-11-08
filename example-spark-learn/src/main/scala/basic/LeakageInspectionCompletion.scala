@@ -1,5 +1,6 @@
 package basic
 
+import breeze.linalg.{DenseMatrix, DenseVector, diag}
 import org.apache.spark.mllib.linalg.Vectors
 
 import scala.collection.mutable
@@ -118,6 +119,40 @@ object LeakageInspectionCompletion {
     println("unzip函数拆分后的结果--2："+unzipEnd._2)
   }
 
+  def demo_blas() = {
+    //创建0矩阵和向量 DenseMatrix DenseVector
+    val m1 = DenseMatrix.zeros[Double](2,3)
+    val v1 = DenseVector.zeros[Double](3)
+    //创建元素都是1的向量
+    val v2 = DenseVector.ones[Double](3)
+    //创建指定元素的向量
+    val v3 = DenseVector.fill(3)(5.0)
+    //根据范围创建向量参数（start，end，step）
+    val v4 = DenseVector.range(1,10,2)
+    //创建对角线为1的矩阵
+    val m2 = DenseMatrix.eye[Double](3)
+    //创建指定对角线元素的矩阵
+    val v6 = diag(DenseVector(1.0,2.0,3.0))
+    //根据向量创建矩阵，每个数组就是一行
+    val m3 = DenseMatrix((1.0,2.0),(3.0,4.0))
+    //根据元素创建向量
+    val v8 = DenseVector(1,2,3,4)
+    //val v9 = v8.t
+    //转置
+    val v9 = DenseVector(1,2,3,4).t
+    //根据下标创建向量和矩阵
+    val v10 = DenseVector.tabulate(3){i=>2*i}
+    val m4 = DenseMatrix.tabulate(3,2){case(i,j) =>i+j}
+    //根据数组创建向量和矩阵
+    val v11 = new DenseVector(Array(1,2,3,4))
+    val m5 = new DenseMatrix(2,3,Array(11,12,12,21,21,11))
+    //创建一个随机向量和矩阵
+    val v12 = DenseVector.rand(4)
+    val m6 = DenseMatrix.rand(2,3)
+    println(v12)
+    println(m6)
+  }
+
   def main(args: Array[String]): Unit = {
     println("LeakageInspectionCompletion")
     println("================ ================")
@@ -142,6 +177,13 @@ object LeakageInspectionCompletion {
     demo_vector()
     println("================ ================")
     demo_zip_unzip()
+    println("================ ================")
+    demo_blas()
+    println("================ ================")
+    println("================ ================")
+    println("================ ================")
+    println("================ ================")
+    println("================ ================")
     println("================ ================")
   }
 
