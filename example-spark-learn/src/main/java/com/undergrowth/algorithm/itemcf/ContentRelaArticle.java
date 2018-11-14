@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.ansj.splitWord.analysis.ToAnalysis;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
@@ -32,37 +33,37 @@ import scala.Tuple2;
  * @version 1.0.0
  * @date 2018-10-30-9:44
  */
-public class ContentGroupNews {
+public class ContentRelaArticle {
 
     public static void main(String[] args) {
-        // example-spark-learn\src\main\resources\te.txt dataout/
+        // E:\iyourcar\project\server-services-bdbox\sql\\article_id_title_content_all.txt dataout/
         if (args.length != 2) {
-            System.err.println("Usage: ContentGroupNews <input-path> <out-path>");
+            System.err.println("Usage: ContentRelaArticle <input-path> <out-path>");
             System.exit(1);
         }
         String inputFilePath = args[0];
         double sim = 0.3;
-        String outputPath = PathAppendUtil.pathAppend(args[1], ContentGroupNews.class.getSimpleName());
-        SparkConf sparkConf = new SparkConf().setMaster("local[2]");
-        sparkConf.setAppName("ContentGroupNews");
+        String outputPath = PathAppendUtil.pathAppend(args[1], ContentRelaArticle.class.getSimpleName());
+        SparkConf sparkConf = new SparkConf().setMaster("local[4]");
+        sparkConf.setAppName("ContentRelaArticle");
         JavaSparkContext jsc = new JavaSparkContext(sparkConf);
         JavaRDD<String> input = jsc.textFile(inputFilePath);
         // 1.过滤字符
         JavaPairRDD<String, Tuple2<String, String>> inputFilterPair = input
-            .map((Function<String, List<String>>) v1 -> Lists.newArrayList(v1.split("===="))).filter(
-                (Function<List<String>, Boolean>) v1 -> v1.size() == 3 && v1.get(1).length() > 1 && v1.get(2).length() > 1).mapToPair(
+            .map((Function<String, List<String>>) v1 -> Lists.newArrayList(v1.split("\001"))).filter(
+                (Function<List<String>, Boolean>) v1 -> v1.size() == 3 && StringUtils.isNotBlank(v1.get(0)) && !v1.get(0).equals("\\N") && v1.get(1).length() > 1 && v1.get(2).length() > 1).mapToPair(
                 (PairFunction<List<String>, String, Tuple2<String, String>>) strings -> new Tuple2<>(strings.get(0),
                     new Tuple2<>(strings.get(1), strings.get(2))));
-        System.out.println("inputFilter count:" + inputFilterPair.count());
+       // System.out.println("inputFilter count:" + inputFilterPair.count());
         // 2.分词 (id,(id,title,[word1,word2]))
         JavaPairRDD<Integer, Tuple3<String, String, List<String>>> splitPair = inputFilterPair.mapToPair(
             (PairFunction<Tuple2<String, Tuple2<String, String>>, Integer, Tuple3<String, String, List<String>>>) v1 -> new Tuple2<>(
                 Integer.valueOf(v1._1), new Tuple3<String, String, List<String>>(v1._1, v1._2._1,
                 Lists.newArrayList(ToAnalysis.parse(v1._2._2).toStringWithOutNature(" ").split(" ")))));
-        splitPair.foreach(
+      /*  splitPair.foreach(
             (VoidFunction<Tuple2<Integer, Tuple3<String, String, List<String>>>>) t -> {
                 System.out.println("splitPair---->" + t._1 + "\t" + t._2._1 + "\t" + t._2._2);
-            });
+            });*/
         splitPair.cache();
         Broadcast<Map<Integer, Tuple2<String, String>>> bIdTitleMap = jsc.broadcast(
             splitPair.mapValues((Function<Tuple3<String, String, List<String>>, Tuple2<String, String>>) v1 -> new Tuple2<>(v1._1, v1._2))
@@ -75,7 +76,7 @@ public class ContentGroupNews {
         IDFModel idf = new IDF().fit(tfPair.values());
         JavaPairRDD<Integer, Vector> tfIdfPair = tfPair.mapValues((Function<Vector, Vector>) v1 -> idf.transform(v1));
         // 计算出文章中每个词的tf-idf
-        tfIdfPair.foreach((VoidFunction<Tuple2<Integer, Vector>>) t -> System.out.println("tfIdfPair---->" + t._1 + "\t" + t._2 + "\t"));
+       // tfIdfPair.foreach((VoidFunction<Tuple2<Integer, Vector>>) t -> System.out.println("tfIdfPair---->" + t._1 + "\t" + t._2 + "\t"));
         // 4.计算相似度(使用余弦相似度进行计算 找出前多少特征 然后找出特征相关文章 再计算相关文章相似度)
         //获取前多少特征值 (id,[w1-tfidf,w2-tfidf])
         JavaPairRDD<Integer, List<Tuple2<Integer, Double>>> idFeaturePairTop = tfIdfPair
@@ -99,9 +100,9 @@ public class ContentGroupNews {
                 return indexValueList.size() > topNum ? indexValueList.subList(0, topNum) : indexValueList.subList(0, indexValueList.size());
             });
         idFeaturePairTop.cache();
-        idFeaturePairTop
+        /*idFeaturePairTop
             .foreach(
-                (VoidFunction<Tuple2<Integer, List<Tuple2<Integer, Double>>>>) t -> System.out.println("idFeaturePairTop---->" + t._1 + "\t" + t._2));
+                (VoidFunction<Tuple2<Integer, List<Tuple2<Integer, Double>>>>) t -> System.out.println("idFeaturePairTop---->" + t._1 + "\t" + t._2));*/
         // 倒索引 (featureId,[arId1,arId2])
         JavaPairRDD<Integer, Iterable<Integer>> indexReversePair = idFeaturePairTop.flatMapToPair(
             (PairFlatMapFunction<Tuple2<Integer, List<Tuple2<Integer, Double>>>, Integer, Integer>) t -> {
