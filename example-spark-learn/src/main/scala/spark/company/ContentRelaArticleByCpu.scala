@@ -1,6 +1,5 @@
 package spark.company
 
-import breeze.linalg.SparseVector
 import org.ansj.splitWord.analysis.ToAnalysis
 import org.apache.spark.mllib.feature.{HashingTF, IDF}
 import org.apache.spark.mllib.linalg.{SparseVector => SV}
@@ -8,18 +7,18 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 /**
   * ${Description}
-  * 与ContentRelaArticleByCpu相比 先过滤后计算 以内存为代价换取cpu
+  * 与ContentRelaArticle相比 先计算后过滤 以cpu为代价换取内存
   *
   * @author zhangwu
   * @date 2018-10-29-17:10
   * @version 1.0.0
   */
-object ContentRelaArticle {
+object ContentRelaArticleByCpu {
 
   def main(args: Array[String]): Unit = {
 
     if (args.length != 6) {
-      println("ContentRelaArticle input-inputPath output-inputPath sim featureNum numRepar mode")
+      println("ContentRelaArticleByCpu input-inputPath output-inputPath sim featureNum numRepar mode")
       System.exit(1)
     }
 
@@ -95,9 +94,8 @@ object ContentRelaArticle {
       var ids: Set[Long] = Set()
 
       //存放文章对应的特征
-      //var idfs: List[(Long, SV)] = List()
+      var idfs: List[(Long, SV)] = List()
 
-      var result: List[((Long, Long), (Long, Long))] = List()
 
       //遍历特征，通过倒排序索引取包含特征的所有文章,除去自身
       // 同时还要包含多个此项中的相同文章id 避免多次计算
@@ -108,61 +106,30 @@ object ContentRelaArticle {
 
       //bIdfPairs(tf-idf特征),遍边文章，获取对应的TF-IDF特征
       ids.foreach(b => {
-        // idfs = idfs ++ List((b, bIdfPairs.value.get(b.toString).get))
-        val id2 = b
-        val id1 = a._1.toInt.asInstanceOf[Number].longValue
-        if (a._1.toInt <= id2)
-          result = result ++ List(((id1, id2), (id1, id2)))
-        else
-          result = result ++ List(((id2, id1), (id2, id1)))
+        idfs = idfs ++ List((b, bIdfPairs.value.get(b.toString).get))
       })
 
       //获取当前文章TF-IDF特征
-      //val sv1 = bIdfPairs.value.get(a._1).get
+      val sv1 = bIdfPairs.value.get(a._1).get
 
-      // import breeze.linalg._
-      //构建当前文章TF-IDF特征向量
-      //val bsv1 = new SparseVector[Double](sv1.indices, sv1.values, sv1.size)
-      //遍历相关文章
-      /*val result = idfs.map {
-        case (id2, idf2) =>
-          //val sv2 = idf2.asInstanceOf[SV]
-          //对应相关文章的特征向量
-          //val bsv2 = new SparseVector[Double](sv2.indices, sv2.values, sv2.size)
-          //计算余弦值
-          //val cosSim = bsv1.dot(bsv2) / (norm(bsv1) * norm(bsv2))
-          // 将小的放置在前面 后续好过滤
-          if (a._1.toInt <= id2)
-            ((a._1.toInt, id2), (a._1.toInt, id2))
-          else
-            ((id2, a._1.toInt), (id2, a._1.toInt))
-      }*/
-      // 文章1，文章2，相似度
-      // result.filter(a => a._3 >= sim)
-      result
-    })
-
-    val docSimsCal = docSims.groupByKey().distinct().mapValues(it => {
-      val id1 = it.toSeq.head._1
-      val id2 = it.toSeq.head._2
-      val sv1 = bIdfPairs.value.get(id1.toString).get
-      val sv2 = bIdfPairs.value.get(id2.toString).get
+      import breeze.linalg._
       //构建当前文章TF-IDF特征向量
       val bsv1 = new SparseVector[Double](sv1.indices, sv1.values, sv1.size)
-      //对应相关文章的特征向量
-      val bsv2 = new SparseVector[Double](sv2.indices, sv2.values, sv2.size)
-      import breeze.linalg._
-      val cosSim = bsv1.dot(bsv2) / (norm(bsv1) * norm(bsv2))
-      cosSim
+      //遍历相关文章
+      val result = idfs.map {
+        case (id2, idf2) =>
+          val sv2 = idf2.asInstanceOf[SV]
+          //对应相关文章的特征向量
+          val bsv2 = new SparseVector[Double](sv2.indices, sv2.values, sv2.size)
+          //计算余弦值
+          val cosSim = bsv1.dot(bsv2) / (norm(bsv1) * norm(bsv2))
+          (a._1, id2, cosSim)
+      }
+      // 文章1，文章2，相似度
+      result.filter(a => a._3 >= sim)
     })
 
-    val docSimsCalSort = docSimsCal.flatMap(a => {
-      val list = List[(Long, (Long, Double))]()
-      val id1: Long = a._1._1.asInstanceOf[Number].longValue
-      val id2: Long = a._1._2.asInstanceOf[Number].longValue
-      val cos = a._2
-      (id1, (id2, cos)) :: (id2, (id1, cos)) :: list
-    }).filter(a => a._2._2 >= sim).combineByKey((v: (Long, Double)) => {
+    val docSimsInter = docSims.map(a => (a._1, (a._2, a._3))).combineByKey((v: (Long, Double)) => {
       val list = List[(Long, Double)]()
       v :: list
     }, (x: List[(Long, Double)], v: (Long, Double)) => {
@@ -171,9 +138,9 @@ object ContentRelaArticle {
       x ::: y
     }).mapValues(v => v.sortBy(_._2).reverse)
 
-    // docSimsCalSort.take(10).foreach(a => println(a))
+    docSimsInter.take(10).foreach(x => println("docSims---->" + x))
 
-    docSimsCalSort.saveAsTextFile(outPath)
+    docSimsInter.saveAsTextFile(outPath)
 
   }
 

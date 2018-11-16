@@ -150,7 +150,10 @@ public class ItemBasedCFSparkJob implements Serializable {
             })
             .collectAsMap();
         Broadcast<Map<Long, Tuple2<Set<Long>, Set<Long>>>> user_visited_bd = jsc.broadcast(new HashMap<>(user_visited));
-
+        System.out.println("user_visited---->");
+        for (Map.Entry<Long, Tuple2<Set<Long>, Set<Long>>> entry : user_visited.entrySet()) {
+            System.out.println(entry.getKey() + "\t" + entry.getValue());
+        }
         //collect legal items
         List<Long> legal_items = data.mapToPair(row -> new Tuple2<Long, Integer>(row.getLong(1), 1))
             .reduceByKey((a, b) -> a + b)
@@ -172,6 +175,8 @@ public class ItemBasedCFSparkJob implements Serializable {
             .groupByKey();
         item_user_list.cache();
         System.out.println("item_user_list:" + item_user_list.collect().size());
+        item_user_list.foreach(it -> System.out.println(it));
+
         //computer sqrt(|item|)
         Map<Long, Float> item_norm = item_user_list
             .mapValues(iter -> {
@@ -234,7 +239,7 @@ public class ItemBasedCFSparkJob implements Serializable {
         item_similaries.cache();
 
         //get user topN recommendtions
-        JavaPairRDD<Long, List<Tuple2<Long, Float>>> user_similaries = item_user_list
+        JavaPairRDD<Long, Tuple2<Long, Float>> user_similaries = item_user_list
             .join(item_similaries)
             .flatMapToPair(
                 (PairFlatMapFunction<Tuple2<Long, Tuple2<Iterable<Tuple2<Long, Float>>, List<Tuple2<Long, Float>>>>, Long, Tuple2<Long, Float>>) t -> {
@@ -262,38 +267,40 @@ public class ItemBasedCFSparkJob implements Serializable {
                         }
                     }
                     return user_similary_items.iterator();
-                })
-            //sum all scores
-            .aggregateByKey(new HashMap<Long, Float>(),
-                (m, item) -> {
-                    Float score = m.get(item._1);
-                    if (score == null) {
-                        m.put(item._1, item._2);
+                });
+        System.out.println("user_similaries---->" + user_similaries.count());
+        user_similaries.take(30).forEach(t -> System.out.println("user_similaries---->" + t));
+        //sum all scores
+        JavaPairRDD<Long, List<Tuple2<Long, Float>>> user_similaries_1 = user_similaries.aggregateByKey(new HashMap<Long, Float>(),
+            (m, item) -> {
+                Float score = m.get(item._1);
+                if (score == null) {
+                    m.put(item._1, item._2);
+                } else {
+                    m.put(item._1, item._2 + score);
+                }
+                return m;
+            },
+            (m1, m2) -> {
+                HashMap<Long, Float> m_big;
+                HashMap<Long, Float> m_small;
+                if (m1.size() > m2.size()) {
+                    m_big = m1;
+                    m_small = m2;
+                } else {
+                    m_big = m2;
+                    m_small = m1;
+                }
+                for (Map.Entry<Long, Float> e : m_small.entrySet()) {
+                    Float v = m_big.get(e.getKey());
+                    if (v != null) {
+                        m_big.put(e.getKey(), e.getValue() + v);
                     } else {
-                        m.put(item._1, item._2 + score);
+                        m_big.put(e.getKey(), e.getValue());
                     }
-                    return m;
-                },
-                (m1, m2) -> {
-                    HashMap<Long, Float> m_big;
-                    HashMap<Long, Float> m_small;
-                    if (m1.size() > m2.size()) {
-                        m_big = m1;
-                        m_small = m2;
-                    } else {
-                        m_big = m2;
-                        m_small = m1;
-                    }
-                    for (Map.Entry<Long, Float> e : m_small.entrySet()) {
-                        Float v = m_big.get(e.getKey());
-                        if (v != null) {
-                            m_big.put(e.getKey(), e.getValue() + v);
-                        } else {
-                            m_big.put(e.getKey(), e.getValue());
-                        }
-                    }
-                    return m_big;
-                })
+                }
+                return m_big;
+            })
             //sort and get topN similary items for user
             .mapValues(all_items -> {
                 List<Tuple2<Long, Float>> limit_items = all_items.entrySet().stream()
@@ -304,7 +311,7 @@ public class ItemBasedCFSparkJob implements Serializable {
                 return limit_items;
             });
 
-        CFModel model = new CFModel(item_similaries, user_similaries);
+        CFModel model = new CFModel(item_similaries, user_similaries_1);
         return model;
     }
 
