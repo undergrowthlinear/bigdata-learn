@@ -22,16 +22,7 @@ public class UBBTest {
     public void ubbTest() throws IOException {
         /*String[] divisionParamArray = {"1_55b76c098e477edc071868d1", "1_55b76c0a8e477edc071868d2", "2_5813207e64d2935fdf98a127",
             "2_58132d5764d2935fdf98a129", "8_5a86efbbe4b0670f404720f5"};*/
-        /**
-         user_account_1_user_id.csv	 总数:2000000	 桶1:999884	 桶2:1000116	 总时间消耗:176ms 	 单次时间消耗:0ms
-         user_account_2_user_id.csv	 总数:2000000	 桶1:1000296	 桶2:999704	 总时间消耗:365ms 	 单次时间消耗:0ms
-         user_account_3_user_id.csv	 总数:997945	 桶1:498887	 桶2:499058	 总时间消耗:699ms 	 单次时间消耗:0ms
-         user_account_4_user_id.csv	 总数:467264	 桶1:233566	 桶2:233698	 总时间消耗:28ms 	 单次时间消耗:0ms
-         user_account_5_user_id.csv	 总数:1013764	 桶1:507054	 桶2:506710	 总时间消耗:117ms 	 单次时间消耗:0ms
-         user_account_6_user_id.csv	 总数:1009989	 桶1:505243	 桶2:504746	 总时间消耗:60ms 	 单次时间消耗:0ms
-         user_account_7_user_id.csv	 总数:2000000	 桶1:998966	 桶2:1001034	 总时间消耗:98ms 	 单次时间消耗:0ms
-         user_account_8_user_id.csv	 总数:1900207	 桶1:949783	 桶2:950424	 总时间消耗:95ms 	 单次时间消耗:0ms
-         */
+
         File dir = new File("E:\\iyourcar\\project\\server-services-bdbox\\sql\\user_account");
         for (String fileName :
             dir.list()) {
