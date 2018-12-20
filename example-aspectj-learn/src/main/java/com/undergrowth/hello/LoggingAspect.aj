@@ -10,7 +10,7 @@ import org.aspectj.lang.Signature;
  * @version 1.0.0
  */
 
-public aspect LoggingAspect {
+/*public aspect LoggingAspect {
 
     before(): within(com.undergrowth..*) && execution(public * *(..)) {
         Signature sig = thisJoinPoint.getSignature();
@@ -23,5 +23,5 @@ public aspect LoggingAspect {
         System.err.println("      getSourceLocation: " + thisJoinPoint.getSourceLocation());
         System.err.println("      getStaticPart: " + thisJoinPoint.getStaticPart());
     }
-}
+}*/
 
