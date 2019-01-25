@@ -1,0 +1,208 @@
+# spark设计理念与基本架构
+## 优势
+- 快速的处理能力----中间与结果集存储内存,避免磁盘IO
+- 易于使用----支持scala/spark/等
+- 支持查询/流式计算、可用性高(支持多个集群模式)、丰富的数据源支持
+## 概念
+- RDD----弹性分布式数据集
+- Partition----数据分区,一个RDD可划分成多个分区
+- NarrowDependency----窄依赖,子RDD依赖父RDD中固定的Partition
+- ShuffleDependency----宽依赖,子RDD依赖父RDD中所有的Partition
+- DAG----有向无环图,即RDD之间的依赖关系
+- Task----具体执行任务
+- Job----用户提交的作业,一个Job包含一个或者多个Task
+- Stage----Job分成的阶段,一个Job包含一个或者多个Stage
+## Spark 模块
+- 以Spark Core为基础,Spark SQL/Stream/graphx/mlib都构建之上
+- Spark Core
+  - SparkContext内置的DAGScheduler负责创建Job,将DAG中的Job划分成Stage,提交Stage
+  - TaskScheduler负责资源的申请、任务的提交与调度
+- Spark Sql
+  - 增强对Sql以及Hive的支持
+  - 将sql转换为语法树,使用规则执行器(RuleExecutor)应用一系列的规则(Rule)到语法树,生成最终的物理执行计划并执行
+- Spark Stream
+  - 流式计算,DStream为数据流的抽象
+- Spark Graphx
+  - 分布式图计算框架
+- Spark Mib
+  - 机器学习
+## 集群部署
+- Cluster Manager----集群管理器,负责资源的分配与管理
+- Worker----Spark工作节点----负责创建Executor,将资源与任务进一步分配给Executor,同步资源信息给Cluster Manager
+  - Executor----执行计算任务的进程
+- Driver App----客户端驱动程序,将程序任务转换为RDD与DAG,并负责与Cluster Manager进行通信
+## 源码分析
+- jmx监控
+ ```
+  -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9999
+   -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false
+ ```
+### SparkContext初始化
+- 创建SparkEnv
+  - org.apache.spark.SparkEnv#create
+  - RpcEnv/JavaSerializer/SerializerManager/BroadcastManager/MapOutputTrackerMaster/ShuffleManager/MemoryManager
+  - BlockManager/BlockManagerMaster/NettyBlockTransferService
+  - MetricsSystem/OutputCommitCoordinator
+- 创建SparkUI
+  - org.apache.spark.ui.SparkUI#create
+  - listenerBus.addListener
+  - EnvironmentListener/StorageStatusListener/ExecutorsListener/StorageListener/RDDOperationGraphListener/_jobProgressListener
+- 创建_taskScheduler、_schedulerBackend、_dagScheduler
+  - org.apache.spark.scheduler.DAGScheduler
+    - waitingStages/runningStages/failedStages/activeJobs
+### 存储体系
+- Driver Program 和 Executor 都会创建BlockManager
+  - BlockManager
+    - BlockManagerMaster----BlockManagerMasterEndpoint is an ThreadSafeRpcEndpoint on the master node to track statuses of all slaves' block managers.
+      - org.apache.spark.storage.BlockManagerMasterEndpoint.receiveAndReply
+    - NettyBlockTransferService/ExternalShuffleClient----用于与其他Executor上传/下载数据块(eg:map的中间结果)
+      - NettyBlockRpcServer----接收上传/下载Blocks(OpenBlocks/UploadBlock)
+      - TransportContext----底层使用netty进行通信
+        - org.apache.spark.network.client.TransportClientFactory
+        - org.apache.spark.network.TransportContext.createServer
+          - TransportServer
+            - org.apache.spark.network.server.TransportServer.init
+              - io.netty.bootstrap.ServerBootstrap
+      - fetchBlocks----org.apache.spark.network.shuffle.OneForOneBlockFetcher.start----client.sendRpc----OpenBlocks
+      - uploadBlock----client.sendRpc----new UploadBlock
+    - DiskBlockManager---
+        - Creates and maintains the logical mapping between logical blocks and physical on-disk
+        - locations. One block is mapped to one file with a name given by its BlockId
+    - MemoryStore/DiskStore----Actual storage of where blocks are kept
+### 任务的提交与执行----任务的执行需要执行引擎的能力
+- build operator DAG----完成RDD的转换以及DAG的创建----RDD Objects
+  - 数据模型----RDD模型支持所有场景的数据处理----转换与行动
+  - 依赖划分----一个RDD包含一个或者多个分区,一个分区包含一个数据集合片段,NarrowDep划分在一个Stage,ShuffleDep依赖上游RDD需要跨界点传输
+  - 数据处理效率----ShuDep的父RDD可并行执行
+  - 容错处理----多机备份,重新调度
+- split graph into stage of tasks----划分、准备提交stage以及task----DAGScheduler
+  - Each Stage is associated with one or many RDDs, with the boundary of a Stage marked by shuffle dependencies.
+- luanch task by cluster manager----使用集群管理器进行任务的分配与调度----TaskScheduler
+- executor tasks----执行任务,将中间结果与数据写入存储体系
+- 关键代码
+    - 主要依靠DAGScheduler完成Job提交/Stage提交、划分
+      - org.apache.spark.scheduler.DAGScheduler.submitJob
+      - org.apache.spark.scheduler.DAGSchedulerEventProcessLoop#doOnReceive----进行事件的中转
+      - org.apache.spark.scheduler.DAGScheduler#submitStage
+    - TaskScheduler进行任务的提交
+      - org.apache.spark.scheduler.TaskSchedulerImpl.submitTasks
+    - org.apache.spark.scheduler.local.LocalSchedulerBackend.reviveOffers----将任务的提交与执行连接起来
+      - org.apache.spark.scheduler.local.LocalEndpoint.receive
+        - org.apache.spark.scheduler.local.LocalEndpoint.reviveOffers----
+    - Executor进行任务的执行
+      - org.apache.spark.executor.Executor.launchTask
+    - org.apache.spark.scheduler.ResultTask.runTask
+      - 最终回调rdd的迭代方法----func(context, rdd.iterator(partition, context))
+### 计算引擎----Spark是一个层层叠代计算的过程
+- RDD是Spark是各种数据计算模型的统一抽象
+  - org.apache.spark.scheduler.ShuffleMapTask.runTask
+    - org.apache.spark.shuffle.sort.SortShuffleWriter.write----写中间文件到缓存以及创建相应的索引文件
+      - org.apache.spark.util.collection.ExternalSorter.insertAll----调用merge与combine
+        - org.apache.spark.util.collection.SizeTrackingAppendOnlyMap.changeValue
+      - org.apache.spark.shuffle.IndexShuffleBlockResolver.writeIndexFileAndCommit
+    - org.apache.spark.rdd.HadoopRDD.compute
+      - org.apache.hadoop.mapred.LineRecordReader.next----最终读取一行一行记录
+  - shuffle----shuffle是所有MapReduce计算框架所必须经过的阶段,shuffle连接map的输出与reduce的输入
+    - map端对计算结果处理----对计算结果做简单缓存/对计算结果在缓存中进行聚合与排序/直接将结果写入磁盘,由reduce端进行计算结果的聚合与排序
+    - 每个map任务实际上最后只会产生一个磁盘文件(相当于多个分组(bucket)被合并到了一个文件,通过索引去查找分区的bucket)
+  - reduce端处理
+    - org.apache.spark.shuffle.BlockStoreShuffleReader.read
+      - org.apache.spark.storage.ShuffleBlockFetcherIterator----获取本地与远程的Block
+  - map与reduce端组合分析
+    - map端溢出分区文件,reduce端组合合并----适用于分区数量较小,map不进行缓存、不进行聚合与分组/排序
+    - map端简单缓存,简单排序/分组,不进行聚合,reduce组合----分区数目较多,未指定聚合函数
+    - map缓存聚合,分组/排序,逐条输出,reduce组合----指定聚合函数
+### 部署模式----Driver提需求,由Master负责主控,分配给Worker,由Worker的Executor负责干活
+- 部署方式
+  - 本地模式/本地集群模式----local/local[n]/local[n,maxRetry]/local-cluster[n,cores,memory]----不具备容错模式
+    - local模式只有Driver,没有Master/Worker,Executor在一个JVM进程中
+      - org.apache.spark.SparkContext.submitJob
+        - org.apache.spark.scheduler.DAGScheduler.submitJob----DAGScheduler完成job创建、Stage创建与提交、拆分Stage以及提交Task
+          - org.apache.spark.scheduler.DAGScheduler.handleJobSubmitted
+            - org.apache.spark.scheduler.DAGScheduler#submitStage
+              - org.apache.spark.scheduler.DAGScheduler#submitMissingTasks
+                - org.apache.spark.scheduler.TaskSchedulerImpl.submitTasks
+                  - org.apache.spark.scheduler.local.LocalSchedulerBackend.reviveOffers----发送申请资源
+                  - org.apache.spark.scheduler.local.LocalEndpoint.receive----处理资源申请
+                    - org.apache.spark.scheduler.local.LocalEndpoint.reviveOffers
+                      - org.apache.spark.scheduler.TaskSchedulerImpl.resourceOffers----回调任务调度器获取处理任务
+                      - org.apache.spark.executor.Executor.launchTask----启动执行器执行任务
+                        - org.apache.spark.scheduler.ResultTask.runTask
+                              - 最终回调rdd的迭代方法----func(context, rdd.iterator(partition, context))
+    - local-cluster----org.apache.spark.deploy.LocalSparkCluster
+      - Driver/Master/Worker存在于一个JVM里面,可有多个Executor存在于另一个JVM
+      - org.apache.spark.deploy.LocalSparkCluster.start----创建master与worker
+      - org.apache.spark.scheduler.TaskSchedulerImpl.initialize
+      - org.apache.spark.scheduler.TaskSchedulerImpl.start----启动backend.start()
+        - org.apache.spark.scheduler.cluster.StandaloneSchedulerBackend.start
+          - org.apache.spark.deploy.client.StandaloneAppClient.start----代表Driver与Master进行通信
+          - command----以命令的方式带入
+          - org.apache.spark.executor.CoarseGrainedExecutorBackend.receive----Executor的执行后台
+      - org.apache.spark.deploy.master.Master#schedule----进行资源的分配(逻辑分配和物理分配)
+        - org.apache.spark.deploy.master.Master#startExecutorsOnWorkers
+          - org.apache.spark.deploy.master.Master#launchExecutor
+            - worker.endpoint.send(LaunchExecutor)----向Worker发送创建执行器消息
+            - exec.application.driver.send(ExecutorAdded)----向Driver发送执行器添加消息
+  - Standalone模式----spak:// ----支持分布式部署/具备容错模式
+    - 容错机制支持Executor/Worker/Master不辞而别
+  - 第三方部署模式----zk:// mesos:// yarn-cluster yarn-standalone
+### Spark SQL
+- Projection----Data Source----Filter
+  - Result----Data Source----Operation
+  - Query-Parse-Bind-Optimize-Execute
+- DataFrame----which is a Dataset of Row/Datasets are lazy
+  - Operations available on Datasets are divided into transformations and actions
+- SQL执行过程----
+  - SQL经过SQLParser解析成UnresolvedLogicPlan
+  - Analyzer经过Catalog进行绑定,生成ResolvedLogicPlan
+  - 使用Optimizer对ResolvedLogicPlan进行优化,生成OptimizedLogicPlan
+  - 使用org.apache.spark.sql.catalyst.planning.QueryPlanner.plan将LogicPlan转为PhysicalPlan(实际上是SparkPlan)
+  - 使用prepareForExecution将PhysicalPlan转为物理执行计划
+  - 使用execute执行物理执行计划,生成SchemaRDD
+#### 代码
+- org.apache.spark.sql.internal.SessionState----拥有SparkSession相关的所有状态
+- 语法树---->TreeNode---->QueryPlan---->SparkPlan(物理计划)
+                                    ---->LogicalPlan(逻辑计划)---->BinaryNode/UnaryNode/LeafNode---->Command/RunnableCommand/SetCommand
+                     ---->Expression---->UnaryExpression/BinaryExpression/TernaryExpression
+- 词法解析器---->SqlBaseParser---->Parser
+                 ---->SparkSqlParser---->AbstractSqlParser
+                 ---->org.apache.spark.sql.catalyst.plans.logical.Command/RunnableCommand/DropDatabaseCommand
+                 ---->org.apache.spark.sql.catalyst.rules.Rule---->分析和优化的操作
+                 ---->org.apache.spark.sql.catalyst.rules.RuleExecutor
+                 ---->org.apache.spark.sql.execution.QueryExecution.prepareForExecution
+- 词法解析发生在任务提交前
+### 流式计算----高吞吐量(以一定时间范围内的数据为批次)/容错能力强
+- kafka/flume/hdfs/mqtt/zeromq等---->spark streaming---->spark engine---->hdfs/databases等
+- 离散流DStream,本质上是RDD序列
+  - DStream中的每个RDD包含了一定间隔的数据
+  - DStream到RDD的转换
+    - org.apache.spark.streaming.scheduler.ReceiverTracker.ReceiverTrackerEndpoint#startReceiver
+  - 提供窗口计算,可以转换滑动窗口的数据----窗口的长度/滑动的间隔
+  - Spark Streaming为了解决数据源的持续性,首先创建一个驻留在Executor内的任务提供数据流的持续接入,
+    - 并不断生成任务去拉去最新的数据并计算
+  - 核心类
+    - org.apache.spark.streaming.StreamingContext
+    - org.apache.spark.streaming.scheduler.JobScheduler
+    - org.apache.spark.streaming.DStreamGraph
+    - org.apache.spark.streaming.Duration
+    - org.apache.spark.streaming.Checkpoint
+    - org.apache.spark.streaming.receiver.Receiver
+  - 大致流程代码
+    - org.apache.spark.streaming.StreamingContext.receiverStream
+      - org.apache.spark.streaming.dstream.DStream.toPairDStreamFunctions----将转换DStream隐式转为行为DStream
+    - org.apache.spark.streaming.StreamingContext.start
+      - org.apache.spark.streaming.scheduler.JobScheduler.start
+        - org.apache.spark.streaming.scheduler.JobScheduler#processEvent
+        - org.apache.spark.streaming.scheduler.ReceiverTracker.start---->接收数据,存储为spark存储体系
+          - org.apache.spark.streaming.receiver.Receiver.store---->接收器接收数据
+          - org.apache.spark.streaming.receiver.ReceiverSupervisorImpl.pushSingle
+          - org.apache.spark.streaming.receiver.BlockGenerator.addData----接收数据存入currentBuffer
+          - org.apache.spark.streaming.receiver.BlockGenerator#updateCurrentBuffer---->
+            - 定时任务调度将currentBuffer转为Block,存入blocksForPushing队列
+          - org.apache.spark.streaming.receiver.BlockGenerator#keepPushingBlocks---->从blocksForPushing获取block,以消息机制推送block
+            - org.apache.spark.streaming.receiver.WriteAheadLogBasedBlockHandler.storeBlock
+            - org.apache.spark.storage.BlockManager.putBytes---->最终通过block管理器存入spark存储体系
+        - org.apache.spark.streaming.scheduler.JobGenerator.start---->从DStreams产生Job
+          - org.apache.spark.streaming.scheduler.JobGenerator#timer---->用于定时产生job
+          - org.apache.spark.streaming.scheduler.JobGenerator#generateJobs---->通过事件分发回调
+            - org.apache.spark.streaming.dstream.DStream.getOrCompute---->DStream转换为RDD

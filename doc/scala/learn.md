@@ -1,7 +1,9 @@
+# scala 2.11.7学习笔记1之概述
 # 参考
 - http://www.runoob.com/scala/scala-file-io.html
 - http://www.jianshu.com/p/e0fc0ab7a9d2
 - http://blog.csdn.net/fjse51/article/details/52152362
+- Scala编程中文版(33章全).pdf
 # 概念
 ## 名词
 - 可扩展语言/是面向对象与函数式编程加入静态类型的混合体
@@ -31,6 +33,7 @@ object HelloWorld {
     - AnyVal----Boolean/Byte Char/Short Int/Float/ Long/Double/ Unit(java void)--------9
       - 值类以方法的名称支持运算符
     - AnyRef(java.lang.Object)----ScalaObject/Iterable/Seq/List java对象/scala对象 String Null/Nothing--------9
+    - [T <: Anmial] ---->T的上边界(包括Anmial) [T >: Anmial]---->T的下边界 https://blog.csdn.net/i6448038/article/details/52061287
 - '<标识符>/'/"/"""/var/val/类型推断
   - VariableName : DataType [=  Initial Value]----与java相反
   - +----字符串连接
@@ -51,12 +54,13 @@ object HelloWorld {
     - 类中方法/本地嵌套方法/函数字面量(使用=>)/闭包捕获了变量本身/重复参数(*)/尾递归
   - 指令式编程风格----
     - 指令转函数----尽量不使用var编程/尽量函数完全无副作用(除了返回值,对主调函数无任何影响)
+  - 可变参数----eg:args: String*
 - 闭包是一个函数，返回值依赖于声明在函数外部的一个或多个变量
   - 高阶函数----带其他函数做参数的函数
-  - 柯里化----柯里化的函数被应用于多个参数列表
+  - 柯里化----柯里化的函数被应用于多个参数列表----多个小括号括起来的函数参数列表的函数就是柯里化函数,curry化最大的意义在于把多个参数的函数等价转化成多个单参数函数的级联
   - 借贷模式----打开资源,并贷出给函数,关闭资源
-  - 如果只传入一个参数,可使用花括号替换小括号
-  - 传名参数,参数的类型开始与=>,而不是()=>,
+  - 如果只传入一个参数,可使用花括号替换小括号----get
+  - 传名参数,参数的类型开始与=>,而不是()=>,eg:def delayed( t: => Long )
 -  Scala 中，字符串的类型实际上是 Java String，它本身没有 String 类。/new StringBuilder
 - var z = new Array[String](3)/var z = Array("Runoob", "Baidu", "Google")
   - 数组以0开始,z(0)而不是java的z[0]
@@ -83,6 +87,7 @@ object HelloWorld {
     - 因此class文件中的main方法也就没什么用了，scala object 中所有成员变量和方法默认都是 static 的所以 可以直接访问main方法
   - 在scala中，类名可以和对象名为同一个名字，该对象称为该类的伴生对象，
     - 类和伴生对象可以相互访问他们的私有属性，但是他们必须在同一个源文件内。
+  - 主构造器/辅助构造器/私有构造器----https://blog.csdn.net/njiang/article/details/48088831
 - Scala Trait(特征)----与接口不同的是，它还可以定义属性和方法的实现
   - 它使用的关键字是 trait
   - Scala的类只能够继承单一父类，但是如果是 Trait(特征) 的话就可以继承多个，从结果来看就是实现了多重继承
@@ -98,6 +103,7 @@ object HelloWorld {
   - 一个模式匹配包含了一系列备选项，每个都开始于关键字 case。每个备选项都包含了
   一个模式及一到多个表达式。箭头符号 => 隔开了模式和表达式
   - case关键字的类定义就是就是样例类(case classes)，样例类是种特殊的类，经过优化以用于模式匹配
+  - Case Class是一个很好的选择，实际上，这正是DTO（或者也有叫作VO）做的事情，所以说Case Class的一个典型应用场景就是DTO
 - Scala 正则表达式----http://www.runoob.com/scala/scala-regular-expressions.html
 - Scala 异常处理----throw new IllegalArgumentException/与java类似
   - catch字句是按次序捕捉的。因此，在catch字句中，越具体的异常越要靠前，越普遍的异常越靠后
@@ -107,8 +113,32 @@ object HelloWorld {
   - 在我们实例化一个类的时，可以带上0个或者多个的参数，使用unapplySeq
   - 编译器在实例化的时会调用 apply 方法。我们可以在类和对象中都定义 apply 方法
 - Scala 文件 I/O----Scala 进行文件写操作，直接用的都是 java中 的 I/O 类 （java.io.File)：
-- Actor与并发----不共享数据,依赖消息传递
-  - actor为邮箱,act方法执行
-  - ! 发送消息,可接收消息处理(receive 阻塞等待)/使用偏函数,应用apply返回true,匹配case消息
-  - 将原生线程当做actor,(self ! "hello world"),(self.receive){case x=>x} self.receiveWithin(1000)){case x=>x})
-  - 重用线程react,抛弃调用者线程堆栈,使用单线程即可循环执行处理请求
+## 特定场景应用
+- Scala中的下划线到底有多少种应用场景(null/this/所有/其他/)
+    - 我目前了解的有一下几个用处：
+        - 1、作为“通配符”，类似Java中的*。如import scala.math._
+        - 2、:_*作为一个整体，告诉编译器你希望将某个参数当作参数序列处理！例如val s = sum(1 to 5:_*)就是将1 to 5当作参数序列处理。
+        - 3、指代一个集合中的每个元素。例如我们要在一个Array a中筛出偶数，并乘以2，可以用以下办法：a.filter(_%2==0).map(2*_)。又如要对缓冲数组ArrayBuffer b排序，可以这样：val bSorted = b.sorted(_
+        - 4、在元组中，可以用方法_1, _2, _3访问组员。如a._2。其中句点可以用空格替代。
+        - 5、使用模式匹配可以用来获取元组的组员，例如val (first, second, third) = t但如果不是所有的部件都需要，那么可以在不需要的部件位置上使用_。比如上一例中val (first, second, _) = t
+        - 6、还有一点，下划线_代表的是某一类型的默认值。对于Int来说，它是0。对于Double来说，它是0.0对于引用类型，它是null。
+- https://www.cnblogs.com/xinlingyoulan/p/6031157.html----scala中常用但其他语言不常见的符号含义
+    - :::三个冒号运算符----表示list的连接操作
+    - :: 两个冒号运算符----表示普通元素与list的连接操作/也可指创建类对象和.的操作的操作符(eg:Tuple2::_2)
+    - _N下划线数字运算符----用于访问元组的第N个元素，N的取值从1开始。元组的元素访问方法与数组不同是因为元组的元素类型可以不同。
+    - -> 返回一个二元元组
+    - <- 用于遍历集合对象
+    - =>  把左边的东西改成右边的东西；可以看做创建函数实例的语法糖
+        - => ：Example：Int => String 表示函数输入为Int型，返回String型，同Function(Int,String)
+        - ()=> ：Example：() => T 表示函数没有输入参数，但返回T
+        - Unit=> ：Unit相当于无值的值，相当于C++中的Void  
+    - +=：为map类型变量添加元素
+    - -=：为map类型变量移除元素及其对应的值  
+    - ::: 该方法只能用于连接两个List类型的集合
+    - :+和+: 两者的区别在于:+方法用于在尾部追加元素，+:方法用于在头部追加元素        
+# Code
+- https://github.com/undergrowthlinear/bigdata-learn.git
+## unknown
+```
+asInstanceOf
+```

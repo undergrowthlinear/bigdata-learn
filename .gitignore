@@ -2,6 +2,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 .mvn/
 .idea/
+.log
 
 ### STS ###
 .apt_generated
@@ -22,5 +23,8 @@ nbproject/private/
 build/
 nbbuild/
 dist/
+out/
+metastore_db/
 nbdist/
 .nb-gradle/
+dataout/

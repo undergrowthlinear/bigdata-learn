@@ -20,31 +20,31 @@ import scala.Tuple2;
  */
 public class WordCountDemo {
 
-  public static void main(String[] args) {
-    SparkConf conf = SparkCommonUtil.getSparkConf("HelloWorld", "local");
-    // setSparkHome指向安装spark的地址，视环境而定
-    JavaSparkContext sc = new JavaSparkContext(conf);
+    public static void main(String[] args) {
+        SparkConf conf = SparkCommonUtil.getSparkConf("HelloWorld", "local");
+        // setSparkHome指向安装spark的地址，视环境而定
+        JavaSparkContext sc = new JavaSparkContext(conf);
 
-    JavaRDD<String> data = sc.textFile("README.md");
-    // 切分为单词
-    JavaRDD<String> words = data.flatMap(
-        new FlatMapFunction<String, String>() {
-          public Iterator<String> call(String x) {
-            return Arrays.asList(x.split(" ")).iterator();
-          }
-        });
+        JavaRDD<String> data = sc.textFile("README.md");
+        // 切分为单词
+        JavaRDD<String> words = data.flatMap(
+            new FlatMapFunction<String, String>() {
+                public Iterator<String> call(String x) {
+                    return Arrays.asList(x.split(" ")).iterator();
+                }
+            });
 // 转换为键值对并计数
-    JavaPairRDD<String, Integer> counts = words.mapToPair(
-        new PairFunction<String, String, Integer>() {
-          public Tuple2<String, Integer> call(String x) {
-            return new Tuple2(x, 1);
-          }
-        }).reduceByKey(new Function2<Integer, Integer, Integer>() {
-      public Integer call(Integer x, Integer y) {
-        return x + y;
-      }
-    });
+        JavaPairRDD<String, Integer> counts = words.mapToPair(
+            new PairFunction<String, String, Integer>() {
+                public Tuple2<String, Integer> call(String x) {
+                    return new Tuple2(x, 1);
+                }
+            }).reduceByKey(new Function2<Integer, Integer, Integer>() {
+            public Integer call(Integer x, Integer y) {
+                return x + y;
+            }
+        });
 // 将统计出来的单词总数存入一个文本文件，引发求值
-    System.out.println(counts.count());
-  }
+        System.out.println(counts.count());
+    }
 }
