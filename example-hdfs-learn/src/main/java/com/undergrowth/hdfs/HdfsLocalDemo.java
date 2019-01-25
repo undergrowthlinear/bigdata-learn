@@ -24,10 +24,10 @@ public class HdfsLocalDemo {
         //要上传的所在的本地路径
         Path src = new Path(HdfsLocalDemo.class.getClassLoader().getResource("people.txt").toURI());
         //要上传的hdfs的目标路径
-        Path dst = new Path("/test/Hadoop/Input");
+        Path dst = new Path("/home/iyourcar_test");
         fs.copyFromLocalFile(src, dst);
         //
-        fs.copyToLocalFile(new Path("/test/Hadoop/Input/people.txt"), new Path("D:/tmp"));
+        fs.copyToLocalFile(new Path("/home/iyourcar_test/people.txt"), new Path("D:/tmp"));
         fs.close();
     }
 
